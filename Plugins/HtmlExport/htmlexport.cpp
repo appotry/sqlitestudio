@@ -1,11 +1,10 @@
 #include "htmlexport.h"
-#include "services/pluginmanager.h"
-#include "common/unused.h"
+#include "services/notifymanager.h"
+#include "schemaresolver.h"
 #include <QFile>
-#include <QTextCodec>
 #include <QDebug>
-#include <QRegExp>
-#include <schemaresolver.h>
+#include <QRegularExpression>
+#include <QStringEncoder>
 
 QString HtmlExport::getFormatName() const
 {
@@ -40,8 +39,8 @@ CfgMain* HtmlExport::getConfig()
 
 bool HtmlExport::beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(query);
-    UNUSED(providedData);
+    Q_UNUSED(query);
+    Q_UNUSED(providedData);
 
     if (!beginDoc(tr("SQL query results")))
         return false;
@@ -52,22 +51,39 @@ bool HtmlExport::beforeExportQueryResults(const QString& query, QList<QueryExecu
     incrIndent();
     if (printHeader)
     {
+        QString viewLabel = tr("Query:");
+        int colSpan = printRownum ? columns.size() + 1 : columns.size();
+        writeln("<tr class=\"title\">");
+        incrIndent();
+        writeln(QString("<td colspan=\"%1\" align=\"center\"><b>%2</b></td>").arg(colSpan).arg(viewLabel));
+        decrIndent();
+        writeln("</tr>");
+        writeln("<tr>");
+        incrIndent();
+        writeln(QString("<td colspan=\"%1\">").arg(colSpan));
+        incrIndent();
+        writeln(QString("<pre>%1</pre>").arg(escape(query)));
+        decrIndent();
+        writeln("</td>");
+        decrIndent();
+        writeln("</tr>");
+
         writeln("<tr class=\"header\">");
         incrIndent();
         if (printRownum)
         {
-            writeln("<td align=\"right\">");
+            writeln("<th align=\"right\">");
             incrIndent();
             writeln("<b><i>#</i></b>");
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
         }
 
         QString column;
         int i = 0;
         for (const QueryExecutor::ResultColumnPtr& col : columns)
         {
-            writeln("<td>");
+            writeln("<th>");
             incrIndent();
             column = QString("<b>%1</b>").arg(col->displayName);
             if (printDatatypes)
@@ -79,7 +95,7 @@ bool HtmlExport::beforeExportQueryResults(const QString& query, QList<QueryExecu
             }
             writeln(column);
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
             i++;
         }
         decrIndent();
@@ -103,18 +119,34 @@ bool HtmlExport::afterExportQueryResults()
     return true;
 }
 
+bool HtmlExport::beforeExportSingleTable(const QString& database, const QString& table)
+{
+    Q_UNUSED(database);
+    return beginDoc(tr("Exported table: %1").arg(table));
+}
+
+bool HtmlExport::afterExportSingleTable()
+{
+    return true;
+}
+
+bool HtmlExport::beforeExportSingleView(const QString& database, const QString& name)
+{
+    Q_UNUSED(database);
+    return beginDoc(tr("Exported view: %1").arg(name));
+}
+
+bool HtmlExport::afterExportSingleView()
+{
+    return true;
+}
+
 bool HtmlExport::exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(ddl);
-    UNUSED(columnNames);
-    UNUSED(providedData);
-
-    if (isTableExport())
-    {
-        if (!beginDoc(tr("Exported table: %1").arg(table)))
-            return false;
-    }
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
+    Q_UNUSED(columnNames);
+    Q_UNUSED(providedData);
 
     int colCount = createTable->columns.size();
     int colSpan = printRownum ? colCount + 1 : colCount;
@@ -122,9 +154,10 @@ bool HtmlExport::exportTable(const QString& database, const QString& table, cons
     writeln("<table>");
     incrIndent();
 
+    QString tableLabel = tr("Table: %1").arg(table);
     writeln("<tr class=\"title\">");
     incrIndent();
-    writeln(QString("<td colspan=\"%1\" align=\"center\">%2</td>").arg(colSpan).arg(tr("Table: %1").arg(table)));
+    writeln(QString("<td colspan=\"%1\" align=\"center\">%2</td>").arg(colSpan).arg(tableLabel));
     decrIndent();
     writeln("</tr>");
 
@@ -134,17 +167,17 @@ bool HtmlExport::exportTable(const QString& database, const QString& table, cons
         incrIndent();
         if (printRownum)
         {
-            writeln("<td align=\"right\">");
+            writeln("<th align=\"right\">");
             incrIndent();
             writeln("<b><i>#</i></b>");
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
         }
 
         QString column;
         for (SqliteCreateTable::Column* col : createTable->columns)
         {
-            writeln("<td>");
+            writeln("<th>");
             incrIndent();
             column = QString("<b>%1</b>").arg(col->name);
             if (printDatatypes)
@@ -156,7 +189,7 @@ bool HtmlExport::exportTable(const QString& database, const QString& table, cons
             }
             writeln(column);
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
         }
         decrIndent();
         writeln("</tr>");
@@ -179,7 +212,7 @@ bool HtmlExport::exportDataRow(SqlResultsRowPtr data)
 {
     currentDataRow++;
 
-    writeln("<tr>");
+    writeln("<tr class=\"data\">");
     incrIndent();
     if (printRownum)
     {
@@ -201,7 +234,7 @@ bool HtmlExport::exportDataRow(SqlResultsRowPtr data)
         else
             align = "left";
 
-        if (value.isNull())
+        if (isNull(value))
         {
             cellValue = "<i>NULL</i>";
             cellStyle = " class=\"null\"";
@@ -232,17 +265,11 @@ bool HtmlExport::exportDataRow(SqlResultsRowPtr data)
 
 bool HtmlExport::exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(ddl);
-    UNUSED(columnNames);
-    UNUSED(createTable);
-    UNUSED(providedData);
-
-    if (isTableExport())
-    {
-        if (!beginDoc(tr("Exported table: %1").arg(table)))
-            return false;
-    }
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
+    Q_UNUSED(columnNames);
+    Q_UNUSED(createTable);
+    Q_UNUSED(providedData);
 
     int colCount = columnNames.size();
     int colSpan = printRownum ? colCount + 1 : colCount;
@@ -250,9 +277,10 @@ bool HtmlExport::exportVirtualTable(const QString& database, const QString& tabl
     writeln("<table>");
     incrIndent();
 
+    QString tableLabel = tr("Table: %1").arg(table);
     writeln("<tr class=\"title\">");
     incrIndent();
-    writeln(QString("<td colspan=\"%1\" align=\"center\">%2 <font color=\"#777777\">(%3)</font></td>").arg(colSpan).arg(tr("Table: %1").arg(table), tr("virtual")));
+    writeln(QString("<td colspan=\"%1\" align=\"center\">%2 <font color=\"#777777\">(%3)</font></td>").arg(colSpan).arg(tableLabel, tr("virtual")));
     decrIndent();
     writeln("</tr>");
 
@@ -262,21 +290,20 @@ bool HtmlExport::exportVirtualTable(const QString& database, const QString& tabl
         incrIndent();
         if (printRownum)
         {
-            writeln("<td align=\"right\">");
+            writeln("<th align=\"right\">");
             incrIndent();
             writeln("<b><i>#</i></b>");
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
         }
 
-        QString column;
         for (const QString& col : columnNames)
         {
-            writeln("<td>");
+            writeln("<th>");
             incrIndent();
             writeln(QString("<b>%1</b>").arg(col));
             decrIndent();
-            writeln("</td>");
+            writeln("</th>");
         }
         decrIndent();
         writeln("</tr>");
@@ -313,8 +340,8 @@ bool HtmlExport::beforeExportDatabase(const QString& database)
 
 bool HtmlExport::exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
 
     writeln("<table>");
     incrIndent();
@@ -369,8 +396,8 @@ bool HtmlExport::exportIndex(const QString& database, const QString& name, const
 
 bool HtmlExport::exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
 
     writeln("<table>");
     incrIndent();
@@ -442,30 +469,79 @@ bool HtmlExport::exportTrigger(const QString& database, const QString& name, con
     return true;
 }
 
-bool HtmlExport::exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr view)
+bool HtmlExport::exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl, SqliteCreateViewPtr createView,
+                            const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
+    Q_UNUSED(createView);
+    Q_UNUSED(providedData);
+
+    int colCount = columnNames.size();
+    int colSpan = printRownum ? colCount + 1 : colCount;
 
     writeln("<table>");
     incrIndent();
 
+    QString viewLabel = tr("View: %1").arg(name);
     writeln("<tr class=\"title\">");
     incrIndent();
-    writeln(QString("<td align=\"center\">%1</td>").arg(tr("View: %1").arg("<b>" + name + "</b>")));
+    writeln(QString("<td colspan=\"%1\" align=\"center\"><b>%2</b></td>").arg(colSpan).arg(viewLabel));
     decrIndent();
     writeln("</tr>");
 
     writeln("<tr>");
     incrIndent();
-    writeln("<td>");
+    writeln(QString("<td colspan=\"%1\">").arg(colSpan));
     incrIndent();
-    writeln(QString("<pre>%1</pre>").arg(escape(view->select->detokenize())));
+    writeln(QString("<pre>%1</pre>").arg(escape(createView->select->detokenize())));
     decrIndent();
     writeln("</td>");
     decrIndent();
     writeln("</tr>");
 
+    if (printHeader)
+    {
+        writeln("<tr class=\"header\">");
+        if (printRownum)
+        {
+            writeln("<th align=\"right\">");
+            incrIndent();
+            writeln("<b><i>#</i></b>");
+            decrIndent();
+            writeln("</th>");
+        }
+
+        for (const QString& col : columnNames)
+        {
+            writeln("<th>");
+            incrIndent();
+            writeln(QString("<b>%1</b>").arg(col));
+            decrIndent();
+            writeln("</th>");
+        }
+        writeln("</tr>");
+    }
+
+    decrIndent();
+
+    columnTypes.clear();
+    SchemaResolver resolver(db);
+    QList<QPair<QString, QString>> selectColumnTypes = resolver.getColumnsAndDataTypesUsingPragma(name);
+    for (QPair<QString, QString>& colAndType : selectColumnTypes)
+        columnTypes << DataType(colAndType.second);
+
+    currentDataRow = 0;
+    return true;
+}
+
+bool HtmlExport::exportViewRow(SqlResultsRowPtr data)
+{
+    return exportDataRow(data);
+}
+
+bool HtmlExport::afterExportView()
+{
     decrIndent();
     writeln("</table>");
     writeln("<br/><br/>");
@@ -477,7 +553,19 @@ bool HtmlExport::afterExport()
     static const QString bodyEndTpl = QStringLiteral("</body>");
     static const QString docEnd = QStringLiteral("</html>");
 
-    writeln("<i>" + tr("Document generated by SQLiteStudio v%1 on %2").arg(SQLITESTUDIO->getVersionString(), QDateTime::currentDateTime().toString()) + "</i>");
+    writeCustomFooter();
+
+    QFile file(":/htmlexport/htmlexport.js");
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qCritical() << "Could not open htmlexport.js resource while exporting to HTML:" << file.errorString();
+        return false;
+    }
+
+    writeln("<i>" + tr("Document generated by Letos v%1 on %2").arg(LETOS->getVersionString(), QDateTime::currentDateTime().toString()) + "</i>");
+    writeln("<script>");
+    writeln(indent ? file.readAll() : compressCssOrJs(file.readAll()));
+    writeln("</script>");
     decrIndent();
     writeln(bodyEndTpl);
     decrIndent();
@@ -513,13 +601,15 @@ bool HtmlExport::beginDoc(const QString& title)
     writeln(titletpl.arg(title));
     writeln(styleStartTpl);
     incrIndent();
-    writeln(indent ? file.readAll() : compressCss(file.readAll()));
+    writeln(indent ? file.readAll() : compressCssOrJs(file.readAll()));
     decrIndent();
     writeln(styleEndTpl);
     writeln(bodyStartTpl);
     incrIndent();
 
-    file.close();
+    if (!writeCustomHeader())
+        return false;
+
     return true;
 }
 
@@ -589,18 +679,90 @@ QString HtmlExport::escape(const QString& str)
     return str.toHtmlEscaped();
 }
 
-QString HtmlExport::compressCss(QString css)
+QString HtmlExport::getCustomHeader(QString& err)
 {
-    static const QRegExp spacesLeftRe(R"REGEXP(([^a-zA-Z0-9_\s]+)\s+(\S+))REGEXP");
-    static const QRegExp spacesRightRe(R"REGEXP((\S+)\s+([^a-zA-Z0-9_\s]+))REGEXP");
-    static const QRegExp spacesBetweenWordsRe(R"REGEXP((\S+)\s{2,}(\S+))REGEXP");
-    while (spacesLeftRe.indexIn(css) > -1)
+    return getCustomHeaderOrFooter(err,
+                                   &cfg.HtmlExport.CustomHeaderMode,
+                                   &cfg.HtmlExport.CustomHdrContent,
+                                   &cfg.HtmlExport.CustomHdrFile);
+}
+
+QString HtmlExport::getCustomFooter(QString& err)
+{
+    return getCustomHeaderOrFooter(err,
+                                   &cfg.HtmlExport.CustomFooterMode,
+                                   &cfg.HtmlExport.CustomFtrContent,
+                                   &cfg.HtmlExport.CustomFtrFile);
+}
+
+QString HtmlExport::getCustomHeaderOrFooter(QString& err, CfgEntry* modeEntry, CfgEntry* contentEntry, CfgEntry* fileEntry)
+{
+    switch (modeEntry->get().toInt())
+    {
+        case 0: // No header/footer
+            break;
+        case 1: // Inline contents
+            return contentEntry->get().toString();
+        case 2: // File with contents
+        {
+            QString err;
+            QString contents = readFileContents(fileEntry->get().toString(), &err);
+            if (!err.isEmpty())
+                notifyError(err);
+
+            return contents;
+        }
+        default:
+            qWarning() << "Unhandled header/footer mode:" << modeEntry->get();
+    }
+    return QString();
+}
+
+bool HtmlExport::writeCustomHeader()
+{
+    QString err;
+    QString hdrContent = getCustomHeader(err);
+    if (!err.isEmpty())
+    {
+        notifyError(err);
+        return false;
+    }
+
+    if (!hdrContent.isEmpty())
+    {
+        writeln(hdrContent);
+        writeln("<br><br>");
+    }
+
+    return true;
+}
+
+void HtmlExport::writeCustomFooter()
+{
+    QString err;
+    QString ftrContent = getCustomFooter(err);
+    if (!err.isEmpty())
+        notifyError(err);
+
+    if (!ftrContent.isEmpty())
+    {
+        writeln(ftrContent);
+        writeln("<br><br>");
+    }
+}
+
+QString HtmlExport::compressCssOrJs(QString css)
+{
+    static const QRegularExpression spacesLeftRe(R"REGEXP(([^a-zA-Z0-9_\s]+)\s+(\S+))REGEXP");
+    static const QRegularExpression spacesRightRe(R"REGEXP((\S+)\s+([^a-zA-Z0-9_\s]+))REGEXP");
+    static const QRegularExpression spacesBetweenWordsRe(R"REGEXP((\S+)\s{2,}(\S+))REGEXP");
+    while (css.indexOf(spacesLeftRe) > -1)
         css.replace(spacesLeftRe, R"(\1\2)");
 
-    while (spacesRightRe.indexIn(css) > -1)
+    while (css.indexOf(spacesRightRe) > -1)
         css.replace(spacesRightRe, R"(\1\2)");
 
-    while (spacesBetweenWordsRe.indexIn(css) > -1)
+    while (css.indexOf(spacesBetweenWordsRe) > -1)
         css.replace(spacesBetweenWordsRe, R"(\1 \2)");
 
     return css.trimmed();
@@ -608,11 +770,11 @@ QString HtmlExport::compressCss(QString css)
 
 bool HtmlExport::init()
 {
-    Q_INIT_RESOURCE(htmlexport);
+    SQLS_INIT_RESOURCE(htmlexport);
     return GenericExportPlugin::init();
 }
 
 void HtmlExport::deinit()
 {
-    Q_CLEANUP_RESOURCE(htmlexport);
+    SQLS_CLEANUP_RESOURCE(htmlexport);
 }

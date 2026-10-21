@@ -4,170 +4,241 @@
   <context>
     <name>HtmlExport</name>
     <message>
-      <location filename="../htmlexport.cpp" line="46"/>
+      <location filename="../htmlexport.cpp" line="45"/>
       <source>SQL query results</source>
-      <translation type="unfinished">SQL query results</translation>
+      <translation>Resultats de la consulta SQL</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="78"/>
-      <location filename="../htmlexport.cpp" line="155"/>
+      <location filename="../htmlexport.cpp" line="54"/>
+      <source>Query:</source>
+      <translation>Consulta:</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="94"/>
+      <location filename="../htmlexport.cpp" line="188"/>
       <source>no type</source>
-      <translation type="unfinished">no type</translation>
+      <translation>sense tipus</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="115"/>
-      <location filename="../htmlexport.cpp" line="243"/>
+      <location filename="../htmlexport.cpp" line="125"/>
       <source>Exported table: %1</source>
-      <translation type="unfinished">Exported table: %1</translation>
+      <translation>Taula exportada: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="127"/>
-      <location filename="../htmlexport.cpp" line="255"/>
+      <location filename="../htmlexport.cpp" line="136"/>
+      <source>Exported view: %1</source>
+      <translation>Vista exportada: %1</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="157"/>
+      <location filename="../htmlexport.cpp" line="280"/>
       <source>Table: %1</source>
-      <translation type="unfinished">Table: %1</translation>
+      <translation>Taula: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="255"/>
+      <location filename="../htmlexport.cpp" line="283"/>
       <source>virtual</source>
-      <translation type="unfinished">virtual</translation>
+      <translation>virtual</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="308"/>
+      <location filename="../htmlexport.cpp" line="335"/>
       <source>Exported database: %1</source>
-      <translation type="unfinished">Exported database: %1</translation>
+      <translation>Base de dades exportada: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="324"/>
+      <location filename="../htmlexport.cpp" line="351"/>
       <source>Index: %1</source>
-      <translation type="unfinished">Index: %1</translation>
+      <translation>Índex: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="330"/>
+      <location filename="../htmlexport.cpp" line="357"/>
       <source>For table:</source>
-      <translation type="unfinished">For table:</translation>
+      <translation>Per a la taula:</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="337"/>
+      <location filename="../htmlexport.cpp" line="364"/>
       <source>Unique:</source>
-      <translation type="unfinished">Unique:</translation>
+      <translation>Únic:</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="338"/>
+      <location filename="../htmlexport.cpp" line="365"/>
       <source>Yes</source>
-      <translation type="unfinished">Yes</translation>
+      <translation>Sí</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="338"/>
+      <location filename="../htmlexport.cpp" line="365"/>
       <source>No</source>
-      <translation type="unfinished">No</translation>
+      <translation>No</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="344"/>
+      <location filename="../htmlexport.cpp" line="371"/>
       <source>Column</source>
-      <translation type="unfinished">Column</translation>
+      <translation>Columna</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="345"/>
+      <location filename="../htmlexport.cpp" line="372"/>
       <source>Collating</source>
-      <translation type="unfinished">Collating</translation>
+      <translation>Intercalació</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="346"/>
+      <location filename="../htmlexport.cpp" line="373"/>
       <source>Sort order</source>
-      <translation type="unfinished">Sort order</translation>
+      <translation>Ordre de classificació</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="380"/>
+      <location filename="../htmlexport.cpp" line="407"/>
       <source>Trigger: %1</source>
-      <translation type="unfinished">Trigger: %1</translation>
+      <translation>Disparador: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="386"/>
+      <location filename="../htmlexport.cpp" line="413"/>
       <source>Activated:</source>
-      <translation type="unfinished">Activated:</translation>
-    </message>
-    <message>
-      <location filename="../htmlexport.cpp" line="394"/>
-      <source>Action:</source>
-      <translation type="unfinished">Action:</translation>
-    </message>
-    <message>
-      <location filename="../htmlexport.cpp" line="401"/>
-      <source>On view:</source>
-      <translation type="unfinished">On view:</translation>
-    </message>
-    <message>
-      <location filename="../htmlexport.cpp" line="403"/>
-      <source>On table:</source>
-      <translation type="unfinished">On table:</translation>
-    </message>
-    <message>
-      <location filename="../htmlexport.cpp" line="414"/>
-      <source>Activate condition:</source>
-      <translation type="unfinished">Activate condition:</translation>
+      <translation>Activat:</translation>
     </message>
     <message>
       <location filename="../htmlexport.cpp" line="421"/>
+      <source>Action:</source>
+      <translation>Acció:</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="428"/>
+      <source>On view:</source>
+      <translation>A la vista:</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="430"/>
+      <source>On table:</source>
+      <translation>A la taula:</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="441"/>
+      <source>Activate condition:</source>
+      <translation>Condició d&apos;activació:</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.cpp" line="448"/>
       <source>Code executed:</source>
-      <translation type="unfinished">Code executed:</translation>
+      <translation>Codi executat:</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="455"/>
+      <location filename="../htmlexport.cpp" line="486"/>
       <source>View: %1</source>
-      <translation type="unfinished">View: %1</translation>
+      <translation>Vista: %1</translation>
     </message>
     <message>
-      <location filename="../htmlexport.cpp" line="480"/>
-      <source>Document generated by SQLiteStudio v%1 on %2</source>
-      <translation type="unfinished">Document generated by SQLiteStudio v%1 on %2</translation>
+      <location filename="../htmlexport.cpp" line="565"/>
+      <source>Document generated by Letos v%1 on %2</source>
+      <translation>Document generat per Letos v%1 el %2</translation>
     </message>
   </context>
   <context>
     <name>HtmlExportConfig</name>
     <message>
-      <location filename="../htmlexport.ui" line="36"/>
+      <location filename="../htmlexport.ui" line="136"/>
       <source>Maximum number of characters per cell:</source>
-      <translation type="unfinished">Maximum number of characters per cell:</translation>
+      <translation>Nombre màxim de caràcters per cel·la:</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="43"/>
+      <location filename="../htmlexport.ui" line="182"/>
       <source>Include data types in first row</source>
-      <translation type="unfinished">Include data types in first row</translation>
+      <translation>Inclou els tipus de dades a la primera fila</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="53"/>
+      <location filename="../htmlexport.ui" line="143"/>
       <source>Column names as first row</source>
-      <translation type="unfinished">Column names as first row</translation>
+      <translation>Noms de les columnes com a primera fila</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="63"/>
+      <location filename="../htmlexport.ui" line="126"/>
       <source>Row numbers as first column</source>
-      <translation type="unfinished">Row numbers as first column</translation>
+      <translation>Números de fila com a primera columna</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="73"/>
+      <location filename="../htmlexport.ui" line="91"/>
       <source>Output format</source>
-      <translation type="unfinished">Output format</translation>
+      <translation>Format de sortida</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="79"/>
+      <location filename="../htmlexport.ui" line="20"/>
+      <source>Custom header</source>
+      <translation>Capçalera personalitzada</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="26"/>
+      <source>No custom header</source>
+      <translation>Sense capçalera personalitzada</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="39"/>
+      <source>Define custom header content</source>
+      <translation>Defineix el contingut de la capçalera personalitzada</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="52"/>
+      <location filename="../htmlexport.ui" line="224"/>
+      <source>HTML content</source>
+      <translation>Contingut HTML</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="62"/>
+      <source>Define custom header file</source>
+      <translation>Defineix el fitxer de capçalera personalitzada</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="78"/>
+      <source>Choose file for the header</source>
+      <translation>Tria el fitxer per a la capçalera</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="81"/>
+      <location filename="../htmlexport.ui" line="253"/>
+      <source>HTML files (*.htm, *.html);;Text files (*.txt);;All files (*)</source>
+      <translation>Fitxers HTML (*.htm, *.html);;Fitxers de text (*.txt);;Tots els fitxers (*)</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="97"/>
       <source>Format document (new lines, indentation)</source>
-      <translation type="unfinished">Format document (new lines, indentation)</translation>
+      <translation>Formata el document (línies noves, sagnat)</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="92"/>
+      <location filename="../htmlexport.ui" line="110"/>
       <source>Compress (everything in one line)</source>
-      <translation type="unfinished">Compress (everything in one line)</translation>
+      <translation>Comprimeix (tot en una sola línia)</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="108"/>
+      <location filename="../htmlexport.ui" line="153"/>
       <source>&lt;p&gt;When enabled, HTML characters such as &amp;lt;, &amp;gt; and &amp;amp; are not escaped in exported values. This allows you for example to export hyper-link enabled documents, but it also may result in incorrect HTML document (unmatched pairs of &amp;lt; and &amp;gt; characters). Be warned.&lt;/p&gt;</source>
       <translation>&lt;p&gt;When enabled, HTML characters such as &amp;lt;, &amp;gt; and &amp; are not escaped in exported values. This allows you for example to export hyper-link enabled documents, but it also may result in incorrect HTML document (unmatched pairs of &amp;lt; and &amp;gt; characters). Be warned.&lt;/p&gt;</translation>
     </message>
     <message>
-      <location filename="../htmlexport.ui" line="111"/>
+      <location filename="../htmlexport.ui" line="156"/>
       <source>Don&apos;t escape HTML characters</source>
-      <translation type="unfinished">Don&apos;t escape HTML characters</translation>
+      <translation>No escapïs els caràcters HTML</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="192"/>
+      <source>Custom footer</source>
+      <translation>Peu de pàgina personalitzat</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="198"/>
+      <source>No custom footer</source>
+      <translation>Sense peu de pàgina personalitzat</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="211"/>
+      <source>Define custom footer content</source>
+      <translation>Defineix el contingut del peu de pàgina personalitzat</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="234"/>
+      <source>Define custom footer file</source>
+      <translation>Defineix el fitxer de peu de pàgina personalitzat</translation>
+    </message>
+    <message>
+      <location filename="../htmlexport.ui" line="250"/>
+      <source>Choose file for the footer</source>
+      <translation>Tria el fitxer per al peu de pàgina</translation>
     </message>
   </context>
 </TS>

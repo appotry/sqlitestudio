@@ -16,22 +16,22 @@
     <message>
       <location filename="../CsvExport.ui" line="41"/>
       <source>, (comma)</source>
-      <translation>, (逗号)</translation>
+      <translation>,（逗号）</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="46"/>
       <source>; (semicolon)</source>
-      <translation>; (分号)</translation>
+      <translation>;（分号）</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="51"/>
       <source>\t (tab)</source>
-      <translation>\t (制表符)</translation>
+      <translation>\t（制表符）</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="56"/>
       <source>  (whitespace)</source>
-      <translation>  (空格)</translation>
+      <translation> （空格）</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="61"/>
@@ -49,7 +49,7 @@
       <translation>空字符串</translation>
     </message>
     <message>
-      <location filename="../csvexport.cpp" line="42"/>
+      <location filename="../csvexport.cpp" line="41"/>
       <source>Enter the custom separator character.</source>
       <translation>请输入自定义的分隔符。</translation>
     </message>

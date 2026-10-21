@@ -1,10 +1,9 @@
 #include "formatselect.h"
-#include "formatwith.h"
 #include "parser/ast/sqlitewith.h"
 #include "parser/ast/sqlitewindowdefinition.h"
 
 FormatSelect::FormatSelect(SqliteSelect* select) :
-    select(select)
+    FormatStatement(select), select(select)
 {
 }
 
@@ -23,15 +22,12 @@ void FormatSelect::formatInternal()
             case SqliteSelect::CompoundOperator::UNION:
                 withNewLine().withKeyword("UNION").withNewLine();
                 break;
-            case SqliteSelect::CompoundOperator::UNION_ALL:
-            {
-                if (core->valuesMode)
-                    withListComma(FormatToken::Flag::NO_NEWLINE_BEFORE);
-                else
-                    withNewLine().withKeyword("UNION ALL").withNewLine();
-
+            case SqliteSelect::CompoundOperator::COMMA:
+                withListComma(FormatToken::Flag::NO_NEWLINE_BEFORE);
                 break;
-            }
+            case SqliteSelect::CompoundOperator::UNION_ALL:
+                withNewLine().withKeyword("UNION ALL").withNewLine();
+                break;
             case SqliteSelect::CompoundOperator::INTERSECT:
                 withNewLine().withKeyword("INTERSECT").withNewLine();
                 break;
@@ -49,7 +45,7 @@ void FormatSelect::formatInternal()
 }
 
 FormatSelectCore::FormatSelectCore(SqliteSelect::Core *core) :
-    core(core)
+    FormatStatement(core), core(core)
 {
 }
 
@@ -60,7 +56,8 @@ void FormatSelectCore::formatInternal()
     if (core->valuesMode)
     {
         SqliteSelect* select = dynamic_cast<SqliteSelect*>(core->parentStatement());
-        if (select->coreSelects.indexOf(core) == 0) // this is first core in series of cores of values mode of the SELECT
+        QList<SqliteSelect::Core*> valueCores = select->coreSelects | FILTER(core, {return core->valuesMode;});
+        if (valueCores.indexOf(core) == 0) // this is first core in series of cores of values mode of the SELECT
             withKeyword("VALUES");
 
         withParDefLeft().withStatementList(core->resultColumns).withParDefRight();
@@ -102,7 +99,7 @@ void FormatSelectCore::formatInternal()
 }
 
 FormatSelectCoreResultColumn::FormatSelectCoreResultColumn(SqliteSelect::Core::ResultColumn *resCol) :
-    resCol(resCol)
+    FormatStatement(resCol), resCol(resCol)
 {
 }
 
@@ -131,7 +128,7 @@ void FormatSelectCoreResultColumn::formatInternal()
 }
 
 FormatSelectCoreSingleSource::FormatSelectCoreSingleSource(SqliteSelect::Core::SingleSource* singleSource) :
-    singleSource(singleSource)
+    FormatStatement(singleSource), singleSource(singleSource)
 {
 }
 
@@ -191,7 +188,7 @@ void FormatSelectCoreSingleSource::formatInternal()
 }
 
 FormatSelectCoreJoinOp::FormatSelectCoreJoinOp(SqliteSelect::Core::JoinOp* joinOp) :
-    joinOp(joinOp)
+    FormatStatement(joinOp), joinOp(joinOp)
 {
 }
 
@@ -208,9 +205,15 @@ void FormatSelectCoreJoinOp::formatInternal()
     if (joinOp->naturalKw)
         keywords << "NATURAL";
 
-    if (joinOp->leftKw)
+    if (joinOp->leftKw || joinOp->fullKw || joinOp->rightKw)
     {
-        keywords << "LEFT";
+        if (joinOp->leftKw)
+            keywords << "LEFT";
+        else if (joinOp->fullKw)
+            keywords << "FULL";
+        else if (joinOp->rightKw)
+            keywords << "RIGHT";
+
         if (joinOp->outerKw)
             keywords << "OUTER";
     }
@@ -232,7 +235,7 @@ void FormatSelectCoreJoinOp::formatInternal()
 }
 
 FormatSelectCoreJoinConstraint::FormatSelectCoreJoinConstraint(SqliteSelect::Core::JoinConstraint* joinConstr) :
-    joinConstr(joinConstr)
+    FormatStatement(joinConstr), joinConstr(joinConstr)
 {
 }
 
@@ -245,7 +248,7 @@ void FormatSelectCoreJoinConstraint::formatInternal()
 }
 
 FormatSelectCoreJoinSourceOther::FormatSelectCoreJoinSourceOther(SqliteSelect::Core::JoinSourceOther* joinSourceOther) :
-    joinSourceOther(joinSourceOther)
+    FormatStatement(joinSourceOther), joinSourceOther(joinSourceOther)
 {
 }
 
@@ -256,7 +259,7 @@ void FormatSelectCoreJoinSourceOther::formatInternal()
 
 
 FormatSelectCoreJoinSource::FormatSelectCoreJoinSource(SqliteSelect::Core::JoinSource* joinSource) :
-    joinSource(joinSource)
+    FormatStatement(joinSource), joinSource(joinSource)
 {
 }
 

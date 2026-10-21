@@ -19,8 +19,8 @@ namespace Cfg
     PDFEXPORTSHARED_EXPORT QStringList getPdfPageSizes();
 }
 
-CFG_CATEGORIES(PdfExportConfig,
-    CFG_CATEGORY(PdfExport,
+CFG_CATEGORIES_EX(PdfExportConfig, PDFEXPORTSHARED_EXPORT,
+    CFG_CATEGORY_EX(PdfExport, PDFEXPORTSHARED_EXPORT,
         CFG_ENTRY(QString,     PageSize,         "A4")
         CFG_ENTRY(QStringList, PageSizes,        Cfg::getPdfPageSizes())
         CFG_ENTRY(int,         Padding,          1)
@@ -35,41 +35,54 @@ CFG_CATEGORIES(PdfExportConfig,
         CFG_ENTRY(int,         FontSize,         10)
         CFG_ENTRY(QColor,      HeaderBgColor,    QColor(Qt::lightGray))
         CFG_ENTRY(QColor,      NullValueColor,   QColor(Qt::gray))
+        CFG_ENTRY(int,         CustomHeaderMode, 0)
+        CFG_ENTRY(QString,     CustomHdrContent, QString(), CFG_DEP(CustomHeaderMode, 1, true))
+        CFG_ENTRY(QString,     CustomHdrFile,    QString(), CFG_DEP(CustomHeaderMode, 2, true))
+        CFG_ENTRY(int,         CustomFooterMode, 0)
+        CFG_ENTRY(QString,     CustomFtrContent, QString(), CFG_DEP(CustomFooterMode, 1, true))
+        CFG_ENTRY(QString,     CustomFtrFile,    QString(), CFG_DEP(CustomFooterMode, 2, true))
     )
 )
 
 class PDFEXPORTSHARED_EXPORT PdfExport : public GenericExportPlugin
 {
         Q_OBJECT
-        SQLITESTUDIO_PLUGIN("pdfexport.json")
+        LETOS_PLUGIN("pdfexport.json")
 
     public:
-        QString getFormatName() const;
-        ExportManager::StandardConfigFlags standardOptionsToEnable() const;
-        ExportManager::ExportProviderFlags getProviderFlags() const;
-        void validateOptions();
-        CfgMain* getConfig();
-        QString getExportConfigFormName() const;
-        QString defaultFileExtension() const;
+        QString getFormatName() const override;
+        ExportManager::StandardConfigFlags standardOptionsToEnable() const override;
+        ExportManager::ExportProviderFlags getProviderFlags() const override;
+        void validateOptions() override;
+        CfgMain* getConfig() override;
+        QString getExportConfigFormName() const override;
+        QString defaultFileExtension() const override;
         bool beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns,
-                                      const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
-        bool exportQueryResultsRow(SqlResultsRowPtr row);
+                                      const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool exportQueryResultsRow(SqlResultsRowPtr row) override;
         bool exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable,
-                         const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
+                         const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
         bool exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable,
-                                const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
-        bool afterExport();
-        bool afterExportTable();
-        bool afterExportQueryResults();
-        bool exportTableRow(SqlResultsRowPtr data);
-        bool beforeExportDatabase(const QString& database);
-        bool exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex);
-        bool exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger);
-        bool exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr view);
-        void cleanupAfterExport();
-        bool isBinaryData() const;
-        bool init();
-        void deinit();
+                                const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool afterExport() override;
+        bool afterExportTable() override;
+        bool afterExportQueryResults() override;
+        bool afterExportView() override;
+        bool exportTableRow(SqlResultsRowPtr data) override;
+        bool beforeExportSingleTable(const QString& database, const QString& table) override;
+        bool afterExportSingleTable() override;
+        bool beforeExportSingleView(const QString& database, const QString& name) override;
+        bool afterExportSingleView() override;
+        bool beforeExportDatabase(const QString& database) override;
+        bool exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex) override;
+        bool exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger) override;
+        bool exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl,
+                        SqliteCreateViewPtr createView, const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool exportViewRow(SqlResultsRowPtr data) override;
+        void cleanupAfterExport() override;
+        bool isBinaryData() const override;
+        bool init() override;
+        void deinit() override;
 
     protected:
         virtual QPagedPaintDevice* createPaintDevice(const QString& documentTitle, bool& takeOwnership);
@@ -125,12 +138,14 @@ class PDFEXPORTSHARED_EXPORT PdfExport : public GenericExportPlugin
 
             QList<ObjectCell> cells;
             int height = 0;
+            bool expandHeight = false;
             Type type = Type::SINGLE;
             bool recalculateColumnWidths = false;
         };
 
-        void prepareTableDataExport(const QString& table, const QStringList& columnNames, const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
+        void prepareTableDataExport(const QStringList& columnNames, const QHash<ExportManager::ExportProviderFlag,QVariant> providedData, const QString& headerLabel);
         QList<int> getColumnDataLengths(int columnCount, const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
+        void initPainter();
         bool beginDoc(const QString& title);
         void endDoc();
         void setupConfig();
@@ -152,6 +167,9 @@ class PDFEXPORTSHARED_EXPORT PdfExport : public GenericExportPlugin
         void drawObjectTopLine(int y);
         void drawObjectCellHeaderBackground(int x1, int y1, int x2, int y2);
         void drawFooter();
+        bool drawCustomHeader();
+        void drawCustomFooter();
+        void drawCustomContent(const QString& content);
         void flushObjectRow(const ObjectRow& row, int y);
         void flushObjectCell(const ObjectCell& cell, int x, int y, int w, int h);
         void flushDataPages(bool forceRender = false);
@@ -179,8 +197,10 @@ class PDFEXPORTSHARED_EXPORT PdfExport : public GenericExportPlugin
         int getContentsRight() const;
         int getContentsBottom() const;
         qreal mmToPoints(qreal sizeMM);
+        QString getCustomHeader(QString& err);
+        QString getCustomFooter(QString& err);
+        QString getCustomHeaderOrFooter(QString& err, CfgEntry* modeEntry, CfgEntry* contentEntry, CfgEntry* fileEntry);
 
-        CFG_LOCAL_PERSISTABLE(PdfExportConfig, cfg)
         QPagedPaintDevice* pagedWriter = nullptr;
         bool takeDeviceOwnership = true;
         QPainter* painter = nullptr;

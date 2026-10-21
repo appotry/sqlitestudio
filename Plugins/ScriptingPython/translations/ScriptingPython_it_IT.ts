@@ -4,29 +4,47 @@
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../scriptingpython.cpp" line="466"/>
+      <location filename="../scriptingpython.cpp" line="730"/>
       <source>Invalid use of %1 function. Expected %2 arguments, but got %3.</source>
-      <translation type="unfinished">Invalid use of %1 function. Expected %2 arguments, but got %3.</translation>
+      <translation>Uso non valido della funzione %1. Atteso %2 argomenti, ma ottenuto %3.</translation>
     </message>
     <message>
-      <location filename="../scriptingpython.cpp" line="475"/>
+      <location filename="../scriptingpython.cpp" line="739"/>
       <source>Unknown error from function %1.</source>
-      <translation type="unfinished">Unknown error from function %1.</translation>
+      <translation>Errore sconosciuto dalla funzione %1.</translation>
     </message>
     <message>
-      <location filename="../scriptingpython.cpp" line="516"/>
+      <location filename="../scriptingpython.cpp" line="780"/>
       <source>Could not calculate string representation of the Python object passed as argument to the function %1.</source>
-      <translation type="unfinished">Could not calculate string representation of the Python object passed as argument to the function %1.</translation>
+      <translation>Impossibile calcolare la rappresentazione della stringa dell&apos;oggetto Python passato come argomento alla funzione %1.</translation>
     </message>
     <message>
-      <location filename="../scriptingpython.cpp" line="532"/>
+      <location filename="../scriptingpython.cpp" line="802"/>
       <source>Could not find execution context for function %1. This is a bug of Python plugin. Please report it.</source>
-      <translation type="unfinished">Could not find execution context for function %1. This is a bug of Python plugin. Please report it.</translation>
+      <translation>Impossibile trovare il contesto di esecuzione per la funzione %1. Questo è un bug del plugin Python. Si prega di segnalarlo.</translation>
     </message>
     <message>
-      <location filename="../scriptingpython.cpp" line="557"/>
+      <location filename="../scriptingpython.cpp" line="827"/>
       <source>Error from Python function %1: %2</source>
-      <translation type="unfinished">Error from Python function %1: %2</translation>
+      <translation>Errore dalla funzione Python %1: %2</translation>
+    </message>
+  </context>
+  <context>
+    <name>ScriptingPython</name>
+    <message>
+      <location filename="../scriptingpython.ui" line="20"/>
+      <source>Python library path</source>
+      <translation>Percorso della libreria Python</translation>
+    </message>
+    <message>
+      <location filename="../scriptingpython.ui" line="29"/>
+      <source>Choose a Python library file</source>
+      <translation>Scegli un file di libreria Python</translation>
+    </message>
+    <message>
+      <location filename="../scriptingpython.cpp" line="370"/>
+      <source>The plugin is not configured properly.</source>
+      <translation>Il plugin non è configurato correttamente.</translation>
     </message>
   </context>
 </TS>

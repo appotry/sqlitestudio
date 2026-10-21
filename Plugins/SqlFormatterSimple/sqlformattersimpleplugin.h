@@ -8,8 +8,8 @@
 #include "plugins/uiconfiguredplugin.h"
 #include <QObject>
 
-CFG_CATEGORIES(SqlFormatterSimpleConfig,
-     CFG_CATEGORY(SqlFormatterSimple,
+CFG_CATEGORIES_EX(SqlFormatterSimpleConfig, SQLFORMATTERSIMPLESHARED_EXPORT,
+     CFG_CATEGORY_EX(SqlFormatterSimple, SQLFORMATTERSIMPLESHARED_EXPORT,
          CFG_ENTRY(bool, UpperCaseKeywords, true)
          CFG_ENTRY(bool, TrimLongSpaces,    true)
      )
@@ -18,7 +18,7 @@ CFG_CATEGORIES(SqlFormatterSimpleConfig,
 class SQLFORMATTERSIMPLESHARED_EXPORT SqlFormatterSimplePlugin : public GenericPlugin, public SqlFormatterPlugin, public UiConfiguredPlugin
 {
         Q_OBJECT
-        SQLITESTUDIO_PLUGIN("sqlformattersimple.json")
+        LETOS_PLUGIN("sqlformattersimple.json")
 
     public:
         SqlFormatterSimplePlugin();

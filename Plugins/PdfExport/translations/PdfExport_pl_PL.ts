@@ -4,166 +4,171 @@
   <context>
     <name>PdfExport</name>
     <message>
-      <location filename="../pdfexport.cpp" line="28"/>
-      <source>SQLiteStudio v%1</source>
-      <translation>SQLiteStudio v%1</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="61"/>
+      <location filename="../pdfexport.cpp" line="66"/>
       <source>SQL query results</source>
       <translation>Wyniki zapytania SQL</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="90"/>
-      <location filename="../pdfexport.cpp" line="144"/>
+      <location filename="../pdfexport.cpp" line="205"/>
       <source>Exported table: %1</source>
       <translation>Eksportowana tabela: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="93"/>
-      <location filename="../pdfexport.cpp" line="159"/>
+      <location filename="../pdfexport.cpp" line="101"/>
+      <location filename="../pdfexport.cpp" line="153"/>
       <source>Table: %1</source>
       <translation>Tabela: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="33"/>
+      <source>Letos v%1</source>
+      <translation>Letos v%1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="104"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Column</source>
       <translation>Kolumna</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Data type</source>
       <translation>Typ danych</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Constraints</source>
       <translation>Ograniczenia</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="126"/>
+      <location filename="../pdfexport.cpp" line="135"/>
       <source>Global table constraints</source>
       <translation>Globalne ograniczenia tabeli</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="215"/>
+      <location filename="../pdfexport.cpp" line="216"/>
+      <source>Exported view: %1</source>
+      <translation>Eksportowany widok: %1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="250"/>
       <source>Exported database: %1</source>
       <translation>Eksportowana baza: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="223"/>
+      <location filename="../pdfexport.cpp" line="258"/>
       <source>Index: %1</source>
       <translation>Indeks: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Property</source>
       <comment>index header</comment>
       <translation>Własność</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Value</source>
       <comment>index header</comment>
       <translation>Wartość</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="228"/>
+      <location filename="../pdfexport.cpp" line="263"/>
       <source>Indexed table</source>
       <translation>Zaindeksowana tabela</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Unique index</source>
       <translation>Indeks unikalny</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Yes</source>
       <translation>Tak</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>No</source>
       <translation>Nie</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Collation</source>
-      <translation>Zestawienie</translation>
+      <translation>Sekwencja porządkowania</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Sort order</source>
       <translation>Sortowanie</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="247"/>
+      <location filename="../pdfexport.cpp" line="282"/>
       <source>Partial index condition</source>
       <translation>Warunek indeksu częściowego</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="261"/>
+      <location filename="../pdfexport.cpp" line="296"/>
       <source>Trigger: %1</source>
       <translation>Wyzwalacz: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="263"/>
+      <location filename="../pdfexport.cpp" line="298"/>
       <source>Property</source>
       <comment>trigger header</comment>
       <translation>Własność</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="263"/>
+      <location filename="../pdfexport.cpp" line="298"/>
       <source>Value</source>
       <comment>trigger header</comment>
       <translation>Wartość</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="265"/>
+      <location filename="../pdfexport.cpp" line="300"/>
       <source>Activation time</source>
       <translation>Moment aktywacji</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="268"/>
+      <location filename="../pdfexport.cpp" line="303"/>
       <source>For action</source>
       <translation>Dla akcji</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="272"/>
+      <location filename="../pdfexport.cpp" line="307"/>
       <source>On view</source>
       <translation>Na widoku</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="274"/>
+      <location filename="../pdfexport.cpp" line="309"/>
       <source>On table</source>
       <translation>Na tabeli</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="279"/>
+      <location filename="../pdfexport.cpp" line="314"/>
       <source>Activation condition</source>
       <translation>Warunek aktywacji</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="285"/>
+      <location filename="../pdfexport.cpp" line="320"/>
       <source>Code executed</source>
       <translation>Kod do wykonania</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="297"/>
+      <location filename="../pdfexport.cpp" line="333"/>
       <source>View: %1</source>
       <translation>Widok: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="298"/>
-      <source>Query:</source>
-      <translation>Zapytanie:</translation>
+      <location filename="../pdfexport.cpp" line="710"/>
+      <source>Document generated with Letos v%1</source>
+      <translation>Dokument wygenerowany przez Letos v%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="654"/>
-      <source>Document generated with SQLiteStudio v%1</source>
-      <translation>Dokument wygenerowany przy pomocy SQLiteStudio v%1</translation>
+      <location filename="../pdfexport.cpp" line="69"/>
+      <location filename="../pdfexport.cpp" line="335"/>
+      <source>Query:</source>
+      <translation>Zapytanie:</translation>
     </message>
   </context>
   <context>
@@ -251,6 +256,68 @@
       <location filename="../pdfexport.ui" line="277"/>
       <source>Print page numbers</source>
       <translation>Drukuj numery stron</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="290"/>
+      <source>Custom header</source>
+      <translation>Własny nagłówek</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="296"/>
+      <source>No custom header</source>
+      <translation>Brak własnego nagłówka</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="309"/>
+      <source>Define custom header content</source>
+      <translation>Podaj zawartość własnego nagłówka</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="322"/>
+      <location filename="../pdfexport.ui" line="393"/>
+      <source>Plain text content</source>
+      <translation>Zwykły tekst</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="332"/>
+      <source>Define custom header file</source>
+      <translation>Podaj plik własnego nagłówka</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="348"/>
+      <source>Choose file for the header</source>
+      <translation>Wybierz plik dla nagłówka</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="351"/>
+      <location filename="../pdfexport.ui" line="422"/>
+      <source>Text files (*.txt);;All files (*)</source>
+      <translation>Pliki tekstowe (*.txt);;Wszystkie pliki (*)</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="361"/>
+      <source>Custom footer</source>
+      <translation>Własna stopka</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="367"/>
+      <source>No custom footer</source>
+      <translation>Brak własnej stopki</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="380"/>
+      <source>Define custom footer content</source>
+      <translation>Podaj zawartość własnej stopki</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="403"/>
+      <source>Define custom footer file</source>
+      <translation>Podaj plik własnej stopki</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="419"/>
+      <source>Choose file for the footer</source>
+      <translation>Wybierz plik dla stopki</translation>
     </message>
   </context>
 </TS>

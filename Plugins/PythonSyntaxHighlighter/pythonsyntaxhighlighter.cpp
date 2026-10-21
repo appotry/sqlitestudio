@@ -7,7 +7,7 @@
 
 // Started from Qt Syntax Highlighter example and then ported https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
 // Ported code copied from https://forum.qt.io/topic/96285/c-highlighter-for-python
-// and then adjusted for SQLiteStudio (i.e. migrated from QRegExp to QRegularExpression).
+// and then adjusted for Letos (i.e. migrated from QRegExp to QRegularExpression).
 class PythonHighlighter : public QSyntaxHighlighter
 {
     public:
@@ -241,47 +241,15 @@ QSyntaxHighlighter* PythonSyntaxHighlighterPlugin::createSyntaxHighlighter(QWidg
 
 void PythonSyntaxHighlighterPlugin::refreshFormats()
 {
-    QTextCharFormat format;
-
-    // Standard
-    format.setForeground(CFG_UI.Colors.SyntaxForeground.get());
-    format.setFontWeight(QFont::Normal);
-    format.setFontItalic(false);
-    styles[PythonSyntaxHighlighterPlugin::STANDARD] = format;
-
-    // Class
-    format.setForeground(CFG_UI.Colors.SyntaxKeywordFg.get());
-    format.setFontWeight(QFont::Bold);
-    styles[PythonSyntaxHighlighterPlugin::DEFCLASS] = format;
-    styles[PythonSyntaxHighlighterPlugin::KEYWORD] = format;
-
-    // Self
-    format.setForeground(CFG_UI.Colors.SyntaxKeywordFg.get());
-    format.setFontWeight(QFont::Normal);
-    format.setFontItalic(true);
-    styles[PythonSyntaxHighlighterPlugin::SELF] = format;
-
-    // Operator
-    format.setForeground(CFG_UI.Colors.SyntaxForeground.get());
-    format.setFontItalic(false);
-    styles[PythonSyntaxHighlighterPlugin::OPERATOR] = format;
-
-    // Parenthesis
-    format.setForeground(CFG_UI.Colors.SyntaxForeground.get());
-    styles[PythonSyntaxHighlighterPlugin::BRACE] = format;
-
-    // String
-    format.setForeground(CFG_UI.Colors.SyntaxStringFg.get());
-    styles[PythonSyntaxHighlighterPlugin::STRING] = format;
-
-    // Numbers
-    format.setForeground(CFG_UI.Colors.SyntaxNumberFg.get());
-    styles[PythonSyntaxHighlighterPlugin::NUMBER] = format;
-
-    // Comment
-    format.setForeground(CFG_UI.Colors.SyntaxCommentFg.get());
-    format.setFontItalic(true);
-    styles[PythonSyntaxHighlighterPlugin::COMMENT] = format;
+    styles[PythonSyntaxHighlighterPlugin::STANDARD] = Cfg::getSyntaxForegroundFormat();
+    styles[PythonSyntaxHighlighterPlugin::DEFCLASS] = Cfg::getSyntaxKeywordFormat();
+    styles[PythonSyntaxHighlighterPlugin::KEYWORD] = Cfg::getSyntaxKeywordFormat();
+    styles[PythonSyntaxHighlighterPlugin::SELF] = Cfg::getSyntaxKeywordFormat();
+    styles[PythonSyntaxHighlighterPlugin::OPERATOR] = Cfg::getSyntaxForegroundFormat();
+    styles[PythonSyntaxHighlighterPlugin::BRACE] = Cfg::getSyntaxForegroundFormat();
+    styles[PythonSyntaxHighlighterPlugin::STRING] = Cfg::getSyntaxStringFormat();
+    styles[PythonSyntaxHighlighterPlugin::NUMBER] = Cfg::getSyntaxNumberFormat();
+    styles[PythonSyntaxHighlighterPlugin::COMMENT] = Cfg::getSyntaxCommentFormat();
 }
 
 QString PythonSyntaxHighlighterPlugin::previewSampleCode() const

@@ -1,6 +1,446 @@
 # ChangeLog
 
+### 4.0.4
+- CHANGE: #5819 Added an option on the Database list configuration page to expand or collapse connected databases on double-click instead of opening their settings.
+- CHANGE: SQLite version updated to 3.54.0.
+- BUGFIX: #5816 Include the data row number in import errors for CSV and other import sources.
+- BUGFIX: #5804 Fixed renaming columns used by dependent views, CHECK constraints, generated columns and table keys, and dropping views before rebuilding their tables.
+- BUGFIX: #5810 Fixed unreadable Debug Console text in dark themes by using the theme's text color.
+- BUGFIX: #5814 Fixed queries using implicitly attached databases with views, CTE aliases, forward references and materialization hints, including incorrect results when table names overlap.
+- BUGFIX: #5822 Fixed uninitialized syntax colors and editor highlight backgrounds when starting with the default palette.
+- BUGFIX: #5815 Restored support for the user's QT_PLUGIN_PATH environment variable by reverting the fix for #4241.
+- BUGFIX: #5808 Fixed dragging table fields into the SQL Editor to insert comma-separated names, generate SELECT with Ctrl, and generate UPDATE with Ctrl+Shift.
+- BUGFIX: #5831 Fixed using `!` and `!=` operators without a whitespace separating it from the value or id.
+- BUGFIX: #5806 Fixed crash when renaming VIEW inline (in Database List).
+
+### 4.0.3
+- ADDED: #5794 Added glowing effect for entities & arrows being in relation with the selected entity. Can be turned off/on.
+- BUGFIX: #5794 Scene area once again refreshes after entity is moved out of the scene, so it's possible to scroll to see it.
+- BUGFIX: #5797 Fixed font color on DDL tab of Table Window immediately after changing theme from light to dark or vice versa.
+- BUGFIX: #5799 Import/Export dialog on macOS has now mnHeight=450, so the options section appear at bottom, neglckting the ephemeral scrollbars on macOS.
+
+### 4.0.2
+- ADDED: #5758 Added `Fusion Light` theme, so now there's `Fusion` for system-compliant autodetected color palette, `Fusion Dark` for enforced dark palette and `Fusion Light` for light palette.
+- ADDED: #5771 Window List menu is now by default a top-level menu (on menubar), but it still can be restored to previous way (submenu in View menu) in configuration.
+- CHANGE: #5774 SQLite3 updated to 3.53.4.
+- BUGFIX: #5755 Grid View column header separator is now easier to grab or double-click.
+- BUGFIX: #5744 Fixed cmd+c in Grid View for macOS with russian keyboard input.
+- BUGFIX: #5744 Update Qt on macOS for official builds to 6.11 to fix cmd+c copy hotkey, thus dropping support for macOS 11 and 12 in official builds (other builds may still use older Qt and support older macOS).
+- BUGFIX: #5777 Fixed crash when committing whole ERD schema while havinh table panel open and trying to do another change in that panel.
+- BUGFIX: #5768 Fixed crash when pasting data from a spreadsheet (i.e. Excel, etc) containing empty cells.
+- BUGFIX: #5754 Fixed crash in several `Browse File` actions across the application.
+- BUGFIX: #5760 Fixed wrong (dark) text color in SQL editor on Windows with dark theme.
+- BUGFIX: #5758 Properly removed `windowsvista` and `windows11` themes, as they should have been in #5743 already in 4.0.1.
+- BUGFIX: #5778 Fixed deleting data rows from Table Window for tables with unusual names.
+- BUGFIX: #5756 Resize (adjust) all selected columns when double-clicked on section separator in header, regardles if the column associated with the clicked separator needs the resizing or not.
+- BUGFIX: #5761 Added additional MacOS build with older Qt (6.5) to allow to run the app on older MacOS (11 & 12), with the known issue #5744 in older Qt.
+- BUGFIX: #5785 Fixed mult-level CTE queries execution with explicit database names in the query.
+- BUGFIX: #5766 Added the `Last-used-window` hotkey (`Ctrl+Tab`) for macOS, for which Qt lacks proper implementation.
+- BUGFIX: Fixed Command Palette navigation under Windows/Linux, after breaking it with the fix for MacOS. Now it should work on all OS's.
+
+### 4.0.1
+- ADDED: #5402 User Interface scaling can be now configured for whole application from the configuration dialog (Look & Feel page).
+- ADDED: Letos can now use different icon sets. It's configurable. For now the open source repository contains only the default icon set, while official letos.org builds will include a set from Icons8 (https://icons8.com). These are proprietary icons and Icons8 team granted the license to Letos project.
+- BUGFIX: #5626 Grid View font is now used for inline editors to make the cell editing experience unified.
+- BUGFIX: #5722 Fixed crash when committing data edited in a View.
+- BUGFIX: #5728 Set cell vertical alignment in Grid View to center.
+- BUGFIX: #5724 Persian translation added. Right-To-Left languages support fixed. Fixed core Qt translations (i.e. dialog buttons, etc).
+- BUGFIX: #5693 Fixed disappearing folder/group from Db list when drag&dropping it outside of the Db list.
+- BUGFIX: #4241 ignore user's QT_PLUGIN_PATH, because it can break Letos if it's incompatible Qt path
+- BUGFIX: #5733 Fixed drop support for SQLite3 files under Windows.
+- BUGFIX: #5742 Fixed header to resize column on double-clicking its right separator.
+- BUGFIX: #5738 Fixed bright background for MDI on first app run when using MacOS or Linux with dark theme.
+- BUGFIX: #5743 Removed the Windows 11 and Windows Vista styles from the official builds, as the Qt implementations are incomplete and may lead to a confusing user experience.
+- BUGFIX: Fixed Command Palette under MacOS, so that navigating with up/down keys over results works now and margins of the results are more aesthetic.
+- BUGFIX: Fixed restoring expanded/collapsed state of folders on the database list.
+- BUGFIX: Fixed crash on pressing Ctrl while having focus in the Hex editor.
+- BUGFIX: Fixed Import Dialog to keep selected table when importing data to table from DB list context menu.
+- BUGFIX: Removed misleading message from data query execution when clearing the sorting column by header clicks.
+
+### 4.0.0
+- ADDED: #2865 ERD editor - a diagram viewer and editor for database schema.
+- ADDED: #5206 Windows ARM64 binaries provided.
+- ADDED: #5241 Linux ARM64 binaries provided.
+- ADDED: #4899 MacOS ARM64 (M1, M2, ...) binaries provided as Universal Binary (both x86_64 and ARM64 architectures supported by a single binary).
+- ADDED: #3886 Added image rendering for image data in the Grid View (plugin-based, so more renderers can be added in future).
+- ADDED: #4027 Added data editor plugin for JSON - with syntax validation and highlighting for editing table data. Contributed by @calumk!
+- ADDED: #5445 Added AUTOINCR option directly to column dialog, reducing clicks needed to create the INTEGER PRIMARY KEY AUTOINCREMENT column.
+- ADDED: #3930 Added support for defining user-defined Aggregate Window Functions in the Functions Editor.
+- ADDED: #4269 Double-clicking on a cell that clearly contains a value to be edited in the Value Editor dialog will immediately open it in the editor dialog.
+- ADDED: #4271 Value Editor dialog (and Form View editor) allow now loading/saving value from/into a file by dedicated buttons.
+- ADDED: #4599 Added Command Palette (Ctrl+Shift+P by default) for quick search & execution of common actions, searching configuration options, etc.
+- ADDED: #5165 Database List can be now synced/linked with active MDI window using the toggle button on top of the database list.
+- ADDED: #5212 Objects on Database List (databases, tables, columns, indexes, triggers, views) can be now renamed quickly inline.
+- ADDED: #5212 Dragging table/view/columns from Database List to SQL Editor will now generate SELECT/UPDATE/INSERT depending on the keyboard modifier during the drop.
+- ADDED: #4662 ScriptingPython plugin now allow selecting Python installed in your system and it's compatible with all recent (and not so recent) Python versions. Big thanks to @tuffnatty for this!
+- ADDED: #4117 Syntax highlighting now supports bold/italic settings.
+- ADDED: #3365 Added Tcl syntax highlighter plugin.
+- ADDED: #3283 Added Tip of the Day plugin.
+- ADDED: #5449 User can now change size of icons on toolbars.
+- ADDED: #5493 Password input (for example in database dialog for encrypted files) has now icon to show/hide the password.
+- ADDED: #4677 Search function for Form View text fields (with Ctrl+f/Cmd+f hotkey).
+- ADDED: #4598 Ctrl+f/Cmd+f hotkey in Grid View now moves focus to filter input.
+- ADDED: #5212 F2 hotkey in SQL editor opens database object being currently at the cursor position (if any).
+- ADDED: #5150 Added the Disable Blinkinig Cursor (for SQL Editor) option in the configuration dialog.
+- ADDED: #4232 Application will warn in status field if the open database was recently edited by a higher version of SQLite and that it may potentially cause some issues.
+- ADDED: #5552 Support for new syntax variants of ALTER TABLE.
+- ADDED: #5383 Double-click on column separator in data view now supports resizing all selected columns at once.
+- ADDED: #5566 Added Columns node to Views in Database List.
+- ADDED: #5284 Column widths and Row Height Adjusting in Grid View is now stored in the session and restored upon next application strt.
+- ADDED: #5578 Much better suppport for dropping various files (databases, SQL files, ...) onto the application Window.
+- ADDED: #5570 In Configuration dialog the Reset To Defaults button was added for hotkeys page.
+- ADDED: #3934 Windows executables in the official release are now signed thanks to the SignPath.io.
+- ADDED: #3932 MacOS executables in the official release are now signed with Apple Developer ID.
+- ADDED: #3539 Export Dialog now has option to export View(s) together with their triggers and data. View Window now has icon on the toolbar to export the View.
+- ADDED: #4417 Html Export plugin produces now HTML tables that are sortable by clicking on their headers.
+- ADDED: #4286 SQL History tab has now function to export executed queries history (or selected subset) to a SQL file.
+- ADDED: #5369 The Format SQL action added to context menus everywhere where SQL is being being edited. Also the hotkey for actions works for it.
+- ADDED: #4401 Custom footer and header can be configured for PDF and HTML export.
+- ADDED: #4401 PDF export now includes query used for the data being exported (when exporting Query Results or a View).
+- ADDED: #5106 Tools menu entries to export/import application configuration, such as defined functions, collation sequences, code snippets and SQLite extensions.
+- ADDED: #4502 When selecting multiple cells, sum of all numerical values will be shown in the toolbar, next to numer of loaded rows.
+- ADDED: #5345 Column data types are now displayed as labels for column on database list. It can be switched off in configuration.
+- ADDED: #4724 Columns in Data Grid View can now be pinned from header's context menu.
+- ADDED: #4623 Form View row number is now an editable input, allowing to jump to arbitraty row number within currently loaded page of data.
+- ADDED: #4539 Added the Open In Editor button to DDL preview dialog.
+- ADDED: #5290 Execute From File Dialog now supports 3 execution modes, allowing SQLite CLI dot commands in the executed file.
+- ADDED: #4873 Execute From File Dialog remembers its settings for another use.
+- ADDED: #5611 Query results in SQL Editor can be arranged on the right side of the query, apart from the options available so far (below query or on separate tab). The layout is saved in the session and restored upon next start.
+- ADDED: #4225 Foreign Key constraint configuration dialogs now warns about using foreign column that is neither PRIMARY KEY nor UNIQUE.
+- ADDED: #3035 The INSTEAD OF triggers on Views are now honored when present. Add/Delete row in the View Window now appears if respective INSTEAD OF trigger is present for the View.
+- ADDED: #5085 Added 'Cut' entry to context menu of data Grid View.
+- ADDED: #5684 Added debug(msg) SQL function to print messages to Status Field, for example from TRIGGER body.
+- ADDED: #4709 Added option in configuration to sort data by single-click on a header. Ehnanced data header tooltips to include this information there.
+- ADDED: #3566 Added option in configuration to make the Enter key move to the next row, if it was used to finish data editing in Grid View. The option is also available from the Grid's context menu.
+- ADDED: #5574 Application was fully translated with AI LLM to new languages: Afrikaans, Arabic, Belarusian, Catalan, Czech, Danish, Dutch, Greek, Hugarian, Japanese, Korean, Norwegian, Portuguese (both European and Brazilian), Romanian, Serbian, Slovak, Swedish, Turkish.
+- CHANGE: #5441 Project has been renamed to Letos. Together with the name, also domain/homepage has changed to letos.org.
+- CHANGE: #4553 Application has moved to Qt 6 (dropping Qt 5 support). This solves several technical issues (for example accented characters on MacOS, better UI scaling for high DPI displays, better dark theme support and more).
+- CHANGE: #5102 All raster icons are replaced with vector icons (SVG). This makes them scalable and work well with high DPI displays.
+- CHANGE: #5701 SQLite3 version updated to 3.53.2.
+- CHANGE: #4271 Value Editor (and Form View) got small visual lifting to be more convenient to use (bigger column labels, etc).
+- CHANGE: #4862 SQL Editor is now tied to a file whenever loads or saves to that file and that tie is restored upon next application session. It also renames editor window to that file name.
+- CHANGE: #4762 Colors configuration for syntax highlighting now allows defining also bold/italic attributes.
+- CHANGE: #5541 Plugins Page in Configuration Dialog uses now a material-design-like toggle for loading/unloading plugins + each plugin has more vertical padding and is clickable as a whole row, not just a small box.
+- CHANGE: #5212 Configuration Dialog filter marks matched widgets with red outline.
+- CHANGE: #5597 Configuration Dialog items on the categoris list are now a bit taller, icons a bit bigger.
+- CHANGE: #5561 Database actions on main toolbar simplified, partially moved to Database List panel.
+- CHANGE: #5060 Application connects to the database that was just added to the list.
+- CHANGE: #5374 Ctrl+O (Cmd+O on macOS) now always asks for a file to open and if it's a database, it's added to the list. If it's SQL file, the SQL editor opens for it.
+- CHANGE: #5374 Ctrl+N (Cmd+N on macOS) now always asks for a file to create and adds the new database to the list.
+- CHANGE: #5477 WxSQLite plugin was renamed to its proper name, the SQLite3MC (SQLite 3 Multiple Ciphers).
+- CHANGE: #5456 Table Modifier optimization, so at most only single copying data can happen, instead of two. Also views/triggers support got improved for cases with subselects.
+- CHANGE: #5496 Code Assistant improved to suggest appropriate JOIN conditions when asked at the ON keyword of joining tables. Currently supports only plain table data sources (not subselects).
+- CHANGE: #5509 Foreign Key editor in Form View and dedicated editor dialog now shows preview of currently selected value of foreign table.
+- CHANGE: #5580 Column Dialog now shows Composite constraints that affect edited column as read-only checked options, to make it clear why this column has particular constraint icon on it in Table Window.
+- CHANGE: #5562 Several toolbars cleaned up, simplified.
+- CHANGE: #5591 Enhanced support for DEFAULT/AUTOINCR/GENERATED columns, so that it's the default value is distinct from NULL and user can always reset new cell value to its default value.
+- CHANGE: #5212 Database list now expands columns, indexes and triggers whenever the table is expanded.
+- CHANGE: #5212 Middle-click on an open database closes it. Middle-click on tables/views (in Database List) closes respective Table and View windows.
+- CHANGE: #5164 Added option to prefer sqlite_master table name over sqlite_schema on the Database List.
+- CHANGE: #5497 Boundled SQLite extensions now use path relative to the running application.
+- CHANGE: #5212 Table Window and View Window does not ask for closing confirmation when they were open for creation of new object and not yet modified.
+- CHANGE: #5212 New Table and New View actions are now disabled if selected item in the Database List does not have open database, as it may be misleading to start designing new table/view and miss the fact that it's still not aimed towards the database.
+- CHANGE: #4849 The setting to show per-column filters in Grid View is now remembered.
+- CHANGE: #5269 Default hotkey for Configuration Dialog changed to Ctrl+, on all platforms.
+- CHANGE: #5212 Config Dialog now remembers the last used page and restores it when its open next time.
+- CHANGE: #5477 SQLCipher for SQLite3MultipleCiphers plugin now provides small initial pragmas configuration proposal.
+- CHANGE: #4475 Using RETURNING clause for INSERTing data to optimize the operation.
+- CHANGE: #3539 File extension in Export Dialog file input is now updated whenever export format is changed.
+- CHANGE: #4554 Added Select All and Deselect All buttons to Populate Dialog.
+- CHANGE: #5321 Reported query execution time now shows more decimal places and removes trailing zeros. The precision is now also configurable.
+- CHANGE: #5209 Default Code Snippet list extended and now they are preferred in the Code Assist when SQL Editor is empty.
+- CHANGE: #5642 Bind Param Dialog now starts in simplified layout (unless complex values were remembered), which is much cleaner for simple input.
+- CHANGE: #5092 Functions, Collations, Code Snippets and Extensions windows now show more info on their list (number of databases in which they are registered, etc). Additionally their splitter position is now remembered.
+- CHANGE: #5158 Status panel now dims older messages, when new messages appear, so they stand up. User can also configure to use older behavior (no dimming), or to remove older messages entirely from the panel and keep only the new one.
+- CHANGE: #4688 Added metadata to Windows executables.
+- CHANGE: #2956 Export Dialog respects hotkeys for changing database in the dropdown, using the same hotkey as SQL Editor.
+- CHANGE: #4964 Import Dialog has now inverted order of pages - the imported file first and then the target table, for which the name is concluded from imported file name. Also filter for CSV import is now extended with tsv files.
+- CHANGE: #3522 EXPLAIN button in SQL Editor now has dropdown menu with selection between EXPLAIN and EXPLAIN QUERY PLAN modes.
+- CHANGE: #5612 With hotkeys being reset to defaults in version 4.0.0, the relevant notification message is now printed upon the reset.
+- CHANGE: #5634 Execute SQL From File dialog no whas a database selector and the action appears in all database list context menus + in the Tools menu of main menubar.
+- CHANGE: Windows x86 (32-bit) binaries will no longer by provided in official builds.
+- CHANGE: #5657 The command line application (letoscli) was deprecated and removed from the current code branch. Please use official SQLite3 CLI as a command line app, as it improved a lot in recent versions.
+- CHANGE: #5574 Application translations were updated with missing translations using AI LLM for languages: Chinese (Simplified and Traditional), French, Italian, Slovak, Spanish
+- CHANGE: #5574 Application translations were updated with missing translations for lanuages: Polish
+- BUGFIX: #3079 Enterprise Formatter now handles comments much better than before.
+- BUGFIX: #4986 Unique indexes are allowed for expressions, as they should be.
+- BUGFIX: #5498 Empty/null cells resulting from LEFT JOINs are not editable anymore.
+- BUGFIX: #3995 Fixed blank MDI window buttons when using 150% interface scaling under Windows.
+- BUGFIX: #3146 Fixed accent characters support under MacOS.
+- BUGFIX: #5212 Grid columns do not shrink when unwanted while refreshing data, or entering new values to cells.
+- BUGFIX: Improved Code Assistant suggestions when SQL editor contains more than one query.
+- BUGFIX: #5089 User-defined functions now follow database renaming in case the function was explicitly registered for the database.
+- BUGFIX: #5584 Fixed user-defined collations.
+- BUGFIX: #5583 Fixed table labels on Database List to enforce the lazy-loaded table schemas to be loaded at once when this option is enabled.
+- BUGFIX: #5609 Fixed SQL syntax highlighter for multi-line comments with empty linies inside.
+- BUGFIX: #5628 Fixed PDF export bugs (first page size too small, occasional table overlapping, page numbers cut off).
+- BUGFIX: #5691 Fixed tooltip in Database Dialog with Wayland under Linux.
+- BUGFIX: #5692 Select first inserted row after inserting multiple rows in Grid View.
+- BUGFIX: #5713 MultiEditor now keeps original line separators from the value loaded, while new separators inserted are alwas \n. Also optimized performance for very long text lines in the editor.
+
+### 3.4.21
+- ADDED: #5466 Support foreign keys with implicit columns (proper values in FK combobox columns).
+- BUGFIX: #5472 Fixed updates cheking under Windows.
+- BUGFIX: #5474 The Deterministic feature of custom functions is now properly persisted between application sessions.
+- BUGFIX: #5475 Fixed handling object names starting with a dollar sign.
+- BUGFIX: #5479 Fixed the Copy With Headers action in data view to copy correct headers if in selected cells there are gaps in columns.
+- BUGFIX: #5482 Changed default hotkey for Collations Editor from Ctrl+Shift+C to Ctrl+Shift+L to avoid conflict with another action assigned to Ctrl+Shift+C - Copy With Headers.
+
+### 3.4.20
+- ADDED: #5452 Option to convert Unicode line/paragraph breaks (U+2028 / U+2029) to LN (\n) when storing value entered in the Form View.
+- BUGFIX: #5437 Fixed issue with flushing WAL files when quitting application.
+- BUGFIX: #5455 Added missing syntax support for ALTER TABLE RENAME COLUMN.
+- BUGFIX: #5453 Fixed next/prev page buttons if the data was refreshed while being on the last page.
+- BUGFIX: #5452 Fixed rendering Unicode line/paragraph breaks in Grid View.
+
+### 3.4.19
+- BUGFIX: #5443 Fixed data entering in Grid View after it has got broken in 3.4.18 (entering editing mode by starting to type jumped to wrong cell).
+- BUGFIX: #5447 Database object filtering improved - both speed (3x) and reliability (i.e. typing while filtering is in progress).
+- BUGFIX: #5450 Increased precision for very small decimal numbers (like 1e-15).
+- BUGFIX: #5440 Fixed formatting string literals in WITH-CTE clause.
+- BUGFIX: #5436 Updated syntax definitions to support VALUES clause after UNION ALL.
+- BUGFIX: Fixed manual updates checking in case when automatic on-startup checking is disabled.
+
+### 3.4.18
+- CHANGE: #5407 SQLite updated to 3.51.1 (except for SQLCipher, which stays at 3.46.1 due to conflicting OpenSSL requirements against Qt 5). Updated syntax files, AST and formatter to support syntax updates.
+- CHANGE: ICU SQLite extension removed from binary packages. Maintaining ICU dependencies in GitHub workflows became an issue, while building SQLiteStudio is primary focus.
+- BUGFIX: #5308 #5358 Fixed handling true/false literals in expressions and on/off/yes/no literals in PRAGMA values.
+- BUGFIX: #5386 Fixed vertical scroll position when refreshing grid data view.
+- BUGFIX: #5348 Fix name-based filtering in Functions/Collations editors and repair Implementation Language dropdown in Collations Editor.
+- BUGFIX: #5348 Fix name-based filtering in Code Snippet/SQLite Extension editors.
+- BUGFIX: #5355 Fixed SQL Enterprise formatter for CASE-WHEN-THEN-END statement.
+- BUGFIX: #5288 Fixed crash when closing all tabs in the Bind Parameter and Value Editor dialogs.
+- BUGFIX: #5305 Fixed result counting and syntax assistant in case of manually - by a user - attached databases (using explicit ATTACH statement).
+- BUGFIX: #5311 Trigger list and Index list in Table Window are now sortable and initially sorted by name. Editing them does not change their order (unless it reflects current sortig order).
+- BUGFIX: #5333 Fixed handling dollar sign in object names.
+- BUGFIX: #5314 Fixed proper handling od the USING clause in queries with JOINs.
+- BUGFIX: #5319 Fixed query results for count(ALL column).
+- BUGFIX: #5363 Fixed crash when closing View window while data was still being read from database.
+- BUGFIX: #5318 Fixed consuming some of UTF-8 spacing characters (U+00A0, U+2029, U+2028) by Form View text input.
+- BUGFIX: #5339 Changed per-column filter inputs, so they always apply modified values when user finishes editing value (moves focus elwhere).
+- BUGFIX: #5381 Fixed per-column filter when it was enabled after SQL filtering mode was set.
+- BUGFIX: #5342 Fixed broken filtering in View data, when the View's source table name requires quoting (i.e. has whitespaces, etc.).
+- BUGFIX: #5347 Fixed SQL formatter to keep single-quote wrapper around string literals.
+- BUGFIX: #5370 Fixed cell inline editor context menu actions for Copy, Cut and Delete.
+- BUGFIX: #5364 Fixed triggering inline cell editor with polish characters.
+- BUGFIX: #5379 Shorthand form of foreign key constraint now works correctly in cell inline editor.
+- BUGFIX: #5378 Default hotkey to toggle Rows Height Adjusting is changed from Alt+H to Ctrl+Alt+H to avoid hoteky conflict with the Help menu hotkey
+- BUGFIX: #5373 Make sure to always scroll data view to a newly inserted row, wherever in the data grid it is.
+- BUGFIX: #5395 Fixed SQL From File executor to handle properly temporar FK disabling.
+- BUGFIX: #5395 Fixed loading trigger condition if it starts with the NOT keyword.
+- BUGFIX: #5398 Fixed Smart Executor for queries, where two joined, unaliased tables return column of the same name, but different case-wise.
+- BUGFIX: #5406 Tracking calls to load_extension() SQL function and loading the same extensions in the Results Counting connection.
+- BUGFIX: #5411 Data View sorting is reset upon modifying table structure.
+- BUGFIX: #5410 Fixed AST token rebuilding for joined data sources being functions.
+- BUGFIX: #5412 Removed ICU extension from Linux binary packages in 3.4.x, as icu.c uses recent ICU API, while Qt 5 comes with older ICU. Users need to provide theirn own icu extension if they want to use it in SQLite under Linux.
+- BUGFIX: Fixed arbitrary crashes when opening SQL Editor, while having non-thread-safe SQLite extensions loaded in the active database.
+
+### 3.4.17
+- BUGFIX: #5274 Fixed crash when invoking tooltip over the Foreign Key icon in Table Structure view in case of FK without explicit parent columns specified.
+- BUGFIX: #5263 Fixed database list filter field as it stopped filtering by column names after bugfix #4980.
+- BUGFIX: Fixed warning when execuing SELECT on sqlite_schema.
+
+### 3.4.16
+- ADDED: #5231 Added safe-mode command line option to bypass issues caused by corrupted session.
+- CHANGE: #5248 Database Export dialog has now Export Indexes and Export Triggers options, just like the Single Table Export dialog.
+- CHANGE: SQLite updated to 3.49.0.
+- CHANGE: Config options for WxSQLite plugin extended to support AEGIS and Ascon-128 ciphers.
+- BUGFIX: #5247 Fixed crash when opening a View's Trigger and enabled trigger-related entries in context menu for a View's Trigger.
+- BUGFIX: #5233 Fixed result column name when using [] quoting operator for column alias name.
+- BUGFIX: #5226 Fixed SQL formatter for INSERT statement when database prefix is used, so the dot is not removed after database name.
+- BUGFIX: #5234 Fixed SQL formatter for GENERATED ALWAYS column in CREATE TABLE statement, so it doesn't quote type name.
+- BUGFIX: #5245 Enterprise SQL formatter preview is no longer resetting vertical scroll when updating preview contents.
+- BUGFIX: #5254 Fixed handling Views that reference columns with spaces in their name, when commits table modifications.
+
+### 3.4.15
+- BUGFIX: #5218 Fixed Drag&Drop of items in the database list - a bug that was introduced in 3.4.14.
+- BUGFIX: #5216 Fixed Query Executor to use Smart Execution Method when there is a Virtual Table mentioned in the query, therefore enabling all advanced features of the Query Executor.
+
+### 3.4.14
+- ADDED: #5190 Added support for optional ORDER BY and LIMIT clauses in UPDATE and DELETE statements.
+- ADDED: #5190 Added support for AS clause in INSERT, UPDATE and DELETE statements.
+- CHANGE: #5187 Backported compilation improvement for ScriptingPython to allow Python version selection through qmake parameter.
+- CHANGE: #5214 Database list item selection is retained in the session for the next application start.
+- BUGFIX: #5190 Improved code assistant suggestions for UPDATE to pripritize more relevant columns.
+- BUGFIX: #5207 Fixed SQL parser to avoid marking INDEXED BY as syntax error.
+- BUGFIX: #5189 Fixed execution of SELECT queries that use subselects with a STAR operator for result columns (in these subselects), so they return correct results.
+- BUGFIX: Fixed execution of complex SELECT queries with subselects, that join multiple tables, some with aliases, some without aliases. Results from such queries would not be editable at all. Now they execute properly using the Smart Execution method.
+- BUGFIX: #4987 MultiEditor dialog (i.e. hex editor dialog) now remembers size that user sets for it.
+- BUGFIX: #5191 Fixed Enterprise Formatter in case when it's configured to avoid whitespaces before binary operator and the AND keyword appears in formatted query.
+
+### 3.4.13
+- BUGFIX: #5183 Fixed completer proposals in the column names of the INSERT INTO statement.
+- BUGFIX: #5184 Fixed completer to show tables from implicitly attached database in case of 'SELECT other_database.'
+- BUGFIX: System tables (sqlite_*) are now pushed further in the competer proposals.
+- BUGFIX: Restored missing completer entries: string, number, BLOB literal.
+- BUGFIX: Fixed Linux installer issue related to the logname command on some Linux distributions.
+
+### 3.4.12
+- BIGFIX: #5179 Fixed results returned from query joining the same table twice.
+- BIGFIX: #5179 Fixed smart execution when joining tables with USING clause, so the result metadata is extracted properly and results can be edited.
+
+### 3.4.11
+- CHANGE: SQLite updated to 3.47.2
+- BUGFIX: #5161 An ultimate fix for dialog windows positioning, so they no longer can appear outside of visible screen.
+- BUGFIX: #4882 Fixed Rows Affected counter for huge numbers (over 2 trillion).
+
+### 3.4.10
+- CHANGE: #5160 The taskbar has been improved to make the currently active task more distinct from the others.
+- BUGFIX: #5148 Fixed counting of tables in queries transparently attaching other databases.
+- BIGFIX: #5162 Fixed crash when enabling STRICT option in Table Window.
+- BIGFIX: Fixed dialog windows positioning, so it's remembered correctly if the dialog is only moved, but not resized.
+- BIGFIX: System tables are again being presented on the database list if the app is configured to do so.
+
+### 3.4.9
+- BUGFIX: #5148 Fixed executing queries that refer to tables with database prefix (i.e. dbName.tableName).
+- BUGFIX: #5149 Relaxed recent limitation on requiring Custom SQL Functions to have unique names, so that names can duplicate if input parameters differ.
+
+### 3.4.8
+- CHANGE: #5146 If user enters a relative file path to the database dialog, a warning will issued to the user pointing out actual resolved path for the relative path entered.
+- BUGFIX: #5145 Fixed Extensions Manager crashing the app if the percentile extension was loaded before. The percentile SQLite extension became corrupted in SQLite 3.46.x, then it got fixed, but the fix is not included in SQLite 3.47.1 source package.
+- BUGFIX: #5144 Fixed Extensions Manager commit button when all extensions got removed from the list.
+
+### 3.4.7
+- CHANGE: #5131 SQLite updated to 3.47.1 (except for SQLCipher, which is still on 3.46.1 at the moment).
+- BUGFIX: #5119 Fixed very bad performance of import() function executed from SQL Editor.
+- BUGFIX: #5124 Fixed ScriptingPython plugin compilation against Python >= 3.12.
+- BUGFIX: #5134 Improved performance significantly when working with big values (~1MB per cell) in multiple columns/rows of a table data grid view.
+- BUGFIX: #5122 Fixed Linux packages to run properly under Wayland.
+- BUGFIX: #5136 Fixed application hanging at quitting when the database is in WAL journaling mode and there is another client still accessing the database.
+- BUGFIX: #5135 Counting rows in enormous tables (which can take very long time) no longer blocks the application.
+
+### 3.4.6
+- BUGFIX: #5114 Fixed black highlighting for current query on systems, where SQLiteStudio was never configured to use theme different than default.
+- BUGFIX: #5111 Applied fix for compiling with Python 3.11 (thanks to @mehw).
+- BUGFIX: #5115 Fixed smart query executor to work properly if there is an inline subquery in a SELECT result columns.
+
+### 3.4.5
+- ADDED: #4974 Extension-based collations (like the ICU) can be now registered in databases using Collations Editor window.
+- ADDED: #5041 Added support for column list syntax in CREATE VIEW.
+- ADDED: #4774 Added checking if data types are matched in both columns while creating foreign column. This applies for Column Dialog Foreign Key, Table Foreign Key and also in the Query Executor (user will receive warning if executed query breaks the Foreign Key data type alignment).
+- ADDED: #4928 During exporting data in Export Dialog, the progress bar now shows number of rows already exported in real time (still filesystem may buffer writing operation, so data may appear in the output file with delay).
+- ADDED: #5079 Data cell focus and current data page is maintained during data reload.
+- CHANGE: #4740 Dialog geometry is saved & restored for several dialog windows (i.e. Import, Export, Populate and more...).
+- CHANGE: #4861 When loading SQL script into SQL Editor, contents of current editor are retained. Instead another editor is open to load SQL script, with exception when current editor is empty - in that case it is used for loading.
+- CHANGE: #4861 When trying to load SQLite database as SQL script into SQL Editor window, application detects it and opens Database dialog for that file instead.
+- CHANGE: #4861 When trying to load huge SQL script (over 10MB) into SQL Editor, user is asked to confirm it.
+- BUGFIX: #4828 Fixed Linux installer error 'logname: no login name'.
+- BUGFIX: #4761 Fixed current query highligting color to respect configured color, instead of always using default color. Also removed query content selection after execution.
+- BUGFIX: #4796 Fixed Database Dialog file selection, so user has clear understanding whether new file is to be created, or existing file to open. Also fixes file selection dialog on MacOS when creating new database file.
+- BUGFIX: #4819 Fixed sorting order cached in data view when executing query with less columns than previously.
+- BUGFIX: #4846 Fixed crash when using NOT NULL DEFERRABLE INITIALLY DEFERRED.
+- BUGFIX: #3454 German translation fixes.
+- BUGFIX: #4835 Fixed detecting cell value change (to enable commit button) when erasing cell with BLOB value starting with null byte.
+- BUGFIX: #4842 Fixed querying ROWID column from tables. It no longer causes issues with editing query result data.
+- BUGFIX: #4844 Fixed moving/copying Views from one base to another using drag&drop or copy&paste.
+- BUGFIX: #4861 Fixed application freezing when loading big files into SQL editor (over 1MB or bigger). Now it can work with huge files, although all smart helpers (e.g. syntax highlighting, etc) are disabled in such window.
+- BUGFIX: #4872 Fixed executing SQL directly from file, so it does not skip CREATE TRIEGGER statements.
+- BUGFIX: #4871 Fixed executing SQL directly from file, so it no longer disables foreign key checks during execution.
+- BUGFIX: #4874 Fixed Foreign Key dropdown in data grid when foreign key references 2 different tables with same foreign column name in both referenced tables.
+- BUGFIX: Fixed tiny memory leak in the import() function.
+- BUGFIX: Fixed import() function options parser, so it no longer overwrites import plugin configuration with incorrect types of configuration values (i.e. string 'true' instead of expected boolean).
+- BUGFIX: #5096 Fixed executing large DDL scripts (more than 100 DDL statements) with CREATE TRIGGER in them.
+- BUGFIX: #4831 Fixed warning message of forbidded cell edition when trying to do it on a multi-level View results, where the View was given an alias name. Now the warning is clear about forbidden edition due to multi-level View.
+- BUGFIX: #5077 Fixed question dialog for going back to structure tab if there are uncommited structure changes (thanks to @marcpley).
+- BUGFIX: #5076 Fixed broken order of data insertion when adding new row to a table with GENERATED column (thanks to @marcpley).
+- BUGFIX: #4949 Added extra calls for cleaning up WAL files upon application exit.
+- BUGFIX: #4934 Fixed copying (drag&drop or copy&paste) tables between databases when a column in the table requires quoting due to being a keyword.
+- BUGFIX: #5076 Fixed unchecking Named Constraint option in constraint configuration (thanks to @marcpley).
+- BUGFIX: #5083 Improved cell editing behavior, so entering edition with Enter key or mouse Double-Click no longer preselects whole value.
+- BUGFIX: #5091 Fixed custom SQL functions editor to prevent duplicated argument names. Also fixed correct argumentName-to-value assignment if arguments share same initial part of their name. Also fixed handling of differnt type of arguments passed to custom SQL function.
+- BUGFIX: #5074 #5082 #5083 Fixed cell editing to preselect proper FK value from dropdown, to correctly load cell value if it containts single quote character and to have proper content selection depending on how editing is triggered.
+- BUGFIX: #5082 When editing FK value inline (not from dropdown), the autocompleted value also updates selection of item in the dropdown (yet to be shown if user chooses so). This also fixes up/down keyboard navigation basing on autocompleted value.
+- BUGFIX: #4959 GitHub Actions Linux build: include qt5-qtwayland to fix segfault in AlmaLinux 9.3 (thanks to @tuffnatty).
+- BUGFIX: #4980 Bunch of SchemaResolver optimizations, resulting in huge performance boost when opening/modifying databases with thousands of tables (from minutes down to milliseconds for opening database with ~6000 tables).
+- BUGFIX: #5065 Improved handling of columns named 'true' or 'false', which are allowed in SQLite, but are treated in a very unusual way by SQLite.
+
+### 3.4.4
+- ADDED: #3488 SQLite ICU extension is boundled into binary packages (thanks to @tuffnatty).
+- ADDED: #4697 Added a 'Restore original hotkey' buttons at keyboard shortcuts page of configuration dialog.
+- ADDED: Added sqlar extension to the default set of extensions provided with binary packages.
+- CHANGE: #4689 Sorting order is not cleared when table data is refreshed. To removed sorting order user can either double-click on header (once or twice) to restore no sorting for a column, or use context menu to clear any sorting.
+- CHANGE: #4735 Order of functions loading has changed. Now it's: built-in, extension-provided, user-defined. The last loaded has the highest precedense.
+- CHANGE: #4732 SQLite updated to 3.41.2 (except for SQLCipher, which is still on 3.39.4 at the moment).
+- CHANGE: #4683 Custom syntax highlighting colors now use theme-based colors by default (to work well with dynamically changing color palette in night/day theme changes) and can be explicitly enabled in configuration.
+- BUGFIX: #4676 #4716 #4693 #4701 #4669 #4721 Few critical fixes for Query Executor, fixing a frequent error: near ")": syntax error.
+- BUGFIX: #4685 Fixed WINDOW/OVER/FILTER keyword handling in the SQL parser.
+- BUGFIX: #4694 Fixed messages for toolbar buttons in Code Snippets window & fixed loading translations for plugins.
+- BUGFIX: #4698 Fixed handling object names with '{' and '}' in their names.
+- BUGFIX: #4681 Fixed risk of null reference call in the SqliteOrderBy.
+- BUGFIX: #4707 Fixed database file selection dialog, so it doesn't complaint about read-only files.
+- BUGFIX: #4679 Fixed issue with case sensivity of CTE alias.
+- BUGFIX: #4697 Changed default hotkey for rolling back pending changes in table data from Ctrl+Backspace to Alt+Shit+Backspace. Default hotkey affects new users and will not change automatically for those who upgrade from older SQLiteStudio.
+- BUGFIX: #4739 Fixed committing changes in Extensions Manager if modifying valid extension settings, while there is another invalid, yet untouched extension on the list.
+- BUGFIX: #4715 Fixed the UPDATE OF column popup on MacOSX.
+- BUGFIX: #4754 Fixed Windows uninstaller to not create separate uninstall entries in Windows registry per each SQLiteStudio version and added SQLiteStudio icon for the uninstall entry in Windows Add/Remove programs.
+- BUGFIX: Tcl plugin compilation improved on Ubuntu 18.04 (thanks to @tuffnatty).
+
+### 3.4.3
+- CHANGE: #4631 Linux binaries are built again back on Ubuntu 20.04 (instead of 22.04) to make it compatible for more Linux machines.
+- BUGFIX: #4660 Removed unnecessary linking to curses library in Linux build file.
+- BUGFIX: #4658 Fixed crash when SQL parser stack gets overflown.
+
+### 3.4.2
+- ADDED: #4653 For dealing with small fractional numbers there is an option now to change Grid View representation of these numbers to a scientific notation - the option is in Configuration/Data Browsing.
+- CHANGE: #4535 Improved current query highlighter, so it considers query on the left of the cursor as current in a more intuitive way.
+- BUGFIX: #4602 Fixed editing data in table with Russian upper-case name.
+- BUGFIX: #4105 Fixed Import Dialog state update when changing import source (CSV vs RegExp), which could cause inability to proceed with the import in some cases.
+- BUGFIX: #3767 Fixed copying objects between unencrypted and encrypted databases, also fixed copying tables with generated columns.
+- BUGFIX: #4422 Portable configuration also prevents SQLiteStudio from touching Windows registry.
+- BUGFIX: #3759 Fixed using independent SQLiteStudio instances by different Unix users simultaneously, regardless of one's settings.
+- BUGFIX: #4198 When copying/moving table with name-colliding index (or trigger) to another database, the name conflict resolution now actually works.
+- BUGFIX: #3541 Standardized commit/rollback hotkeys for: functions editor, extensions editor, collations editor, snippets editor, table window structure tab, view window query tab.
+- BUGFIX: #4607 Fixed bug in Query Executor, that caused selecting ROWID from a View, without expanding the view in the first place, thus causing smart execution to fail.
+- BUGFIX: #4607 Fixed Query Executor to apply column sorting correctly even in Simple Execution method.
+- BUGFIX: #4614 Fixed opening object links in SQL editor to be case-insensitive.
+- BUGFIX: #4618 Fixed query executor when using filer on a View.
+- BUGFIX: #4613 Fixed per-column filter behavior when clearing single filter using the in-line erase button.
+- BUGFIX: #4613 Fixed per-column filter behavior when jumping between subsequent filter inputs, so it does not apply filter for each single input, but rather waits for user Enter or Return key to be hit. Also not applying filter immediately when clicking the in-line erase button.
+- BUGFIX: #4624 Fixed (optimized) "Replace All" function in SQL Editor, reducing the "Replace All" action time from 30 seconds to 30 milliseconds in case of 380 occurrences.
+- BUGFIX: #4622 Fixed Form View to open at the same row that is selected in the Grid View.
+- BUGFIX: #4616 Fixed font refreshing in Grid View when changing font size with ctrl+wheel.
+- BUGFIX: #4562 Fixed Config Dialog to properly show loaded/unloaded plugins in case of dependant plugins.
+- BUGFIX: #4634 Added workaround for handling qt5ct style from Qt configuration utility.
+- BUGFIX: #4548 Automatic indexes are now marked correctly as unique and the Index Dialog is read-only for them.
+- BUGFIX: #4637 Fixed Bind Parameters dialog to apply initially a reasonable size of input editors.
+- BUGFIX: #4384 Fixed DDL modifications of Foreign Key referencing table, so the FK constraint is not retained if referenced column was dropped.
+- BUGFIX: #4636 Fixed importing CSV with multi-word column names in the header line of CSV.
+- BUGFIX: #4365 Fixed support for triggers with same name as tables in the same database (which is allowed by SQLite).
+- BUGFIX: #4641 Fixed a serious bug with filtering data grid view with more complex queries/views, including expression-based column names with multi-word aliases.
+- BUGFIX: #4272 Fixed undesired code assistant after starting application with SQL Editor contents suggesting auto completion.
+- BUGFIX: #4643 Fixed executing query with apostrophe (doubled) inside of a string literal value.
+- BUGFIX: #4546 Fixed exporting results of a query that is a huge SQL statement.
+- BUGFIX: #4642 Fixed crash when removing a last database from the application and then modifying contents of SQL Editor.
+- BUGFIX: #4064 Fixed support for ":memory:" database.
+- BUGFIX: #4254 Fixed few issues with CLI help messages.
+- BUGFIX: #4639 Fixed typo.
+- BUGFIX: Fixed refreshing invalid database state if edited & fixed its connection options.
+
+### 3.4.1
+- CHANGE: #4585 SQLite updated to 3.40.0 (except for SQLCipher, which has latest version 3.39.2).
+- BUGFIX: #4600 #4587 Fixed very slow loading of data in tables with foreign keys.
+- BUGFIX: #4549 Query executor column aliases do not need wrapping anymore, because parser in 3.4.0 does not strip wrapped aliases anymore.
+- BUGFIX: #4219 Removed duplicated UI config entries generated by Printing plugin.
+- BUGFIX: #4563 Installer now runs the application at final step as a regular user even if running as root.
+- BUGFIX: Fixed icon path for Linux installer, so that SQLiteStudio shows with the icon in Linux application list.
+- BUGFIX: #4550 Fixed the Test Connection button in Database Dialog.
+- BUGFIX: #4569 Fixed casual application crash on database disconnection.
+- BUGFIX: #4529 Fixed application freeze when creating table with ICU collation.
+- BUGFIX: #4586 Fixed unloading & loading SQLCipher plugin during single run of application.
+- BUGFIX: #4577 Fixed SSL handshake issue under Linux during updates checking.
+- BUGFIX: #4590 Fixed TLS issue under Windows.
+- BUGFIX: #4364 Fixed table modification script in case all existing columns of a table are deleted, but the table remains and then new columns are added.
+- BUGFIX: #4098 Fixed disappearing table (not really, just in UI) when dragging it and dropping onto SQL Editor.
+- BUGFIX: #4594 Initial (default) colors of current line/query in SQL Editor is fixed to not be just black.
+- BUGFIX: #4140 #4343 Disabling Foreign Keys during execution SQL directly from file.
+- BUGFIX: #4593 Fixed row/column (de)selection on header ctrl+click.
+- BUGFIX: #4596 Fixed thread-safety issue with QtScripting (JavaScript) built-in plugin.
+
 ### 3.4.0
+- ADDED: #4058 Added support for RETURNING syntax in INSERT/DELETE/UPDATE and MATERIALIZED syntax in CTE - introduced in SQLite 3.35.
+- ADDED: #4058 Added support for STRICT tables introduced in SQLite 3.37.
+- ADDED: #4058 Added support for -> and ->> operators from SQLite 3.38.
+- ADDED: #4058 Added support for RIGHT, FULL OUTER JOIN, IS (NOT) DISTINCT FROM operators that were introduced in SQLite 3.39.
 - ADDED: #513 Python scripting plugin added, along side with Python syntax highlighting plugin. Requires Python installed in the system to use the plugin.
 - ADDED: #4050 Functions Editor allows marking functions as deterministic (thus using them for GENERATED columns).
 - ADDED: #3615 console.log() function for JS scripts.
@@ -12,18 +452,36 @@
 - ADDED: #3714 Added highlighter for current query (under cursor, to be executed), to make the user aware which query is actually going to be executed when Execute Query hotkey is used.
 - ADDED: #4006 Colors configuration for syntax highlighting is reintroduced in a new, improved form.
 - ADDED: #3793 Close windows on the left/right options added to the View menu and Taskbar context menu. Also renamed 'all but selected' to 'other'.
+- ADDED: #4065 Code Snippets - define in dedicated window, use it from the code assistant (hit the assistant hotkey twice).
+- ADDED: #4402 Added context menu option to adjust height of rows according to their contents. Also added single-row adjusting by double-clicking on the row header section on the left.
+- ADDED: #3942 Added option to SQL Export plugin to add IF NOT EXISTS clause to CREATE statements.
+- ADDED: #4249 Added tooltips for WITHOUT ROWID and STRICT checkboxes in the Table Window.
+- ADDED: #4264 Added svg icon to portable packages.
+- ADDED: #3439 Foreign Key dropdown is now available not only in the Grid View, but also in the Form View and the modal Value Editor dialog.
+- ADDED: #3779 Constraint icons on the Structure tab of a Table Window now shows tooltips (on mouse hover) with details of the constraint.
+- ADDED: #3956 Added button for clearing DDL history in the DDL History window.
+- ADDED: #4024 Added feature to the CLI app for executing SQL files directly from the command line, using all SQLiteStudio query executor features.
+- ADDED: #3515 Added option in CSV Import plugin to treat quotation character (") as regular character.
+- ADDED: #4092 Added possibility to increase/decrease font size using Ctrl+MouseWheel or by (configurable) shortcuts Ctrl++ & Ctrl+-. Applicable for SQL Editor, Database List, Status Field, Data View.
+- ADDED: #4217 Added the Invert Selection entry in data grid context menu.
+- ADDED: #4096 Added data grid option for filtering by strict text (not just whether contains, but if actually equals). Old filtering options remain.
 - ADDED: Allow drag and drop a file to the add database dialog.
+- CHANGE: #4058 SQLite updated to 3.39.4 (except for SQLCipher, which has latest version 3.39.2).
 - CHANGE: #3272 Named function parameters of Custom SQL functions are now passed to script code as named variables.
 - CHANGE: #3337 QtScript (deprecated module) usage migrated to QML module, using QJSEngine, the EcmaScript compliant implementation. Also changed plugin language name from QtScript to JavaScript and icon from Qt icon to JS icon.
 - CHANGE: #2963 Application state (session) is saved (apart from normal application exit) whenever the state changes and also during critical application crash.
 - CHANGE: #4083 Added support for regexp literals and template literals in JS syntax highlighter.
-- CHANGE: #4129 Improved memory saving algorithm, so when the colum is result of expression, the full value is always loaded immediately, to avoid subsequent query execution for loading full value when user copies cell value to clipboad.
 - CHANGE: #4071 #3437 Data column width has now more configuration options, so that it can retain its width upon entered value, or to have header contents (column name) visible.
 - CHANGE: Finalized transition to new model of translation files (using Crowdin). Generation of qm files and updating qrc files is now fully automated.
-- CHANGE: SQLite updated to 3.35.5.
 - CHANGE: #4300 Db Dialog now has just 1 browse button, but uses Qt file dialog, not native one.
 - CHANGE: Unused the help button in title bar are removed.
 - CHANGE: #4273 Newer opened database is selected by default in the tree.
+- CHANGE: #4240 #4458 #4419 #4129 Removed mechanism that limited initial value loaded to a cell to keep the amount of memory used at safe level. While it served it purpose well, it introduced so many other issues (refer to GitHub issues mentioned for this ChangeLog item), that it was not worth it. If a user keeps lots of gigabytes in a single table and you plan to query it, the user may want to limit amount of rows you query or display at once.
+- CHANGE: #4435 Changed data griv view behavior, so when user clicks once, it will select column/row and if double-clicks, the sorting order is applied.
+- CHANGE: #4088 Changed F2 hotkey, so it enters inline editing of a cell (no longer it opens the config dialog, which now is under F10 key). View Window, Collation Editor, Functions Editor, and Extensions Editor got now Ctrl+S hotkey to commit pending changes.
+- CHANGE: #4341 When testing or accepting database connection in Database Dialog, in case of error, the message is displayed in status field properly, but also shows up in tooltip of the connection error icon.
+- CHANGE: #3439 Compact Layout (that reduces many margins to save working space) is now excluded from the Form View, as it made it only worse.
+- CHANGE: #4538 Linux binaries are now built onUbuntu 22.04 (used to be 20.04).
 - BUGFIX: #4218 Fixed mnemonics ampersand displayed in toolbar button tooltips (they are used for relevant menu items, but in toolbar they caused additional ampersand to be displayed).
 - BUGFIX: #4095 Fixed "per column" filter to apply updated values upon leaving filter input, or resetting it.
 - BUGFIX: #4113 Fixed importing from data sources having less columns than in the target table.
@@ -34,8 +492,25 @@
 - BUGFIX: #4084 Fixed View window refreshing when a dependant table was modified.
 - BUGFIX: Fixed error messages in debug console when executing query with less columns in results than the previously executed query.
 - BUGFIX: Fixed WITHOUT ROWID checkbox updating when table structure changes are rolled back.
+- BUGFIX: Fixed updating data values for a single PK column in WITHOUT ROWID table.
+- BUGFIX: Fixed a bug when a style plugin was missing and style was in use - the config window was being confusedabout it.
 - BUGFIX: #4267 Path now shows familiar backslashes on Windows for Add a database and About dialog.
 - BUGFIX: #4314 Fixed missing OpenSSL license exemptions.
+- BUGFIX: #4433 Fixed loading translations under Linux.
+- BUGFIX: #4447 Fixed AUTOINCREMENT generation of DDL statement for table-level PRIMARY KEY.
+- BUGFIX: #4418 Fixed current editor window deselection after dropping table/view with a query in that editor, which (that table/view) was open in another window, that got closed with the DROP statement.
+- BUGFIX: #4386 Fixed handling database password with an apostrophe.
+- BUGFIX: #4369 WAL mode is now handled properly upon application quit or database disconnection.
+- BUGFIX: #4340 Fixed crash when populating two columns with random text.
+- BUGFIX: #4362 #4363 #4239 Fixed handling object names (i.e. tables) with a usual wrapping characters being part of their name, for example table named [someTable].
+- BUGFIX: #4356 Fixed resolving column names by SelectResolver in rare cases, when the column name is undefined and should be left for SQLite engine to determin.
+- BUGFIX: #4331 Fixed handling object names with # and $ inside.
+- BUGFIX: #4306 Fixed parsing BLOB literals and formatting it back to SQL statements from internal AST.
+- BUGFIX: #4278 Fixed language dropdown being empty sometimes when English language was selected.
+- BUGFUX: #4545 Fixed Dead Keys support under Linux.
+- BUGFIX: #4529 Fixed cooperation with collations defined by ICU extension.
+- BUGFIX: #4534 Configuration Dialog categories list width is now initially adjusted to fit contents.
+- BUGFIX: Schema changes are now properly refreshed in SQL Editors to highlight database object names.
 
 ### 3.3.3
 - CHANGE: #4011 SQLite updated to 3.35.4. SQLite3MultipleCiphers updated to 1.2.4 (SQLite 3.35.4). This enables math functions from 3.35. SQLCipher updated to 4.4.3, which is only SQLite 3.34.1, so no math functions for SQLCipher.
@@ -130,6 +605,7 @@
 - BUGFIX: #3787 Field state indicator now shows popup (the message) immediately after pointing it with a mouse, instead of having a delay.
 - BUGFIX: #3550 After successful data import, a number of rows imported is included in the notification message.
 - BUGFIX: #3415 Fixed release build scripts on all platforms.
+- BUGFIX: Fixed data grid filtering in views that use table-valued functions as data source.
 
 ### 3.2.1
 - BUGFIX: #3399 Fixed start under Linux using the pre-compiled binary distributions (it used to fail due to missing xcb dependency).
@@ -1072,7 +1548,7 @@
 - BUGFIX: Fixed opening tables from SQL editor links (control+click) with different case size.
 - BUGFIX: Fixed error with "_colItem(query)" reported on comp.lang.tcl group.
 - BUGFIX: Fixed problem with inserting first row to empty table using Form View.
-- BUGFIX: The progressbar dialog won't stay any longer after critical error occured, so user was unable to report the bug.
+- BUGFIX: The progressbar dialog won't stay any longer after critical error occurred, so user was unable to report the bug.
 - BUGFIX: Fixed: http://forum.sqlitestudio.pl/viewtopic.php?f=4&t=3659
 - BUGFIX: Fixed viewing data from View in SQlite 2.
 - BUGFIX: Fixed: http://forum.sqlitestudio.pl/viewtopic.php?f=4&t=3662
@@ -1343,7 +1819,7 @@
 - REMOVED: Removed date() function while there is standard SQLite date() function.
 - BUGFIX: 'View data preview' window is now properly stored in session so it's title is restored in next session.
 - BUGFIX: 'View data preview' can not be opened in two separate windows now, so it will not cause problems with doubled tasks on taskbar anymore.
-- BUGFIX: Another little bug with 'REFERENCES' in table edition dialog - occured when column reference was wrapped with white-spaces.
+- BUGFIX: Another little bug with 'REFERENCES' in table edition dialog - occurred when column reference was wrapped with white-spaces.
 - BUGFIX: Detection of 'REFERENCES' constraints in table browsing window on Constraints tab. It used to detect more constraints than there was.
 - BUGFIX: Handling table global constraints in table browsing window on Constraints tab.
 - BUGFIX: Fixed (finally?) problem with UTF-8 data in database.
@@ -1398,5 +1874,5 @@
 - BUGFIX: Fixed execution of multiple SQL statements that are creating some SQLite objects (it tried to create some of them twice).
 - BUGFIX: DDL formatting in table window fixed.
 - BUGFIX: Fixed critical error while exporting some data as a XML.
-- BUGFIX: Fixed critical error while some error occured when trying to create trigger.
+- BUGFIX: Fixed critical error while some error occurred when trying to create trigger.
 - BUGFIX: Fixed critical errors while customizing toolbar.

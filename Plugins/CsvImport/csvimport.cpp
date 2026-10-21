@@ -1,7 +1,9 @@
 #include "csvimport.h"
+#include "common/utils.h"
 #include "services/importmanager.h"
-#include "sqlitestudio.h"
+#include "letos.h"
 #include "services/notifymanager.h"
+#include "common/utils.h"
 #include <QVariant>
 #include <QFile>
 #include <QTextStream>
@@ -33,7 +35,7 @@ bool CsvImport::beforeImport(const ImportManager::StandardImportConfig& config)
     }
 
     stream = new QTextStream(file);
-    stream->setCodec(config.codec.toLatin1().data());
+    stream->setEncoding(textEncodingForName(config.codec));
 
     if (!extractColumns())
     {
@@ -86,6 +88,7 @@ void CsvImport::defineCsvFormat()
     csvFormat.rowSeparators = QStringList({"\r\n", "\n", "\r"});
     csvFormat.multipleRowSeparators = true;
     csvFormat.strictRowSeparator = true;
+    csvFormat.quotationMark = cfg.CsvImport.QuotationMark.get();
 
     switch (cfg.CsvImport.Separator.get())
     {
@@ -132,7 +135,7 @@ QList<QVariant> CsvImport::next()
         for (const QString& val : deserializedEntry)
         {
             if (val == nullVal)
-                values << QVariant(QVariant::String);
+                values << QVariant(QMetaType::fromType<QString>());
             else
                 values << val;
         }
@@ -187,16 +190,17 @@ bool CsvImport::validateOptions()
 
 QString CsvImport::getFileFilter() const
 {
-    return tr("CSV files (*.csv);;Text files (*.txt);;All files (*)");
+    OpenFileFilters::Filters filters = OpenFileFilters::get();
+    return QStringList({filters.csv, filters.text, filters.all}).join(";;");
 }
 
 bool CsvImport::init()
 {
-    Q_INIT_RESOURCE(csvimport);
+    SQLS_INIT_RESOURCE(csvimport);
     return GenericPlugin::init();
 }
 
 void CsvImport::deinit()
 {
-    Q_CLEANUP_RESOURCE(csvimport);
+    SQLS_CLEANUP_RESOURCE(csvimport);
 }

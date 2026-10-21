@@ -4,17 +4,17 @@
 <context>
     <name>DbAndroid</name>
     <message>
-        <location filename="../dbandroid.cpp" line="39"/>
+        <location filename="../dbandroid.cpp" line="40"/>
         <source>Invalid or incomplete Android Database URL.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="54"/>
+        <location filename="../dbandroid.cpp" line="55"/>
         <source>Android database URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="55"/>
+        <location filename="../dbandroid.cpp" line="56"/>
         <source>Select Android database</source>
         <translation type="unfinished"></translation>
     </message>
@@ -29,43 +29,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="183"/>
-        <source>You can grab Android connector JAR file from Tools menu. It&apos;s required for 2 of 3 connections supported by the Android plugin. For more details read plugin&apos;s documentation on &lt;a href=&quot;%1&quot;&gt;SQLiteStudio&apos;s wiki page.&lt;/a&gt;</source>
+        <location filename="../dbandroid.cpp" line="198"/>
+        <source>Could not find Android Debug Bridge application. &lt;a href=&quot;%1&quot;&gt;Click here&lt;/a&gt; to point out the location of the ADB application, otherwise the %2 plugin will not support USB cable connections, only the network connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="191"/>
-        <source>Could not find Android Debug Bridge application. &lt;a href=&quot;%1&quot;&gt;Click here&lt;/a&gt; to point out the location of the ADB application, otherwise the %2 plugin will not support USB cable connections, only the network connection..</source>
+        <location filename="../dbandroid.cpp" line="217"/>
+        <source>The selected ADB is incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="209"/>
+        <location filename="../dbandroid.cpp" line="218"/>
+        <source>Would you like to select another one, or leave it unconfigured?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dbandroid.cpp" line="242"/>
+        <source>Save JAR file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dbandroid.cpp" line="216"/>
         <source>Invalid ADB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="209"/>
-        <source>The selected ADB is incorrect.
-Would you like to select another one, or leave it unconfigured?</source>
+        <location filename="../dbandroid.cpp" line="183"/>
+        <source>You can grab Android connector JAR file from Tools menu. It&apos;s required for 2 of 3 connections supported by the Android plugin. For more details read plugin&apos;s documentation on &lt;a href=&quot;%1&quot;&gt;Letos&apos;s wiki page.&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="211"/>
+        <location filename="../dbandroid.cpp" line="219"/>
         <source>Select another ADB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="211"/>
+        <location filename="../dbandroid.cpp" line="220"/>
         <source>Leave unconfigured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroid.cpp" line="232"/>
-        <source>Save jar file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dbandroid.cpp" line="251"/>
+        <location filename="../dbandroid.cpp" line="192"/>
         <source>Get Android connector JAR file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -73,12 +77,12 @@ Would you like to select another one, or leave it unconfigured?</source>
 <context>
     <name>DbAndroidInstance</name>
     <message>
-        <location filename="../dbandroidinstance.cpp" line="106"/>
+        <location filename="../dbandroidinstance.cpp" line="121"/>
         <source>Android SQLite driver does not support loadable extensions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroidinstance.cpp" line="188"/>
+        <location filename="../dbandroidinstance.cpp" line="229"/>
         <source>Connection with Android database &apos;%1&apos; lost.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -87,7 +91,7 @@ Would you like to select another one, or leave it unconfigured?</source>
     <name>DbAndroidJsonConnection</name>
     <message>
         <location filename="../dbandroidjsonconnection.cpp" line="175"/>
-        <source>Cannot connect to device %1, because it&apos;s not visible to your computer.</source>
+        <source>Cannot connect to device %1, because it&apos;s not visible from your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -181,7 +185,7 @@ Would you like to select another one, or leave it unconfigured?</source>
     </message>
     <message>
         <location filename="../dbandroidpathdialog.ui" line="127"/>
-        <source>&lt;p&gt;This is password configured in the SQLiteStudio service being embeded in the Android application.&lt;/p&gt;</source>
+        <source>&lt;p&gt;This is password configured in the Letos service being embeded in the Android application.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -296,7 +300,7 @@ Android device refused deletion, or it was impossible.</source>
     <name>DbAndroidShellConnection</name>
     <message>
         <location filename="../dbandroidshellconnection.cpp" line="31"/>
-        <source>Cannot connect to device %1, because it&apos;s not visible to your computer.</source>
+        <source>Cannot connect to device %1, because it&apos;s not visible from your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -330,8 +334,8 @@ Android device refused deletion, or it was impossible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dbandroidshellconnection.cpp" line="219"/>
-        <location filename="../dbandroidshellconnection.cpp" line="226"/>
+        <location filename="../dbandroidshellconnection.cpp" line="207"/>
+        <location filename="../dbandroidshellconnection.cpp" line="214"/>
         <source>Could not execute query on database &apos;%1&apos;: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -339,7 +343,7 @@ Android device refused deletion, or it was impossible.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../sqlqueryandroid.cpp" line="101"/>
+        <location filename="../sqlqueryandroid.cpp" line="100"/>
         <source>Cannot bind argument &apos;%1&apos; of the query, because it&apos;s value is missing.</source>
         <translation type="unfinished"></translation>
     </message>

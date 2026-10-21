@@ -4,37 +4,37 @@
   <context>
     <name>Printing</name>
     <message>
-      <location filename="../printing.cpp" line="35"/>
+      <location filename="../printing.cpp" line="36"/>
       <source>Print data</source>
-      <translation type="unfinished">Print data</translation>
+      <translation>데이터 인쇄</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="37"/>
+      <location filename="../printing.cpp" line="38"/>
       <source>Print query</source>
-      <translation type="unfinished">Print query</translation>
+      <translation>쿼리 인쇄</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="74"/>
+      <location filename="../printing.cpp" line="75"/>
       <source>No data to print.</source>
-      <translation type="unfinished">No data to print.</translation>
+      <translation>인쇄할 데이터가 없습니다.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="82"/>
+      <location filename="../printing.cpp" line="83"/>
       <source>Printing data.</source>
-      <translation type="unfinished">Printing data.</translation>
+      <translation>데이터를 인쇄하는 중입니다.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="108"/>
+      <location filename="../printing.cpp" line="109"/>
       <source>Printing query.</source>
-      <translation type="unfinished">Printing query.</translation>
+      <translation>쿼리를 인쇄하는 중입니다.</translation>
     </message>
   </context>
   <context>
     <name>PrintingExport</name>
     <message>
-      <location filename="../printingexport.cpp" line="30"/>
+      <location filename="../printingexport.cpp" line="27"/>
       <source>Printing</source>
-      <translation type="unfinished">Printing</translation>
+      <translation>인쇄</translation>
     </message>
   </context>
 </TS>

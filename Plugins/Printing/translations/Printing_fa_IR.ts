@@ -4,37 +4,37 @@
   <context>
     <name>Printing</name>
     <message>
-      <location filename="../printing.cpp" line="35"/>
+      <location filename="../printing.cpp" line="36"/>
       <source>Print data</source>
-      <translation type="unfinished">Print data</translation>
+      <translation>چاپ داده‌ها</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="37"/>
+      <location filename="../printing.cpp" line="38"/>
       <source>Print query</source>
-      <translation type="unfinished">Print query</translation>
+      <translation>چاپ پرس‌وجو</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="74"/>
+      <location filename="../printing.cpp" line="75"/>
       <source>No data to print.</source>
-      <translation type="unfinished">No data to print.</translation>
+      <translation>داده‌ای برای چاپ وجود ندارد.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="82"/>
+      <location filename="../printing.cpp" line="83"/>
       <source>Printing data.</source>
-      <translation type="unfinished">Printing data.</translation>
+      <translation>در حال چاپ داده‌ها.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="108"/>
+      <location filename="../printing.cpp" line="109"/>
       <source>Printing query.</source>
-      <translation type="unfinished">Printing query.</translation>
+      <translation>در حال چاپ پرس‌وجو.</translation>
     </message>
   </context>
   <context>
     <name>PrintingExport</name>
     <message>
-      <location filename="../printingexport.cpp" line="30"/>
+      <location filename="../printingexport.cpp" line="27"/>
       <source>Printing</source>
-      <translation type="unfinished">Printing</translation>
+      <translation>چاپ</translation>
     </message>
   </context>
 </TS>

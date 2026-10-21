@@ -1,98 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="he" sourcelanguage="en">
-  <context>
+<context>
     <name>SqlExport</name>
     <message>
-      <location filename="../sqlexport.cpp" line="57"/>
-      <source>-- Results of query:</source>
-      <translation>-- תוצאות שאילתה:</translation>
+        <location filename="../sqlexport.cpp" line="87"/>
+        <source>-- Results of query:</source>
+        <translation>-- תוצאות שאילתה:</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="122"/>
-      <source>-- Table: %1</source>
-      <translation>-- טבלה: %1</translation>
+        <location filename="../sqlexport.cpp" line="159"/>
+        <source>-- Table: %1</source>
+        <translation>-- טבלה: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="168"/>
-      <source>-- Index: %1</source>
-      <translation>-- מִפְתֵּחַ: %1</translation>
+        <location filename="../sqlexport.cpp" line="206"/>
+        <source>-- Index: %1</source>
+        <translation>-- מִפְתֵּחַ: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="185"/>
-      <source>-- Trigger: %1</source>
-      <translation>-- מַזְנֵק: %1</translation>
+        <location filename="../sqlexport.cpp" line="231"/>
+        <source>-- Trigger: %1</source>
+        <translation>-- מַזְנֵק: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="202"/>
-      <source>-- View: %1</source>
-      <translation>-- מצג: %1</translation>
+        <location filename="../sqlexport.cpp" line="259"/>
+        <source>-- View: %1</source>
+        <translation>-- מצג: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="216"/>
-      <source>-- File generated with SQLiteStudio v%1 on %2</source>
-      <translation>-- המסמך חולל באמצעות SQLiteStudio v%1 ב %2</translation>
+        <location filename="../sqlexport.cpp" line="284"/>
+        <source>-- File generated with Letos v%1 on %2</source>
+        <translation type="unfinished">-- File generated with Letos v%1 on %2</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="220"/>
-      <source>-- Text encoding used: %1</source>
-      <translation>קידוד מלל באמצעות: %1</translation>
+        <location filename="../sqlexport.cpp" line="288"/>
+        <source>-- Text encoding used: %1</source>
+        <translation>קידוד מלל באמצעות: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="276"/>
-      <source>Table name for INSERT statements is mandatory.</source>
-      <translation>שם הטבלה להצהרות INSERT הוא חובה.</translation>
+        <location filename="../sqlexport.cpp" line="370"/>
+        <source>Table name for INSERT statements is mandatory.</source>
+        <translation>שם הטבלה להצהרות INSERT הוא חובה.</translation>
     </message>
-  </context>
-  <context>
+</context>
+<context>
     <name>sqlExportCommonConfig</name>
     <message>
-      <location filename="../SqlExportCommon.ui" line="20"/>
-      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
+        <location filename="../SqlExportCommon.ui" line="30"/>
+        <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
+        <translation>חילול משפט &quot;DROP IF EXISTS&quot; לפני משפט &quot;CREATE&quot;</translation>
     </message>
     <message>
-      <location filename="../SqlExportCommon.ui" line="30"/>
-      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+        <location filename="../SqlExportCommon.ui" line="40"/>
+        <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
+        <translation>תיסדור משפטי DDL בלבד (החרגת משפטי &quot;INSERT&quot;)</translation>
     </message>
     <message>
-      <location filename="../SqlExportCommon.ui" line="40"/>
-      <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+        <location filename="../SqlExportCommon.ui" line="50"/>
+        <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+        <translation>הוספת פסוקית &quot;IF NOT EXISTS&quot; למשפט &quot;CREATE&quot;</translation>
     </message>
-  </context>
-  <context>
+    <message>
+        <location filename="../SqlExportCommon.ui" line="20"/>
+        <source>Use SQL formatter to format exported SQL statements</source>
+        <translation>שימוש במתסדר SQL לתיסדור משפטי SQL שיוצאו</translation>
+    </message>
+</context>
+<context>
     <name>sqlExportQueryConfig</name>
     <message>
-      <location filename="../SqlExportQuery.ui" line="20"/>
-      <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+        <location filename="../SqlExportQuery.ui" line="47"/>
+        <source>Use SQL formatter to format exported SQL statements</source>
+        <translation>שימוש במתסדר SQL לתיסדור משפטי SQL שיוצאו</translation>
     </message>
     <message>
-      <location filename="../SqlExportQuery.ui" line="30"/>
-      <source>Table name to use for INSERT statements:</source>
-      <translation>שם הטבלה לשימוש להצהרות INSERT:</translation>
+        <location filename="../SqlExportQuery.ui" line="40"/>
+        <source>Table name to use for INSERT statements:</source>
+        <translation>שם הטבלה לשימוש להצהרות INSERT:</translation>
     </message>
     <message>
-      <location filename="../SqlExportQuery.ui" line="37"/>
-      <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
-      <translation type="unfinished">Generate &quot;CREATE TABLE&quot; statement at the begining</translation>
+        <location filename="../SqlExportQuery.ui" line="64"/>
+        <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
+        <translation>חילול משפט &quot;CREATE TABLE&quot; בהתחלה</translation>
     </message>
     <message>
-      <location filename="../SqlExportQuery.ui" line="47"/>
-      <source>Include the query in comments</source>
-      <translation>הכללת השאילתה בהערות</translation>
+        <location filename="../SqlExportQuery.ui" line="20"/>
+        <source>Include the query in comments</source>
+        <translation>הכללת השאילתה בהערות</translation>
     </message>
     <message>
-      <location filename="../SqlExportQuery.ui" line="57"/>
-      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
+        <location filename="../SqlExportQuery.ui" line="30"/>
+        <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
+        <translation>חילול משפט &quot;DROP IF EXISTS&quot; לפני משפט &quot;CREATE&quot;</translation>
     </message>
     <message>
-      <location filename="../SqlExportQuery.ui" line="74"/>
-      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+        <location filename="../SqlExportQuery.ui" line="74"/>
+        <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
+        <translation>תיסדור משפטי DDL בלבד (החרגת משפטי &quot;INSERT&quot;)</translation>
     </message>
-  </context>
+    <message>
+        <location filename="../SqlExportQuery.ui" line="84"/>
+        <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+        <translation>הוספת פסוקית &quot;IF NOT EXISTS&quot; למשפט &quot;CREATE&quot;</translation>
+    </message>
+</context>
 </TS>

@@ -16,7 +16,6 @@
 #include "formatattach.h"
 #include "formatbegintrans.h"
 #include "formatcommittrans.h"
-#include "formatcopy.h"
 #include "formatcreateindex.h"
 #include "formatcreatetrigger.h"
 #include "formatcreateview.h"
@@ -48,7 +47,6 @@
 #include "parser/ast/sqliteattach.h"
 #include "parser/ast/sqlitebegintrans.h"
 #include "parser/ast/sqlitecommittrans.h"
-#include "parser/ast/sqlitecopy.h"
 #include "parser/ast/sqlitecreateindex.h"
 #include "parser/ast/sqlitecreatetrigger.h"
 #include "parser/ast/sqlitecreateview.h"
@@ -68,6 +66,7 @@
 #include "common/global.h"
 #include <QRegularExpression>
 #include <QDebug>
+#include <QtGlobal>
 
 #define FORMATTER_FACTORY_ENTRY(query, Type, FormatType) \
     if (dynamic_cast<Type*>(query)) \
@@ -77,7 +76,8 @@ const QString FormatStatement::SPACE = " ";
 const QString FormatStatement::NEWLINE = "\n";
 qint64 FormatStatement::nameSeq = 0;
 
-FormatStatement::FormatStatement()
+FormatStatement::FormatStatement(SqliteStatement* stmt) :
+    thisStatement(stmt)
 {
     static_qstring(nameTpl, "statement_%1");
 
@@ -145,7 +145,6 @@ FormatStatement *FormatStatement::forQuery(SqliteStatement *query)
     FORMATTER_FACTORY_ENTRY(query, SqliteAttach, FormatAttach);
     FORMATTER_FACTORY_ENTRY(query, SqliteBeginTrans, FormatBeginTrans);
     FORMATTER_FACTORY_ENTRY(query, SqliteCommitTrans, FormatCommitTrans);
-    FORMATTER_FACTORY_ENTRY(query, SqliteCopy, FormatCopy);
     FORMATTER_FACTORY_ENTRY(query, SqliteCreateVirtualTable, FormatCreateVirtualTable);
     FORMATTER_FACTORY_ENTRY(query, SqliteCreateIndex, FormatCreateIndex);
     FORMATTER_FACTORY_ENTRY(query, SqliteCreateTrigger, FormatCreateTrigger);
@@ -212,9 +211,10 @@ FormatStatement& FormatStatement::withOperator(const QString& oper, FormatToken:
     return *this;
 }
 
-FormatStatement&FormatStatement::withStringOrId(const QString& id)
+FormatStatement&FormatStatement::withStringOrId(const QString& id, FormatToken::Flags flags)
 {
-    withToken(FormatToken::STRING_OR_ID, id);
+    FormatToken* token = withToken(FormatToken::STRING_OR_ID, id);
+    token->flags |= flags;
     return *this;
 }
 
@@ -353,17 +353,30 @@ FormatStatement& FormatStatement::withNewLine()
 
 FormatStatement& FormatStatement::withLiteral(const QVariant& value)
 {
-    if (value.isNull())
+    if (isNull(value))
         return *this;
 
-    if (value.userType() == QVariant::String)
+    if (value.userType() == QMetaType::QString)
     {
         withString(value.toString());
         return *this;
     }
 
+    if (value.userType() == QMetaType::Bool)
+    {
+        withId(value.toBool() ? "true" : "false", false);
+        return *this;
+    }
+
+    if (value.userType() == QMetaType::QByteArray)
+    {
+        static_qstring(blobLiteral, "X'%1'");
+        withBlob(blobLiteral.arg(QString::fromLatin1(value.toByteArray().toHex())));
+        return *this;
+    }
+
     bool ok;
-    if (value.userType() == QVariant::Double)
+    if (value.userType() == QMetaType::Double)
     {
         value.toDouble(&ok);
         if (ok)
@@ -380,14 +393,7 @@ FormatStatement& FormatStatement::withLiteral(const QVariant& value)
         return *this;
     }
 
-    QString str = value.toString();
-    if (str.startsWith("x'", Qt::CaseInsensitive) && str.endsWith("'"))
-    {
-        withBlob(str);
-        return *this;
-    }
-
-    withString(str);
+    withString(value.toString());
     return *this;
 }
 
@@ -583,7 +589,7 @@ QString FormatStatement::detokenize()
                 {
                     // No 'break', so we go to next case, the regular KEYWORD
                 }
-                __attribute__((__fallthrough__));
+                Q_FALLTHROUGH();
             }
             case FormatToken::KEYWORD:
             {
@@ -614,10 +620,12 @@ QString FormatStatement::detokenize()
             {
                 applyIndent();
                 QString val = token->value.toString();
-                if (val.contains("\""))
-                    formatId(token->value.toString(), true);
+                if (token->flags.testFlag(FormatToken::SINGLE_QUOTE_STRING) && !val.contains("'"))
+                    line += wrapString(token->value.toString());
+                else if (val.contains("\""))
+                    formatId(val, true);
                 else
-                    line += wrapObjName(token->value.toString(), NameWrapper::DOUBLE_QUOTE);
+                    line += wrapObjName(val, NameWrapper::DOUBLE_QUOTE);
 
                 break;
             }
@@ -796,7 +804,7 @@ QString FormatStatement::detokenize()
             }
             case FormatToken::INCR_INDENT:
             {
-                if (!token->value.isNull())
+                if (!isNull(token->value))
                     incrIndent(token->value.toString());
                 else
                     incrIndent();

@@ -4,82 +4,87 @@
   <context>
     <name>CsvImport</name>
     <message>
-      <location filename="../csvimport.cpp" line="30"/>
+      <location filename="../csvimport.cpp" line="32"/>
       <source>Cannot read file %1</source>
-      <translation type="unfinished">Cannot read file %1</translation>
+      <translation>نمی‌توان فایل %1 را خواند</translation>
     </message>
     <message>
-      <location filename="../csvimport.cpp" line="62"/>
+      <location filename="../csvimport.cpp" line="64"/>
       <source>Could not find any data in the file %1.</source>
-      <translation type="unfinished">Could not find any data in the file %1.</translation>
+      <translation>هیچ داده‌ای در فایل %1 یافت نشد.</translation>
     </message>
     <message>
-      <location filename="../csvimport.cpp" line="167"/>
+      <location filename="../csvimport.cpp" line="170"/>
       <source>Enter the custom separator character.</source>
-      <translation type="unfinished">Enter the custom separator character.</translation>
-    </message>
-    <message>
-      <location filename="../csvimport.cpp" line="190"/>
-      <source>CSV files (*.csv);;Text files (*.txt);;All files (*)</source>
-      <translation type="unfinished">CSV files (*.csv);;Text files (*.txt);;All files (*)</translation>
+      <translation>نویسهٔ جداکنندهٔ سفارشی را وارد کنید.</translation>
     </message>
   </context>
   <context>
     <name>csvImportOptions</name>
     <message>
-      <location filename="../CsvImportOptions.ui" line="24"/>
+      <location filename="../CsvImportOptions.ui" line="37"/>
       <source>, (comma)</source>
-      <translation type="unfinished">, (comma)</translation>
+      <translation>, (ویرگول)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="29"/>
+      <location filename="../CsvImportOptions.ui" line="42"/>
       <source>; (semicolon)</source>
-      <translation type="unfinished">; (semicolon)</translation>
+      <translation>; (نقطه‌ویرگول)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="34"/>
+      <location filename="../CsvImportOptions.ui" line="47"/>
       <source>\t (tab)</source>
-      <translation type="unfinished">\t (tab)</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="39"/>
-      <source>  (whitespace)</source>
-      <translation type="unfinished">  (whitespace)</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="44"/>
-      <source>Custom:</source>
-      <translation type="unfinished">Custom:</translation>
+      <translation>\t (تب)</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="52"/>
-      <source>&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</source>
-      <translation type="unfinished">&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</translation>
+      <source>  (whitespace)</source>
+      <translation>  (فضای خالی)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="55"/>
-      <source>First line represents CSV column names</source>
-      <translation type="unfinished">First line represents CSV column names</translation>
+      <location filename="../CsvImportOptions.ui" line="57"/>
+      <source>Custom:</source>
+      <translation>سفارشی:</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="65"/>
-      <source>Field separator:</source>
-      <translation type="unfinished">Field separator:</translation>
+      <source>Column separator:</source>
+      <translation>جداکنندهٔ ستون:</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="108"/>
+      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the &amp;quot; character will be interpreted as standard CSV value quotation mark, causing the string to be treated as single value until the next (ending) &amp;quot; character. If disabled, the &amp;quot; will be treated as any other character. Usually you want this to be enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;اگر فعال باشد، نویسهٔ &amp;quot; به‌عنوان علامت نقل‌قول استاندارد مقدار CSV تفسیر می‌شود و باعث می‌شود رشته تا نویسهٔ &amp;quot; بعدی (پایانی) به‌عنوان یک مقدار واحد در نظر گرفته شود. اگر غیرفعال باشد، &amp;quot; مانند هر نویسهٔ دیگری در نظر گرفته خواهد شد. معمولاً بهتر است این گزینه فعال باشد.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="111"/>
+      <source>Interpret &quot; as a value quotation mark</source>
+      <translation>تفسیر &quot; به‌عنوان علامت نقل‌قول مقدار</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="20"/>
+      <source>&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</source>
+      <translation>&lt;p&gt;اگر نخستین خط داده در فایل CSV شما نشان‌دهندهٔ نام ستون‌هاست، این گزینه را فعال کنید. نمی&apos;خواهید نام ستون‌ها به‌عنوان دادهٔ معمولی در جدول وارد شوند.&lt;/p&gt;</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="23"/>
+      <source>First line represents CSV column names</source>
+      <translation>خط نخست نمایانگر نام ستون‌های CSV است</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="72"/>
+      <source>If enabled, then text value provided on the right will be interpreted as NULL</source>
+      <translation>اگر فعال باشد، مقدار متنی ارائه‌شده در سمت راست به‌عنوان NULL تفسیر خواهد شد</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="75"/>
+      <source>NULL values:</source>
+      <translation>مقادیر NULL:</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="85"/>
-      <source>If enabled, then text value provided on the right will be interpreted as NULL</source>
-      <translation type="unfinished">If enabled, then text value provided on the right will be interpreted as NULL</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="88"/>
-      <source>NULL values:</source>
-      <translation type="unfinished">NULL values:</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="98"/>
       <source>If your CSV data contains null values, define how are they represented in the CSV.</source>
-      <translation type="unfinished">If your CSV data contains null values, define how are they represented in the CSV.</translation>
+      <translation>اگر داده‌های CSV شما شامل مقادیر null هستند، مشخص کنید که آن‌ها در CSV چگونه نمایش داده می‌شوند.</translation>
     </message>
   </context>
 </TS>

@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/forms">
+        <file>plugins/populatesequence.ui</file>
+        <file>plugins/populaterandomtext.ui</file>
+        <file>plugins/populatedictionary.ui</file>
+        <file>plugins/populateconstant.ui</file>
+        <file>plugins/populaterandom.ui</file>
+        <file>plugins/populatescript.ui</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>plugins/scriptingqt.svg</file>
+        <file>plugins/scriptingsql.svg</file>
+    </qresource>
+    <qresource prefix="/docs">
+        <file>licenses/lgpl.txt</file>
+        <file>licenses/diff_match.txt</file>
+        <file>licenses/gpl.txt</file>
+        <file>licenses/mit.txt</file>
+        <file>licenses/icu.txt</file>
+        <file>licenses/icons.txt</file>
+        <file>licenses/letos_license.txt</file>
+    </qresource>
+</RCC>

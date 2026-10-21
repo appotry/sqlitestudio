@@ -4,95 +4,105 @@
   <context>
     <name>SqlExport</name>
     <message>
-      <location filename="../sqlexport.cpp" line="57"/>
+      <location filename="../sqlexport.cpp" line="87"/>
       <source>-- Results of query:</source>
-      <translation type="unfinished">-- Results of query:</translation>
+      <translation>-- Resultate van navraag:</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="122"/>
+      <location filename="../sqlexport.cpp" line="159"/>
       <source>-- Table: %1</source>
-      <translation type="unfinished">-- Table: %1</translation>
+      <translation>-- Tabel: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="168"/>
+      <location filename="../sqlexport.cpp" line="206"/>
       <source>-- Index: %1</source>
-      <translation type="unfinished">-- Index: %1</translation>
+      <translation>-- Indeks: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="185"/>
+      <location filename="../sqlexport.cpp" line="231"/>
       <source>-- Trigger: %1</source>
-      <translation type="unfinished">-- Trigger: %1</translation>
+      <translation>-- Sneller: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="202"/>
+      <location filename="../sqlexport.cpp" line="259"/>
       <source>-- View: %1</source>
-      <translation type="unfinished">-- View: %1</translation>
+      <translation>-- Aansig: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="216"/>
-      <source>-- File generated with SQLiteStudio v%1 on %2</source>
-      <translation type="unfinished">-- File generated with SQLiteStudio v%1 on %2</translation>
+      <location filename="../sqlexport.cpp" line="284"/>
+      <source>-- File generated with Letos v%1 on %2</source>
+      <translation>-- Lêer gegenereer met Letos v%1 op %2</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="220"/>
+      <location filename="../sqlexport.cpp" line="288"/>
       <source>-- Text encoding used: %1</source>
-      <translation type="unfinished">-- Text encoding used: %1</translation>
+      <translation>-- Gebruikte teksenkodering: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="276"/>
+      <location filename="../sqlexport.cpp" line="370"/>
       <source>Table name for INSERT statements is mandatory.</source>
-      <translation type="unfinished">Table name for INSERT statements is mandatory.</translation>
+      <translation>Tabelnaam vir INSERT-stellings is verpligtend.</translation>
     </message>
   </context>
   <context>
     <name>sqlExportCommonConfig</name>
     <message>
-      <location filename="../SqlExportCommon.ui" line="20"/>
-      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
-    </message>
-    <message>
       <location filename="../SqlExportCommon.ui" line="30"/>
-      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
+      <translation>Genereer &quot;DROP IF EXISTS&quot;-stelling voor &quot;CREATE&quot;-stelling</translation>
     </message>
     <message>
       <location filename="../SqlExportCommon.ui" line="40"/>
+      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
+      <translation>Formateer slegs DDL-stellings (sluit &quot;INSERT&quot;-stellings uit)</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportCommon.ui" line="50"/>
+      <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+      <translation>Voeg &quot;IF NOT EXISTS&quot;-klousule by &quot;CREATE&quot;-stelling</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportCommon.ui" line="20"/>
       <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+      <translation>Gebruik SQL-formateerder om geëksporteerde SQL-stellings te formateer</translation>
     </message>
   </context>
   <context>
     <name>sqlExportQueryConfig</name>
     <message>
-      <location filename="../SqlExportQuery.ui" line="20"/>
+      <location filename="../SqlExportQuery.ui" line="47"/>
       <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+      <translation>Gebruik SQL-formateerder om geëksporteerde SQL-stellings te formateer</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="40"/>
+      <source>Table name to use for INSERT statements:</source>
+      <translation>Tabelnaam om vir INSERT-stellings te gebruik:</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="64"/>
+      <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
+      <translation>Genereer &quot;CREATE TABLE&quot;-stelling aan die begin</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="20"/>
+      <source>Include the query in comments</source>
+      <translation>Sluit die navraag in kommentare in</translation>
     </message>
     <message>
       <location filename="../SqlExportQuery.ui" line="30"/>
-      <source>Table name to use for INSERT statements:</source>
-      <translation type="unfinished">Table name to use for INSERT statements:</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="37"/>
-      <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
-      <translation type="unfinished">Generate &quot;CREATE TABLE&quot; statement at the begining</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="47"/>
-      <source>Include the query in comments</source>
-      <translation type="unfinished">Include the query in comments</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="57"/>
       <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
+      <translation>Genereer &quot;DROP IF EXISTS&quot;-stelling voor &quot;CREATE&quot;-stelling</translation>
     </message>
     <message>
       <location filename="../SqlExportQuery.ui" line="74"/>
       <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+      <translation>Formateer slegs DDL-stellings (sluit &quot;INSERT&quot;-stellings uit)</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="84"/>
+      <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+      <translation>Voeg &quot;IF NOT EXISTS&quot;-klousule by &quot;CREATE&quot;-stelling</translation>
     </message>
   </context>
 </TS>

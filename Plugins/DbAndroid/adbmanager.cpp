@@ -5,6 +5,11 @@
 #include <QDebug>
 #include <QTimer>
 #include <QRegularExpression>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#include <QtSystemDetection>
+#else
+#include <qsystemdetection.h>
+#endif
 
 AdbManager::AdbManager(DbAndroid* dbAndroidPlugin) :
     QObject(dbAndroidPlugin), plugin(dbAndroidPlugin)
@@ -148,13 +153,7 @@ QString AdbManager::findAdb()
         return "adb.exe";
 
     static_qstring(winAdbPath, "/../Android/sdk/platform-tools/adb.exe");
-    for (const QString& path : QStandardPaths::standardLocations(
-#if QT_VERSION >= 0x050400
-             QStandardPaths::AppLocalDataLocation
-#else
-             QStandardPaths::GenericDataLocation
-#endif
-             ))
+    for (const QString& path : QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation))
     {
         fullPath = QDir::cleanPath(path + winAdbPath);
         if (testAdb(fullPath, true))
@@ -309,7 +308,7 @@ bool AdbManager::execLongCommand(const QStringList& arguments, QProcess& proc, Q
     QString cmd = " '" + args.replaceInStrings("'", "'\\''").join("' '") + "'";
 
     // Now, the temporary file for the script
-    QTemporaryFile tmpFile("SQLiteStudio-XXXXXX.sh");
+    QTemporaryFile tmpFile("Letos-XXXXXX.sh");
     if (!tmpFile.open())
     {
         if (stdErr)
@@ -418,7 +417,7 @@ void AdbManager::updateDeviceList()
     if (!plugin->isAdbValid())
         return;
 
-    updateDevicesFuture = QtConcurrent::run(this, &AdbManager::getDevicesInternal, true);
+    updateDevicesFuture = QtConcurrent::run(&AdbManager::getDevicesInternal, this, true);
 }
 
 void AdbManager::handleNewDeviceList(const QStringList& devices)
@@ -427,7 +426,7 @@ void AdbManager::handleNewDeviceList(const QStringList& devices)
         return;
 
     currentDeviceList = devices;
-    QtConcurrent::run(this, &AdbManager::updateDetails, devices);
+    runInThread([=, this]{ updateDetails(devices); });
 
     emit deviceListChanged(devices);
 }

@@ -1,11 +1,10 @@
 #include "sqlexport.h"
 #include "common/utils_sql.h"
-#include "sqlitestudio.h"
+#include "letos.h"
 #include "config_builder.h"
 #include "services/exportmanager.h"
-#include "common/unused.h"
 #include "services/codeformatter.h"
-#include <QTextCodec>
+#include <QStringEncoder>
 
 SqlExport::SqlExport()
 {
@@ -39,13 +38,45 @@ QString SqlExport::getExportConfigFormName() const
     return "sqlExportCommonConfig";
 }
 
+bool SqlExport::beforeExportSingleTable(const QString& database, const QString& table)
+{
+    Q_UNUSED(database);
+    Q_UNUSED(table);
+    writeHeader();
+    writeFkDisable();
+    writeBegin();
+    return true;
+}
+
+bool SqlExport::afterExportSingleTable()
+{
+    return true;
+}
+
+bool SqlExport::beforeExportSingleView(const QString& database, const QString& name)
+{
+    Q_UNUSED(database);
+    Q_UNUSED(name);
+    writeHeader();
+    writeFkDisable();
+    writeBegin();
+    return true;
+}
+
+bool SqlExport::afterExportSingleView()
+{
+    return true;
+}
+
 bool SqlExport::beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(providedData);
+    Q_UNUSED(providedData);
     static_qstring(dropDdl, "DROP TABLE IF EXISTS %1;");
+    static_qstring(ifNotExists, "IF NOT EXISTS ");
+    static_qstring(createDdl, "CREATE TABLE %1%2 (%3);");
 
     QStringList colDefs;
-    for (QueryExecutor::ResultColumnPtr resCol : columns)
+    for (QueryExecutor::ResultColumnPtr& resCol : columns)
         colDefs << wrapObjIfNeeded(resCol->displayName);
 
     this->columns = colDefs.join(", ");
@@ -64,7 +95,7 @@ bool SqlExport::beforeExportQueryResults(const QString& query, QList<QueryExecut
     if (!cfg.SqlExport.GenerateCreateTable.get())
         return true;
 
-    QString ddl = "CREATE TABLE " + theTable + " (" + this->columns + ");";
+    QString ddl = createDdl.arg(cfg.SqlExport.GenerateIfNotExists.get() ? ifNotExists : "", theTable, this->columns);
     writeln("");
 
     if (cfg.SqlExport.GenerateDrop.get())
@@ -76,20 +107,16 @@ bool SqlExport::beforeExportQueryResults(const QString& query, QList<QueryExecut
 
 bool SqlExport::exportQueryResultsRow(SqlResultsRowPtr row)
 {
-    QStringList argList = rowToArgList(row);
-    QString argStr = argList.join(", ");
-    QString sql = "INSERT INTO " + theTable + " (" + this->columns + ") VALUES (" + argStr + ");";
-    writeln(sql);
-    return true;
+    return exportDataRow(row);
 }
 
 bool SqlExport::exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(createTable);
-    UNUSED(providedData);
+    Q_UNUSED(createTable);
+    Q_UNUSED(providedData);
 
     tableGeneratedColumns.clear();
-    for (SqliteCreateTable::Column* col : createTable->columns)
+    for (SqliteCreateTable::Column*& col : createTable->columns)
     {
         if (col->hasConstraint(SqliteCreateTable::Column::Constraint::GENERATED))
             tableGeneratedColumns << col->name;
@@ -100,14 +127,15 @@ bool SqlExport::exportTable(const QString& database, const QString& table, const
 
 bool SqlExport::exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(createTable);
-    UNUSED(providedData);
+    Q_UNUSED(createTable);
+    Q_UNUSED(providedData);
     return exportTable(database, table, columnNames, ddl);
 }
 
 bool SqlExport::exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl)
 {
     static_qstring(dropDdl, "DROP TABLE IF EXISTS %1;");
+    static_qstring(ifNotExists, " IF NOT EXISTS");
 
     generatedColumnIndexes.clear();
     QStringList colList;
@@ -126,13 +154,6 @@ bool SqlExport::exportTable(const QString& database, const QString& table, const
 
     columns = colList.join(", ");
 
-    if (isTableExport())
-    {
-        writeHeader();
-        writeFkDisable();
-        writeBegin();
-    }
-
     QString fullName = getNameForObject(database, table, false);
     writeln("");
     writeln(tr("-- Table: %1").arg(fullName));
@@ -142,20 +163,20 @@ bool SqlExport::exportTable(const QString& database, const QString& table, const
     if (cfg.SqlExport.GenerateDrop.get())
         writeln(formatQuery(dropDdl.arg(theTable)));
 
-    writeln(formatQuery(ddl));
+    QString finalDdl = ddl;
+    if (cfg.SqlExport.GenerateIfNotExists.get())
+    {
+        int idx = finalDdl.indexOf("table", 0, Qt::CaseInsensitive);
+        finalDdl.insert(idx + 5, ifNotExists);
+    }
+
+    writeln(formatQuery(finalDdl));
     return true;
 }
 
 bool SqlExport::exportTableRow(SqlResultsRowPtr data)
 {
-    QStringList argList = rowToArgList(data, true);
-    QString argStr = argList.join(", ");
-    QString sql = "INSERT INTO " + theTable + " (" + columns + ") VALUES (" + argStr + ");";
-    if (!cfg.SqlExport.FormatDdlsOnly.get())
-        sql = formatQuery(sql);
-
-    writeln(sql);
-    return true;
+    return exportDataRow(data);
 }
 
 bool SqlExport::afterExport()
@@ -167,7 +188,7 @@ bool SqlExport::afterExport()
 
 bool SqlExport::beforeExportDatabase(const QString& database)
 {
-    UNUSED(database);
+    Q_UNUSED(database);
     writeHeader();
     writeFkDisable();
     writeBegin();
@@ -176,8 +197,9 @@ bool SqlExport::beforeExportDatabase(const QString& database)
 
 bool SqlExport::exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex)
 {
-    UNUSED(createIndex);
+    Q_UNUSED(createIndex);
     static_qstring(dropDdl, "DROP INDEX IF EXISTS %1;");
+    static_qstring(ifNotExists, " IF NOT EXISTS");
 
     QString index = getNameForObject(database, name, false);
     writeln("");
@@ -187,14 +209,22 @@ bool SqlExport::exportIndex(const QString& database, const QString& name, const 
     if (cfg.SqlExport.GenerateDrop.get())
         writeln(formatQuery(dropDdl.arg(fullName)));
 
-    writeln(formatQuery(ddl));
+    QString finalDdl = ddl;
+    if (cfg.SqlExport.GenerateIfNotExists.get())
+    {
+        int idx = finalDdl.indexOf("index", 0, Qt::CaseInsensitive);
+        finalDdl.insert(idx + 5, ifNotExists);
+    }
+
+    writeln(formatQuery(finalDdl));
     return true;
 }
 
 bool SqlExport::exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger)
 {
-    UNUSED(createTrigger);
+    Q_UNUSED(createTrigger);
     static_qstring(dropDdl, "DROP TRIGGER IF EXISTS %1;");
+    static_qstring(ifNotExists, " IF NOT EXISTS");
 
     QString trig = getNameForObject(database, name, false);
     writeln("");
@@ -204,14 +234,25 @@ bool SqlExport::exportTrigger(const QString& database, const QString& name, cons
     if (cfg.SqlExport.GenerateDrop.get())
         writeln(dropDdl.arg(fullName));
 
-    writeln(formatQuery(formatQuery(ddl)));
+    QString finalDdl = ddl;
+    if (cfg.SqlExport.GenerateIfNotExists.get())
+    {
+        int idx = finalDdl.indexOf("trigger", 0, Qt::CaseInsensitive);
+        finalDdl.insert(idx + 7, ifNotExists);
+    }
+
+    writeln(formatQuery(finalDdl));
     return true;
 }
 
-bool SqlExport::exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr createView)
+bool SqlExport::exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl, SqliteCreateViewPtr createView,
+                           const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(createView);
+    Q_UNUSED(createView);
+    Q_UNUSED(columnNames);
+    Q_UNUSED(providedData);
     static_qstring(dropDdl, "DROP VIEW IF EXISTS %1;");
+    static_qstring(ifNotExists, " IF NOT EXISTS");
 
     QString view = getNameForObject(database, name, false);
     writeln("");
@@ -221,15 +262,26 @@ bool SqlExport::exportView(const QString& database, const QString& name, const Q
     if (cfg.SqlExport.GenerateDrop.get())
         writeln(dropDdl.arg(fullName));
 
-    writeln(formatQuery(formatQuery(ddl)));
+    QString finalDdl = ddl;
+    if (cfg.SqlExport.GenerateIfNotExists.get())
+    {
+        int idx = finalDdl.indexOf("view", 0, Qt::CaseInsensitive);
+        finalDdl.insert(idx + 4, ifNotExists);
+    }
+    writeln(formatQuery(finalDdl));
     return true;
+}
+
+bool SqlExport::exportViewRow(SqlResultsRowPtr data)
+{
+    return exportDataRow(data);
 }
 
 void SqlExport::writeHeader()
 {
     QDateTime ctime = QDateTime::currentDateTime();
     writeln("--");
-    writeln(tr("-- File generated with SQLiteStudio v%1 on %2").arg(SQLITESTUDIO->getVersionString()).arg(ctime.toString()));
+    writeln(tr("-- File generated with Letos v%1 on %2").arg(LETOS->getVersionString(), ctime.toString()));
     writeln("--");
     if (standardOptionsToEnable().testFlag(ExportManager::CODEC))
     {
@@ -298,6 +350,18 @@ QStringList SqlExport::rowToArgList(SqlResultsRowPtr row, bool honorGeneratedCol
     return valueListToSqlList(row->valueList());
 }
 
+bool SqlExport::exportDataRow(SqlResultsRowPtr data)
+{
+    QStringList argList = rowToArgList(data, true);
+    QString argStr = argList.join(", ");
+    QString sql = "INSERT INTO " + theTable + " (" + columns + ") VALUES (" + argStr + ");";
+    if (!cfg.SqlExport.FormatDdlsOnly.get())
+        sql = formatQuery(sql);
+
+    writeln(sql);
+    return true;
+}
+
 void SqlExport::validateOptions()
 {
     if (exportMode == ExportManager::QUERY_RESULTS)
@@ -315,18 +379,22 @@ void SqlExport::validateOptions()
     {
         bool generateCreate = cfg.SqlExport.GenerateCreateTable.get();
         EXPORT_MANAGER->updateVisibilityAndEnabled(cfg.SqlExport.GenerateDrop, true, generateCreate);
+        EXPORT_MANAGER->updateVisibilityAndEnabled(cfg.SqlExport.GenerateIfNotExists, true, generateCreate);
         if (!generateCreate)
+        {
             cfg.SqlExport.GenerateDrop.set(false);
+            cfg.SqlExport.GenerateIfNotExists.set(false);
+        }
     }
 }
 
 bool SqlExport::init()
 {
-    Q_INIT_RESOURCE(sqlexport);
+    SQLS_INIT_RESOURCE(sqlexport);
     return GenericExportPlugin::init();
 }
 
 void SqlExport::deinit()
 {
-    Q_CLEANUP_RESOURCE(sqlexport);
+    SQLS_CLEANUP_RESOURCE(sqlexport);
 }

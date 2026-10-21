@@ -4,37 +4,37 @@
   <context>
     <name>Printing</name>
     <message>
-      <location filename="../printing.cpp" line="35"/>
+      <location filename="../printing.cpp" line="36"/>
       <source>Print data</source>
-      <translation type="unfinished">Print data</translation>
+      <translation>Druk data</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="37"/>
+      <location filename="../printing.cpp" line="38"/>
       <source>Print query</source>
-      <translation type="unfinished">Print query</translation>
+      <translation>Druk navraag</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="74"/>
+      <location filename="../printing.cpp" line="75"/>
       <source>No data to print.</source>
-      <translation type="unfinished">No data to print.</translation>
+      <translation>Geen data om te druk nie.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="82"/>
+      <location filename="../printing.cpp" line="83"/>
       <source>Printing data.</source>
-      <translation type="unfinished">Printing data.</translation>
+      <translation>Besig om data te druk.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="108"/>
+      <location filename="../printing.cpp" line="109"/>
       <source>Printing query.</source>
-      <translation type="unfinished">Printing query.</translation>
+      <translation>Besig om navraag te druk.</translation>
     </message>
   </context>
   <context>
     <name>PrintingExport</name>
     <message>
-      <location filename="../printingexport.cpp" line="30"/>
+      <location filename="../printingexport.cpp" line="27"/>
       <source>Printing</source>
-      <translation type="unfinished">Printing</translation>
+      <translation>Drukwerk</translation>
     </message>
   </context>
 </TS>

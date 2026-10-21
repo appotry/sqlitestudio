@@ -2,7 +2,7 @@
 #include "parser/ast/sqlitepragma.h"
 
 FormatPragma::FormatPragma(SqlitePragma* pragma) :
-    pragma(pragma)
+    FormatStatement(pragma), pragma(pragma)
 {
 }
 
@@ -17,9 +17,17 @@ void FormatPragma::formatInternal()
     withId(pragma->pragmaName);
 
     if (pragma->equalsOp)
-        withOperator("=").withLiteral(pragma->value);
+        withOperator("=");
     else if (pragma->parenthesis)
-        withParExprLeft().withLiteral(pragma->value).withParExprRight();
+        withParExprLeft();
+
+    if (pragma->value.userType() == QMetaType::Bool)
+        withId(pragma->getBoolLiteralValue(), false);
+    else
+        withLiteral(pragma->value);
+
+    if (pragma->parenthesis)
+        withParExprRight();
 
     withSemicolon();
 }

@@ -1,0 +1,86 @@
+#ifndef ERDCONNECTION_H
+#define ERDCONNECTION_H
+
+#include <QObject>
+#include <QPointF>
+#include "erdarrowitem.h"
+#include "parser/ast/sqlitecreatetable.h"
+
+class ErdEntity;
+class ErdScene;
+class ErdCurvyArrowItem;
+class QGraphicsScene;
+class Db;
+
+class ErdConnection
+{
+    public:
+        ErdConnection(ErdEntity* startEntity, const QPointF& endPos, ErdArrowItem::Type arrowType);
+        ErdConnection(ErdEntity* startEntity, int startRow, ErdEntity* endEntity, int endRow, ErdArrowItem::Type arrowType);
+        virtual ~ErdConnection();
+
+        void addToScene(ErdScene* scene);
+        void updatePosition(const QPointF& endPos);
+        void finalizeConnection(ErdEntity* entity, const QPointF& endPos);
+        void cancelFinalState(const QPointF& endPos);
+        void restoreFinalState();
+        bool isFinalized() const;
+        void refreshPosition();
+        ErdEntity* getStartEntity() const;
+        ErdEntity* getEndEntity() const;
+        int getStartEntityRow() const;
+        int getEndEntityRow() const;
+        SqliteCreateTable::Column* getStartEntityColumn() const;
+        SqliteCreateTable::Column* getEndEntityColumn() const;
+        SqliteCreateTable::Column* getPreCancelEndEntityColumn() const;
+        void setArrowType(ErdArrowItem::Type arrowType);
+        void select(bool changeFocusToo = true);
+        void deselect();
+        void markAsBeingDeleted();
+        bool isBeingDeleted() const;
+        bool isOwnerOf(ErdArrowItem* arrow);
+        const ErdArrowItem* getArrowItem() const;
+        bool isCompoundConnection() const;
+        QList<ErdConnection*> getAssociatedConnections() const;
+        void setAssociatedConnections(const QList<ErdConnection*>& connections);
+        bool isEditing() const;
+
+        /**
+         * @brief Sets index of connection in the starting entity.
+         * It's not a row number. It's more of a z-index of arrow relative to other arrows.
+         * The square arrow type uses it to draw different horizontal distances for multiple connections.
+         */
+        void setIndexInStartEntity(int idx);
+
+        /**
+         * @brief Sets index of connection in the ending entity.
+         * More details in the #setIndexInStartEntity();
+         */
+        void setIndexInEndEntity(int idx);
+
+        bool isTableLevelFk() const;
+        void setTableLevelFk(bool value);
+        void endEntityAboutToBeDeleted();
+
+    private:
+        static QPointF findThisPosAgainstOther(ErdEntity* thisEntity, int thisRow, const QPointF& otherPosition, ErdArrowItem::Side& entitySide);
+        void commitFinalizationChange();
+        bool removeCancelledFk(SqliteCreateTablePtr& createTable);
+        bool addFk(SqliteCreateTablePtr& createTable);
+
+        ErdEntity* startEntity = nullptr;
+        ErdEntity* endEntity = nullptr;
+        ErdEntity* preCancelEndEntity = nullptr;
+        int startEntityRow = -1;
+        int endEntityRow = -1;
+        int preCancelEndEntityRow = -1;
+        int indexInStartEntity = 0;
+        int indexInEndEntity = 0;
+        bool tableLevelFk = false;
+        QPointF volatileEndPosition;
+        ErdArrowItem* arrow = nullptr;
+        ErdScene* scene = nullptr;
+        QList<ErdConnection*> associatedConnections;
+};
+
+#endif // ERDCONNECTION_H

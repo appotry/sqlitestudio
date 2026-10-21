@@ -5,7 +5,7 @@
 #include "formatwith.h"
 
 FormatInsert::FormatInsert(SqliteInsert* insert) :
-    insert(insert)
+    FormatStatement(insert), insert(insert)
 {
 }
 
@@ -28,9 +28,11 @@ void FormatInsert::formatInternal()
     withKeyword("INTO");
 
     if (!insert->database.isNull())
-        withId(insert->database);
+        withId(insert->database).withIdDot();
 
     withId(insert->table);
+    if (!insert->tableAlias.isNull())
+        withKeyword("AS").withId(insert->tableAlias);
 
     if (insert->defaultValuesKw)
     {
@@ -52,5 +54,10 @@ void FormatInsert::formatInternal()
         withDecrIndent();
     }
 
+    if (!insert->returning.isEmpty())
+    {
+        withNewLine().withLinedUpKeyword("RETURNING");
+        withStatementList(insert->returning, "returningColumns");
+    }
     withSemicolon();
 }

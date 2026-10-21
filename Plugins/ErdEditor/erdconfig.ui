@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ErdConfig</class>
+ <widget class="QWidget" name="ErdConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="maxTablesLabel">
+     <property name="text">
+      <string>Maximum number of tables for ERD editor</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="maxTablesSpin">
+     <property name="toolTip">
+      <string>Setting this value too high may cause the application to slow down or become unresponsive when opening the ERD editor.</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>99999</number>
+     </property>
+     <property name="cfg" stdset="0">
+      <string notr="true">Erd.MaxTableLimit</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>205</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QCheckBox" name="dragBySpaceCheck">
+     <property name="toolTip">
+      <string>Starts panning as soon as the Space key is pressed, without requiring a mouse button press.</string>
+     </property>
+     <property name="text">
+      <string>Pan view with Space only</string>
+     </property>
+     <property name="cfg" stdset="0">
+      <string notr="true">Erd.DragBySpace</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QCheckBox" name="checkBox">
+     <property name="toolTip">
+      <string>Highlight entities directly related to the selected entity and the relationships connecting them.</string>
+     </property>
+     <property name="text">
+      <string>Highlight related entities</string>
+     </property>
+     <property name="cfg" stdset="0">
+      <string notr="true">Erd.GlowingRelations</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

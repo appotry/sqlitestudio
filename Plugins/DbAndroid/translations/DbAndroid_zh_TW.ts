@@ -4,17 +4,17 @@
   <context>
     <name>DbAndroid</name>
     <message>
-      <location filename="../dbandroid.cpp" line="39"/>
+      <location filename="../dbandroid.cpp" line="40"/>
       <source>Invalid or incomplete Android Database URL.</source>
       <translation>無效或不完整的 Android 資料庫 URL。</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="54"/>
+      <location filename="../dbandroid.cpp" line="55"/>
       <source>Android database URL</source>
       <translation>Android 資料庫 URL</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="55"/>
+      <location filename="../dbandroid.cpp" line="56"/>
       <source>Select Android database</source>
       <translation>選擇 Android 資料庫</translation>
     </message>
@@ -29,44 +29,47 @@
       <translation>使用 Android 除錯橋 (ADB)：%1</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="183"/>
-      <source>You can grab Android connector JAR file from Tools menu. It&apos;s required for 2 of 3 connections supported by the Android plugin. For more details read plugin&apos;s documentation on &lt;a href=&quot;%1&quot;&gt;SQLiteStudio&apos;s wiki page.&lt;/a&gt;</source>
-      <translation>您可以從工具選單取得 Android 聯結器 JAR 檔案。Android 外掛支援的 3 種連線方式有 2 個需要它。更多細節見 SQLiteStudio wiki 頁面上的&lt;a href=&quot;%1&quot;&gt;外掛文件&lt;/a&gt;。</translation>
+      <location filename="../dbandroid.cpp" line="198"/>
+      <source>Could not find Android Debug Bridge application. &lt;a href=&quot;%1&quot;&gt;Click here&lt;/a&gt; to point out the location of the ADB application, otherwise the %2 plugin will not support USB cable connections, only the network connection.</source>
+      <translation>找不到 Android Debug Bridge 應用程式。&lt;a href=&quot;%1&quot;&gt;按一下這裡&lt;/a&gt;以指定 ADB 應用程式的位置，否則 %2 外掛程式將不支援 USB 傳輸線連線，而僅支援網路連線。</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="191"/>
-      <source>Could not find Android Debug Bridge application. &lt;a href=&quot;%1&quot;&gt;Click here&lt;/a&gt; to point out the location of the ADB application, otherwise the %2 plugin will not support USB cable connections, only the network connection..</source>
-      <translation>找不到 ADB 應用程式。&lt;a href=&quot;%1&quot;&gt;點選此處&lt;/a&gt; 來指定 ADB 應用程式的位置。否則 %2 外掛將不支援 USB 線纜連線，只能使用網路連線..</translation>
+      <location filename="../dbandroid.cpp" line="217"/>
+      <source>The selected ADB is incorrect.</source>
+      <translation>選取的 ADB 不正確。</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="209"/>
+      <location filename="../dbandroid.cpp" line="218"/>
+      <source>Would you like to select another one, or leave it unconfigured?</source>
+      <translation>您要選取另一個，還是保持未設定？</translation>
+    </message>
+    <message>
+      <location filename="../dbandroid.cpp" line="242"/>
+      <source>Save JAR file</source>
+      <translation>儲存 JAR 檔案</translation>
+    </message>
+    <message>
+      <location filename="../dbandroid.cpp" line="216"/>
       <source>Invalid ADB</source>
       <translation>無效的 ADB</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="209"/>
-      <source>The selected ADB is incorrect.
-Would you like to select another one, or leave it unconfigured?</source>
-      <translation>選擇的 ADB 不正確。
-選擇另一個？或者不做設定檔？</translation>
+      <location filename="../dbandroid.cpp" line="183"/>
+      <source>You can grab Android connector JAR file from Tools menu. It&apos;s required for 2 of 3 connections supported by the Android plugin. For more details read plugin&apos;s documentation on &lt;a href=&quot;%1&quot;&gt;Letos&apos;s wiki page.&lt;/a&gt;</source>
+      <translation>您可以從「工具」選單取得 Android 連接器 JAR 檔案。它（it&apos;s）是 Android 外掛程式支援的 3 種連線中有 2 種所必需。如需更多詳細資訊，請閱讀 &lt;a href=&quot;%1&quot;&gt;Letos&apos;s wiki 頁面上的 plugin&apos;s 文件。&lt;/a&gt;</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="211"/>
+      <location filename="../dbandroid.cpp" line="219"/>
       <source>Select another ADB</source>
       <translation>選擇其他 ADB</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="211"/>
+      <location filename="../dbandroid.cpp" line="220"/>
       <source>Leave unconfigured</source>
       <translation>不做設定檔</translation>
     </message>
     <message>
-      <location filename="../dbandroid.cpp" line="232"/>
-      <source>Save jar file</source>
-      <translation>儲存 jar 檔案</translation>
-    </message>
-    <message>
-      <location filename="../dbandroid.cpp" line="251"/>
+      <location filename="../dbandroid.cpp" line="192"/>
       <source>Get Android connector JAR file</source>
       <translation>獲取 Android 聯結器 JAR 檔案</translation>
     </message>
@@ -74,12 +77,12 @@ Would you like to select another one, or leave it unconfigured?</source>
   <context>
     <name>DbAndroidInstance</name>
     <message>
-      <location filename="../dbandroidinstance.cpp" line="106"/>
+      <location filename="../dbandroidinstance.cpp" line="121"/>
       <source>Android SQLite driver does not support loadable extensions.</source>
       <translation>Android SQLite 驅動程式不支援可載入的擴充套件。</translation>
     </message>
     <message>
-      <location filename="../dbandroidinstance.cpp" line="188"/>
+      <location filename="../dbandroidinstance.cpp" line="229"/>
       <source>Connection with Android database &apos;%1&apos; lost.</source>
       <translation>與 Android 資料庫 &apos;%1&apos; 的連線丟失。</translation>
     </message>
@@ -88,8 +91,8 @@ Would you like to select another one, or leave it unconfigured?</source>
     <name>DbAndroidJsonConnection</name>
     <message>
       <location filename="../dbandroidjsonconnection.cpp" line="175"/>
-      <source>Cannot connect to device %1, because it&apos;s not visible to your computer.</source>
-      <translation>無法連線裝置 %1，它對您的計算機不可見。</translation>
+      <source>Cannot connect to device %1, because it&apos;s not visible from your computer.</source>
+      <translation>無法連線至裝置 %1，因為它（it&apos;s）無法從您的電腦看見。</translation>
     </message>
     <message>
       <location filename="../dbandroidjsonconnection.cpp" line="182"/>
@@ -182,8 +185,8 @@ Would you like to select another one, or leave it unconfigured?</source>
     </message>
     <message>
       <location filename="../dbandroidpathdialog.ui" line="127"/>
-      <source>&lt;p&gt;This is password configured in the SQLiteStudio service being embeded in the Android application.&lt;/p&gt;</source>
-      <translation>&lt;p&gt;這是在 Android 應用程式中嵌入的為 SQLiteStudio 服務設定檔的密碼。&lt;/p&gt;</translation>
+      <source>&lt;p&gt;This is password configured in the Letos service being embeded in the Android application.&lt;/p&gt;</source>
+      <translation>&lt;p&gt;這是在嵌入 Android 應用程式的 Letos 服務中設定的密碼。&lt;/p&gt;</translation>
     </message>
     <message>
       <location filename="../dbandroidpathdialog.ui" line="140"/>
@@ -301,8 +304,8 @@ Android 裝置拒絕或無法完成刪除。</translation>
     <name>DbAndroidShellConnection</name>
     <message>
       <location filename="../dbandroidshellconnection.cpp" line="31"/>
-      <source>Cannot connect to device %1, because it&apos;s not visible to your computer.</source>
-      <translation>無法連線裝置 %1，您的計算機上看不到它。</translation>
+      <source>Cannot connect to device %1, because it&apos;s not visible from your computer.</source>
+      <translation>無法連線至裝置 %1，因為它（it&apos;s）無法從您的電腦看見。</translation>
     </message>
     <message>
       <location filename="../dbandroidshellconnection.cpp" line="46"/>
@@ -335,8 +338,8 @@ Android 裝置拒絕或無法完成刪除。</translation>
       <translation>無法獲取應用程式 %1 的資料庫清單。詳細資訊：%2</translation>
     </message>
     <message>
-      <location filename="../dbandroidshellconnection.cpp" line="219"/>
-      <location filename="../dbandroidshellconnection.cpp" line="226"/>
+      <location filename="../dbandroidshellconnection.cpp" line="207"/>
+      <location filename="../dbandroidshellconnection.cpp" line="214"/>
       <source>Could not execute query on database &apos;%1&apos;: %2</source>
       <translation>無法在資料庫 &apos;%1&apos; 上執行查詢：%2</translation>
     </message>
@@ -344,7 +347,7 @@ Android 裝置拒絕或無法完成刪除。</translation>
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../sqlqueryandroid.cpp" line="101"/>
+      <location filename="../sqlqueryandroid.cpp" line="100"/>
       <source>Cannot bind argument &apos;%1&apos; of the query, because it&apos;s value is missing.</source>
       <translation>無法在此查詢中繫結引數 &apos;%1&apos;，因為缺少它的值。</translation>
     </message>

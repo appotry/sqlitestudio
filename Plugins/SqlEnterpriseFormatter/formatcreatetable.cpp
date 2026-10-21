@@ -3,7 +3,7 @@
 #include "sqlenterpriseformatter.h"
 
 FormatCreateTable::FormatCreateTable(SqliteCreateTable* createTable) :
-    createTable(createTable)
+    FormatStatement(createTable), createTable(createTable)
 {
 }
 
@@ -36,8 +36,22 @@ void FormatCreateTable::formatInternal()
 
         withParDefRight();
 
-        if (!createTable->withOutRowId.isNull())
+        markAndKeepIndent("tableOptions");
+        bool atLeastOneOption = false;
+        if (createTable->withOutRowId)
+        {
             withKeyword("WITHOUT").withId("ROWID");
+            atLeastOneOption = true;
+        }
+
+        if (createTable->strict)
+        {
+            if (atLeastOneOption)
+                withListComma(FormatToken::NO_SPACE_BEFORE);
+
+            withId("STRICT");
+            //atLeastOneOption = true; // to uncomment if there are further options down below
+        }
     }
 
     withSemicolon();
@@ -87,7 +101,7 @@ int FormatCreateTable::getColNameLength(const QString& name)
 }
 
 FormatCreateTableColumn::FormatCreateTableColumn(SqliteCreateTable::Column* column) :
-    column(column)
+    FormatStatement(column), column(column)
 {
 }
 
@@ -113,7 +127,7 @@ void FormatCreateTableColumn::formatInternal()
 
 
 FormatCreateTableColumnConstraint::FormatCreateTableColumnConstraint(SqliteCreateTable::Column::Constraint* constr) :
-    constr(constr)
+    FormatStatement(constr), constr(constr)
 {
 }
 
@@ -185,15 +199,33 @@ void FormatCreateTableColumnConstraint::formatInternal()
             break;
         }
         case SqliteCreateTable::Column::Constraint::NULL_:
-        case SqliteCreateTable::Column::Constraint::NAME_ONLY:
+        {
+            // Is the default and unofficial. Pass through
+            withKeyword("NULL");
+            break;
+        }
         case SqliteCreateTable::Column::Constraint::DEFERRABLE_ONLY:
+        {
+            // Pass through
+            if (constr->deferrable == SqliteDeferrable::NOT_DEFERRABLE)
+                withKeyword("NOT");
+            withKeyword("DEFERRABLE");
+            if (constr->initially != SqliteInitially::null)
+            {
+                withKeyword("INITIALLY");
+                withKeyword(constr->initially == SqliteInitially::DEFERRED ? "DEFERRED" : "IMMEDIATE");
+            }
+            break;
+        }
+        case SqliteCreateTable::Column::Constraint::NAME_ONLY:
+            // The CONSTRAINT <name> clause has already been output
             break;
     }
 }
 
 
 FormatCreateTableConstraint::FormatCreateTableConstraint(SqliteCreateTable::Constraint* constr) :
-    constr(constr)
+    FormatStatement(constr), constr(constr)
 {
 }
 
@@ -206,12 +238,12 @@ void FormatCreateTableConstraint::formatInternal()
     {
         case SqliteCreateTable::Constraint::PRIMARY_KEY:
         {
-            withKeyword("PRIMARY").withKeyword("KEY").withParDefLeft().withStatementList(constr->indexedColumns).withParDefRight();
+            withKeyword("PRIMARY").withKeyword("KEY").withParDefLeft().withStatementList(constr->indexedColumns);
 
             if (constr->autoincrKw)
                 withKeyword("AUTOINCREMENT");
 
-            withConflict(constr->onConflict);
+            withParDefRight().withConflict(constr->onConflict);
             break;
         }
         case SqliteCreateTable::Constraint::UNIQUE:

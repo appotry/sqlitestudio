@@ -7,13 +7,14 @@
 #include "config_builder.h"
 #include "csvserializer.h"
 
-CFG_CATEGORIES(CsvImportConfig,
-     CFG_CATEGORY(CsvImport,
+CFG_CATEGORIES_EX(CsvImportConfig, CSVIMPORTSHARED_EXPORT,
+     CFG_CATEGORY_EX(CsvImport, CSVIMPORTSHARED_EXPORT,
          CFG_ENTRY(bool,    FirstRowAsColumns, false)
          CFG_ENTRY(int,     Separator,         0)
          CFG_ENTRY(QString, CustomSeparator,   QString())
          CFG_ENTRY(bool,    NullValues,        false)
          CFG_ENTRY(QString, NullValueString,   QString())
+         CFG_ENTRY(bool,    QuotationMark,     true)
      )
 )
 
@@ -23,7 +24,7 @@ class QTextStream;
 class CSVIMPORTSHARED_EXPORT CsvImport : public GenericPlugin, public ImportPlugin
 {
         Q_OBJECT
-        SQLITESTUDIO_PLUGIN("csvimport.json")
+        LETOS_PLUGIN("csvimport.json")
 
     public:
         CsvImport();

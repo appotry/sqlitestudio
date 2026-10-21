@@ -1,6 +1,5 @@
 #include "scriptingtcl.h"
 #include "common/global.h"
-#include "common/unused.h"
 #include "db/db.h"
 #include "parser/lexer.h"
 #include "parser/token.h"
@@ -20,7 +19,7 @@ ScriptingTcl::~ScriptingTcl()
 
 bool ScriptingTcl::init()
 {
-    Q_INIT_RESOURCE(scriptingtcl);
+    SQLS_INIT_RESOURCE(scriptingtcl);
     QMutexLocker locker(mainInterpMutex);
     mainContext = new ContextTcl();
     return true;
@@ -31,7 +30,7 @@ void ScriptingTcl::deinit()
     QMutexLocker locker(mainInterpMutex);
     safe_delete(mainContext);
     Tcl_Finalize();
-    Q_CLEANUP_RESOURCE(scriptingtcl);
+    SQLS_CLEANUP_RESOURCE(scriptingtcl);
 }
 
 QString ScriptingTcl::getLanguage() const
@@ -103,7 +102,7 @@ QString ScriptingTcl::getErrorMessage(ScriptingPlugin::Context* context) const
 
 QString ScriptingTcl::getIconPath() const
 {
-    return ":/scriptingtcl/scriptingtcl.png";
+    return ":/scriptingtcl/scriptingtcl.svg";
 }
 
 QVariant ScriptingTcl::evaluate(ScriptingPlugin::Context* context, const QString& code, const FunctionInfo& funcInfo,
@@ -331,30 +330,30 @@ QString ScriptingTcl::tclObjToString(Tcl_Obj* obj)
 Tcl_Obj* ScriptingTcl::variantToTclObj(const QVariant& value)
 {
     Tcl_Obj* obj = nullptr;
-    switch (value.type())
+    switch (value.userType())
     {
-        case QVariant::Bool:
+        case QMetaType::Bool:
             obj = Tcl_NewBooleanObj(value.toBool());
             break;
-        case QVariant::Int:
-        case QVariant::UInt:
+        case QMetaType::Int:
+        case QMetaType::UInt:
             obj = Tcl_NewIntObj(value.toInt());
             break;
-        case QVariant::LongLong:
-        case QVariant::ULongLong:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
             obj = Tcl_NewWideIntObj((Tcl_WideInt)value.toLongLong());
             break;
-        case QVariant::Double:
+        case QMetaType::Double:
             obj = Tcl_NewDoubleObj(value.toDouble());
             break;
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
         {
             QByteArray bytes = value.toByteArray();
             unsigned char* ubytes = reinterpret_cast<unsigned char*>(bytes.data());
             obj = Tcl_NewByteArrayObj(ubytes, bytes.size());
             break;
         }
-        case QVariant::List:
+        case QMetaType::QVariantList:
         {
             QList<QVariant> list = value.toList();
             int listSize = list.size();
@@ -366,7 +365,7 @@ Tcl_Obj* ScriptingTcl::variantToTclObj(const QVariant& value)
             delete[] objList;
             break;
         }
-        case QVariant::StringList:
+        case QMetaType::QStringList:
         {
             QStringList list = value.toStringList();
             int listSize = list.size();
@@ -378,7 +377,7 @@ Tcl_Obj* ScriptingTcl::variantToTclObj(const QVariant& value)
             delete[] objList;
             break;
         }
-        case QVariant::Hash:
+        case QMetaType::QVariantHash:
         {
             QHash<QString, QVariant> hash = value.toHash();
             obj = Tcl_NewDictObj();
@@ -390,7 +389,7 @@ Tcl_Obj* ScriptingTcl::variantToTclObj(const QVariant& value)
             }
             break;
         }
-        case QVariant::Map:
+        case QMetaType::QVariantMap:
         {
             QMap<QString, QVariant> map = value.toMap();
             obj = Tcl_NewDictObj();
@@ -402,7 +401,7 @@ Tcl_Obj* ScriptingTcl::variantToTclObj(const QVariant& value)
             }
             break;
         }
-        case QVariant::String:
+        case QMetaType::QString:
         default:
             obj = stringToTclObj(value.toString());
             break;
@@ -455,8 +454,8 @@ int ScriptingTcl::dbCommand(ClientData clientData, Tcl_Interp* interp, int objc,
 
 int ScriptingTcl::initTclCommand(ClientData clientData, Tcl_Interp* interp, int objc, Tcl_Obj* const objv[])
 {
-    UNUSED(clientData);
-    UNUSED(objv);
+    Q_UNUSED(clientData);
+    Q_UNUSED(objv);
 
     if (objc > 1)
     {

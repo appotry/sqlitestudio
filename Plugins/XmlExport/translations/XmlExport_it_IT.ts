@@ -4,7 +4,7 @@
   <context>
     <name>XmlExport</name>
     <message>
-      <location filename="../xmlexport.cpp" line="38"/>
+      <location filename="../xmlexport.cpp" line="37"/>
       <source>Enter the namespace to use (for example: http://my.namespace.org)</source>
       <translation>Inserisci lo spazio dei nomi da usare (per esempio: http://my.namespace.org)</translation>
     </message>
@@ -19,7 +19,7 @@
     <message>
       <location filename="../XmlExport.ui" line="26"/>
       <source>Format document (new lines, indentation)</source>
-      <translation>Formato documento (nuova riga, rientro)</translation>
+      <translation>Formato documento (nuova riga, indentazione)</translation>
     </message>
     <message>
       <location filename="../XmlExport.ui" line="42"/>

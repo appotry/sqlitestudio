@@ -1,8 +1,8 @@
 #include "multieditorimage.h"
-#include "common/unused.h"
 #include "iconmanager.h"
 #include "uiconfig.h"
 #include "services/notifymanager.h"
+#include "multieditor/multieditor.h"
 #include <QBuffer>
 #include <QImageReader>
 #include <QLabel>
@@ -23,8 +23,6 @@ MultiEditorImage::MultiEditorImage()
 
     QToolBar* tb = new QToolBar();
     tb->setOrientation(Qt::Vertical);
-    loadAction = tb->addAction(ICONS.OPEN_FILE, tr("Load from file"), this, SLOT(openFile()));
-    tb->addAction(ICONS.SAVE_FILE, tr("Store in a file"), this, SLOT(saveFile()));
     zoomInAct = tb->addAction(ICONS.ZOOM_IN, tr("Zoom in by 25%"), this, SLOT(zoomIn()));
     zoomOutAct = tb->addAction(ICONS.ZOOM_OUT, tr("Zoom out by 25%"), this, SLOT(zoomOut()));
     tb->addAction(ICONS.ZOOM_RESET, tr("Reset zoom"), this, SLOT(resetZoom()));
@@ -67,7 +65,7 @@ QVariant MultiEditorImage::getValue()
 
 void MultiEditorImage::setReadOnly(bool boolValue)
 {
-    loadAction->setEnabled(!boolValue);
+    Q_UNUSED(boolValue);
 }
 
 QList<QWidget*> MultiEditorImage::getNoScrollWidgets()
@@ -81,96 +79,17 @@ void MultiEditorImage::focusThisWidget()
 {
 }
 
-void MultiEditorImage::notifyAboutUnload()
+QString MultiEditorImage::getPreferredFileFilter()
 {
-    emit aboutToBeDeleted();
+    return MultiEditor::getFileDialogFilter(MultiEditor::IMAGES);
 }
 
 void MultiEditorImage::scale(double factor)
 {
     currentZoom *= factor;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     imgLabel->resize(currentZoom * imgLabel->pixmap(Qt::ReturnByValue).size());
-#else
-    imgLabel->resize(currentZoom * imgLabel->pixmap()->size());
-#endif
     zoomInAct->setEnabled(currentZoom < 10.0);
     zoomOutAct->setEnabled(currentZoom > 0.1);
-}
-
-void MultiEditorImage::openFile()
-{
-    QString dir = getFileDialogInitPath();
-    QString filter = tr("Images (*.jpeg *.jpg *.png *.bmp *.gif *.tiff *.jp2 *.svg *.tga *.icns *.webp *.wbmp *.mng);;All files (*)");
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open image"), dir, filter);
-    if (fileName.isNull())
-        return;
-
-    setFileDialogInitPathByFile(fileName);
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        notifyError(tr("Could not open file %1 for reading.").arg(fileName));
-        return;
-    }
-
-    QByteArray newData = file.readAll();
-    file.close();
-
-    setValue(newData);
-    emit valueModified();
-}
-
-void MultiEditorImage::saveFile()
-{
-    QString dir = getFileDialogInitPath();
-    QString filter;
-    QString selectedFilter;
-    QString format = QString::fromLatin1(imgFormat);
-    if (!format.isEmpty())
-    {
-        selectedFilter = QString("%1 (*.%2)").arg(format, format.toLower());
-        filter = QString("%1;;%3").arg(selectedFilter, tr("All files (*)"));
-    }
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save image"), dir, filter, selectedFilter.isEmpty() ? nullptr : &selectedFilter);
-    if (fileName.isNull())
-        return;
-
-    setFileDialogInitPathByFile(fileName);
-
-    QPixmap thePixmap =
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-        imgLabel->pixmap(Qt::ReturnByValue);
-#else
-        *(imgLabel->pixmap());
-#endif
-
-    imgLabel->resize(currentZoom * thePixmap.size());
-    if (!format.isEmpty() && !fileName.endsWith(format, Qt::CaseInsensitive) && !thePixmap.isNull())
-    {
-        if (!thePixmap.save(fileName))
-        {
-            QString requestedFormat = QFileInfo(fileName).completeSuffix();
-            notifyWarn(tr("Tried to save image under different format (%1) than original (%2), "
-                          "but application failed to convert it. The image with unchanged format (%3) "
-                          "will be saved under the given name (%4)").arg(requestedFormat, format, format, fileName));
-        }
-        else
-            return;
-    }
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::WriteOnly))
-    {
-        notifyError(tr("Could not open file %1 for writting.").arg(fileName));
-        return;
-    }
-
-    if (file.write(imgData) < imgData.size())
-        notifyError(tr("Could not write image into the file %1").arg(fileName));
-
-    file.close();
 }
 
 void MultiEditorImage::zoomIn()
@@ -205,6 +124,7 @@ bool MultiEditorImagePlugin::validFor(const DataType& dataType)
     switch (dataType.getType())
     {
         case DataType::BLOB:
+        case DataType::ANY:
         case DataType::NONE:
         case DataType::unknown:
             return true;
@@ -228,13 +148,31 @@ bool MultiEditorImagePlugin::validFor(const DataType& dataType)
     return false;
 }
 
-int MultiEditorImagePlugin::getPriority(const DataType& dataType)
+int MultiEditorImagePlugin::getPriority(const QVariant& value, const DataType& dataType)
 {
+    if (value.userType() == QMetaType::QByteArray)
+    {
+        QByteArray bytes = value.toByteArray();
+        if (bytes.size() >= 32)
+        {
+            QBuffer buffer;
+            buffer.setData(bytes);
+            buffer.open(QIODevice::ReadOnly);
+
+            QImageReader reader(&buffer);
+            bool isImg = reader.canRead();
+            buffer.close();
+            if (isImg)
+                return 1; // High priority for valid images
+        }
+    }
+
     switch (dataType.getType())
     {
         case DataType::BLOB:
             return 10;
         case DataType::NONE:
+        case DataType::ANY:
         case DataType::unknown:
             return 50;
         case DataType::BOOLEAN:
@@ -264,7 +202,7 @@ QString MultiEditorImagePlugin::getTabLabel()
 
 bool MultiEditorImagePlugin::init()
 {
-    Q_INIT_RESOURCE(multieditorimage);
+    SQLS_INIT_RESOURCE(multieditorimage);
     return GenericPlugin::init();
 }
 
@@ -276,5 +214,5 @@ void MultiEditorImagePlugin::deinit()
         delete editor;
     }
 
-    Q_CLEANUP_RESOURCE(multieditorimage);
+    SQLS_CLEANUP_RESOURCE(multieditorimage);
 }

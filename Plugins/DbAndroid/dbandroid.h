@@ -10,8 +10,8 @@ class AdbManager;
 class DbAndroidConnectionFactory;
 class QAction;
 
-CFG_CATEGORIES(DbAndroidConfig,
-    CFG_CATEGORY(DbAndroid,
+CFG_CATEGORIES_EX(DbAndroidConfig, DBANDROIDSHARED_EXPORT,
+    CFG_CATEGORY_EX(DbAndroid, DBANDROIDSHARED_EXPORT,
         CFG_ENTRY(QString, AdbPath, QString())
         CFG_ENTRY(bool,    JarDownloadNotified, false)
     )
@@ -20,7 +20,7 @@ CFG_CATEGORIES(DbAndroidConfig,
 class DBANDROIDSHARED_EXPORT DbAndroid : public GenericPlugin, public DbPlugin
 {
         Q_OBJECT
-        SQLITESTUDIO_PLUGIN("dbandroid.json")
+        LETOS_PLUGIN("dbandroid.json")
 
     public:
         DbAndroid();
@@ -43,13 +43,14 @@ class DBANDROIDSHARED_EXPORT DbAndroid : public GenericPlugin, public DbPlugin
         void initAdb();
         QString askForAdbPath();
         void showJarMessage();
+        void createJarAction();
 
         AdbManager* adbManager = nullptr;
         DbAndroidConnectionFactory* connectionFactory = nullptr;
         bool adbValid = false;
         QAction* jarAction = nullptr;
 
-        static_char* PLUGIN_MANUAL_URL = "https://github.com/pawelsalawa/sqlitestudio/wiki/DbAndroid";
+        static_char* PLUGIN_MANUAL_URL = "https://github.com/pawelsalawa/letos/wiki/DbAndroid";
         static_char* SELECT_ADB_URL = "select_adb://";
 
         CFG_LOCAL_PERSISTABLE(DbAndroidConfig, cfg)

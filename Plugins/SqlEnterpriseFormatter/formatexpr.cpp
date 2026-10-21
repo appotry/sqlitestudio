@@ -6,11 +6,12 @@
 #include "parser/ast/sqliteraise.h"
 #include "parser/ast/sqlitefilterover.h"
 #include "sqlenterpriseformatter.h"
+#include "common/utils_sql.h"
 
 QRegularExpression FormatExpr::WORD_ONLY_RE = QRegularExpression("^[a-zA-Z]+$");
 
 FormatExpr::FormatExpr(SqliteExpr* expr) :
-    expr(expr)
+    FormatStatement(expr), expr(expr)
 {
 }
 
@@ -44,8 +45,8 @@ void FormatExpr::formatInternal()
             if (!expr->table.isNull())
                 withId(expr->table).withIdDot();
 
-            if (expr->possibleDoubleQuotedString)
-                withStringOrId(expr->column);
+            if (expr->possibleDoubleQuotedString || expr->originallySingleQuoteString)
+                withStringOrId(expr->column, expr->originallySingleQuoteString ? FormatToken::SINGLE_QUOTE_STRING : FormatToken::Flag::NO_FLAG);
             else
                 withId(expr->column);
             break;
@@ -68,7 +69,11 @@ void FormatExpr::formatInternal()
 
             // Operator can be a keyword
             QString opStr = cfg->SqlEnterpriseFormatter.UppercaseKeywords.get() ? expr->binaryOp.toUpper() : expr->binaryOp.toLower();
-            withStatement(expr->expr1, "binaryOp1").withOperator(opStr);
+            withStatement(expr->expr1, "binaryOp1");
+            if (WORD_ONLY_RE.match(opStr).hasMatch())
+                withKeyword(opStr);
+            else
+                withOperator(opStr);
 
             if (multiLine)
                 withNewLine().withIncrIndent("binaryOp1");
@@ -76,6 +81,11 @@ void FormatExpr::formatInternal()
             withStatement(expr->expr2, "binaryOp2");
             if (multiLine)
                 withDecrIndent();
+            break;
+        }
+        case SqliteExpr::Mode::PTR_OP:
+        {
+            withStatement(expr->expr1).withOperator(expr->ptrOp).withStatement(expr->expr2);
             break;
         }
         case SqliteExpr::Mode::FUNCTION:
@@ -89,7 +99,13 @@ void FormatExpr::formatInternal()
             if (expr->star)
                 withOperator("*").withParFuncRight();
             else
-                withStatementList(expr->exprList, "funcArgs", FormatStatement::ListSeparator::EXPR_COMMA).withParFuncRight();
+            {
+                withStatementList(expr->exprList, "funcArgs", FormatStatement::ListSeparator::EXPR_COMMA);
+                if (!expr->sortColumns.isEmpty())
+                    withKeyword("ORDER").withKeyword("BY").withStatementList(expr->sortColumns);
+
+                withParFuncRight();
+            }
 
             break;
         }
@@ -104,11 +120,30 @@ void FormatExpr::formatInternal()
             if (expr->star)
                 withOperator("*").withParFuncRight();
             else
-                withStatementList(expr->exprList, "funcArgs", FormatStatement::ListSeparator::EXPR_COMMA).withParFuncRight();
+            {
+                withStatementList(expr->exprList, "funcArgs", FormatStatement::ListSeparator::EXPR_COMMA);
+                if (!expr->sortColumns.isEmpty())
+                    withKeyword("ORDER").withKeyword("BY").withStatementList(expr->sortColumns);
+
+                withParFuncRight();
+            }
 
             if (expr->filterOver)
                 withStatement(expr->filterOver);
 
+            break;
+        }
+        case SqliteExpr::Mode::ORDERED_SET_AGGREGATE:
+        {
+            withId(expr->function).withParFuncLeft();
+            if (expr->distinctKw)
+                withKeyword("DISTINCT");
+            else if (expr->allKw)
+                withKeyword("ALL");
+
+            withStatementList(expr->exprList, "funcArgs", FormatStatement::ListSeparator::EXPR_COMMA).withParFuncRight();
+            withKeyword("WITHIN").withKeyword("GROUP");
+            withParFuncLeft().withKeyword("ORDER").withKeyword("BY").withStatement(expr->expr1, "orderByExpr1").withParFuncRight();
             break;
         }
         case SqliteExpr::Mode::SUB_EXPR:
@@ -165,6 +200,16 @@ void FormatExpr::formatInternal()
             withStatement(expr->expr2, "is");
             break;
         }
+        case SqliteExpr::Mode::DISTINCT:
+        {
+            withStatement(expr->expr1).withKeyword("IS");
+            if (expr->notKw)
+                withKeyword("NOT");
+
+            withKeyword("DISTINCT").withKeyword("FROM");
+            withStatement(expr->expr2, "isDistinct");
+            break;
+        }
         case SqliteExpr::Mode::BETWEEN:
         {
             withStatement(expr->expr1);
@@ -215,35 +260,43 @@ void FormatExpr::formatInternal()
                 withStatement(expr->expr1, "case");
 
             bool then = false;
-            for (SqliteExpr* innerExpr : expr->exprList)
+            for (SqliteExpr*& innerExpr : expr->exprList)
             {
                 if (then)
                     withKeyword("THEN");
                 else
-                    withKeyword("WHEN");
+                {
+                    withNewLine();
+                    if (expr->expr1)
+                        withIncrIndent("case");
+                    else
+                        withIncrIndent();
 
-                if (expr->expr1)
-                    withIncrIndent("case");
-                else
-                    withIncrIndent();
+                    withKeyword("WHEN");
+                }
 
                 withStatement(innerExpr);
-                withDecrIndent();
+
+                if (!then)
+                    withDecrIndent();
 
                 then = !then;
             }
 
             if (expr->expr2)
             {
-                withKeyword("ELSE");
+                withNewLine();
                 if (expr->expr1)
                     withIncrIndent("case");
                 else
                     withIncrIndent();
 
-                withStatement(expr->expr2).withDecrIndent();
+                withKeyword("ELSE");
+                withStatement(expr->expr2);
+                withDecrIndent();
             }
 
+            withNewLine();
             withKeyword("END");
             break;
         }

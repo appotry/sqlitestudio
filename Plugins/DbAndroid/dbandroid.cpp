@@ -9,12 +9,13 @@
 #include "services/dbmanager.h"
 #include "dbandroidconnectionfactory.h"
 #include "iconmanager.h"
-#include <QUrl>
+#include "common/utils.h"
 #include <QDebug>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QDesktopServices>
-#include <QtConcurrent/QtConcurrent>
+#include <QPushButton>
+#include <QUrl>
 
 DbAndroid::DbAndroid()
 {
@@ -79,7 +80,7 @@ QString DbAndroid::generateDbName(const QVariant& baseValue)
 
 bool DbAndroid::init()
 {
-    Q_INIT_RESOURCE(dbandroid);
+    SQLS_INIT_RESOURCE(dbandroid);
 
     qRegisterMetaType<QList<AdbManager::Device>>("QList<Device>");
 
@@ -102,9 +103,8 @@ bool DbAndroid::init()
         showJarMessage();
     }
     else
-    {
-        QtConcurrent::run(this, &DbAndroid::initAdb);
-    }
+        runInThread([=, this]{ initAdb(); });
+
     return true;
 }
 
@@ -116,7 +116,7 @@ void DbAndroid::deinit()
     safe_delete(jarAction);
     safe_delete(connectionFactory);
     safe_delete(adbManager);
-    Q_CLEANUP_RESOURCE(dbandroid);
+    SQLS_CLEANUP_RESOURCE(dbandroid);
 }
 
 QString DbAndroid::getCurrentAdb()
@@ -181,15 +181,22 @@ void DbAndroid::showJarMessage()
     if (!cfg.DbAndroid.JarDownloadNotified.get())
     {
         notifyInfo(tr("You can grab Android connector JAR file from Tools menu. It's required for 2 of 3 connections supported by the Android plugin. "
-                      "For more details read plugin's documentation on <a href=\"%1\">SQLiteStudio's wiki page.</a>").arg(PLUGIN_MANUAL_URL));
+                      "For more details read plugin's documentation on <a href=\"%1\">Letos's wiki page.</a>").arg(PLUGIN_MANUAL_URL));
         cfg.DbAndroid.JarDownloadNotified.set(true);
     }
+}
+
+void DbAndroid::createJarAction()
+{
+    QIcon i = ICONMANAGER->getIcon("android");
+    jarAction = MAINWINDOW->getToolsMenu()->addAction(i, tr("Get Android connector JAR file"));
+    connect(jarAction, SIGNAL(triggered()), this, SLOT(getJar()));
 }
 
 void DbAndroid::handleInvalidAdb()
 {
     notifyError(tr("Could not find Android Debug Bridge application. <a href=\"%1\">Click here</a> to point out the location of the ADB application, "
-                   "otherwise the %2 plugin will not support USB cable connections, only the network connection..").arg(SELECT_ADB_URL, getLabel()));
+                   "otherwise the %2 plugin will not support USB cable connections, only the network connection.").arg(SELECT_ADB_URL, getLabel()));
 }
 
 void DbAndroid::statusFieldLinkClicked(const QString& link)
@@ -206,11 +213,14 @@ void DbAndroid::statusFieldLinkClicked(const QString& link)
                 return;
             }
 
-            int res = QMessageBox::warning(MAINWINDOW, tr("Invalid ADB"), tr("The selected ADB is incorrect.\n"
-                                                                             "Would you like to select another one, or leave it unconfigured?"),
-                                           tr("Select another ADB"), tr("Leave unconfigured"));
+            QMessageBox box(QMessageBox::Warning, tr("Invalid ADB"),
+                            tr("The selected ADB is incorrect."), QMessageBox::NoButton, MAINWINDOW);
+            box.setInformativeText(tr("Would you like to select another one, or leave it unconfigured?"));
+            box.setDefaultButton(box.addButton(tr("Select another ADB"), QMessageBox::ResetRole));
+            QAbstractButton* rejectButton = box.addButton(tr("Leave unconfigured"), QMessageBox::RejectRole);
+            box.exec();
 
-            if (res == 1)
+            if (box.clickedButton() == rejectButton)
                 return;
 
             file = askForAdbPath();
@@ -229,7 +239,7 @@ void DbAndroid::deviceListChanged()
 
 void DbAndroid::getJar()
 {
-    QString path = QFileDialog::getExistingDirectory(nullptr, tr("Save jar file"));
+    QString path = QFileDialog::getExistingDirectory(nullptr, tr("Save JAR file"));
     if (path.isEmpty())
         return;
 
@@ -247,9 +257,7 @@ void DbAndroid::createJarAction(const QString& pluginName)
     if (pluginName != "" && pluginName != getName())
         return;
 
-    QIcon* i = ICONMANAGER->getIcon("android");
-    jarAction = MAINWINDOW->getToolsMenu()->addAction(*(i), tr("Get Android connector JAR file"));
-    connect(jarAction, SIGNAL(triggered()), this, SLOT(getJar()));
+    createJarAction();
 }
 
 AdbManager* DbAndroid::getAdbManager() const

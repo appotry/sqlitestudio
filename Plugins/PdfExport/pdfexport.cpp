@@ -1,7 +1,6 @@
 #include "pdfexport.h"
-#include "common/unused.h"
+#include "services/notifymanager.h"
 #include "uiutils.h"
-#include "log.h"
 #include <QtMath>
 #include <QPainter>
 #include <QFont>
@@ -9,8 +8,12 @@
 
 QString PdfExport::bulletChar = "\u2022";
 
+CFG_DEFINE(PdfExportConfig)
+#define PDFEXPORT_CFG CFG_INSTANCE(PdfExportConfig)
+
 bool PdfExport::init()
 {
+    SQLS_INIT_RESOURCE(pdfexport);
     textOption = new QTextOption();
     textOption->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     return GenericExportPlugin::init();
@@ -19,13 +22,15 @@ bool PdfExport::init()
 void PdfExport::deinit()
 {
     safe_delete(textOption);
+    CFG_DELETE_INSTANCE(PdfExportConfig);
+    SQLS_CLEANUP_RESOURCE(pdfexport);
 }
 
 QPagedPaintDevice* PdfExport::createPaintDevice(const QString& documentTitle, bool &takeOwnership)
 {
     QPdfWriter* pdfWriter = new QPdfWriter(output);
     pdfWriter->setTitle(documentTitle);
-    pdfWriter->setCreator(tr("SQLiteStudio v%1").arg(SQLITESTUDIO->getVersionString()));
+    pdfWriter->setCreator(tr("Letos v%1").arg(LETOS->getVersionString()));
     takeOwnership = true;
     return pdfWriter;
 }
@@ -56,10 +61,16 @@ QString PdfExport::defaultFileExtension() const
 
 bool PdfExport::beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(query);
+    Q_UNUSED(query);
 
     if (!beginDoc(tr("SQL query results")))
         return false;
+
+    exportObjectColumnsHeader({tr("Query:")});
+    exportObjectRow(query);
+    bufferedObjectRows.last().expandHeight = true;
+
+    flushObjectPages();
 
     totalRows = providedData[ExportManager::ROW_COUNT].toInt();
 
@@ -83,14 +94,12 @@ bool PdfExport::exportQueryResultsRow(SqlResultsRowPtr row)
 
 bool PdfExport::exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(columnNames);
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(columnNames);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
 
-    if (isTableExport() && !beginDoc(tr("Exported table: %1").arg(table)))
-        return false;
-
-    exportObjectHeader(tr("Table: %1").arg(table));
+    QString headerLabel = tr("Table: %1").arg(table);
+    exportObjectHeader(headerLabel);
 
     QStringList tableDdlColumns = {tr("Column"), tr("Data type"), tr("Constraints")};
     exportObjectColumnsHeader(tableDdlColumns);
@@ -100,7 +109,7 @@ bool PdfExport::exportTable(const QString& database, const QString& table, const
     QStringList columnsAndTypes;
     int colNamesLength = 0;
     int dataTypeLength = 0;
-    for (SqliteCreateTable::Column* col : createTable->columns)
+    for (SqliteCreateTable::Column*& col : createTable->columns)
     {
         colDef = col->name;
         colNamesLength = qMax(colNamesLength, colDef.size());
@@ -118,7 +127,7 @@ bool PdfExport::exportTable(const QString& database, const QString& table, const
     QList<int> columnDataLengths = {colNamesLength, dataTypeLength, 0};
     calculateDataColumnWidths(tableDdlColumns, columnDataLengths, 2);
 
-    for (SqliteCreateTable::Column* col : createTable->columns)
+    for (SqliteCreateTable::Column*& col : createTable->columns)
         exportTableColumnRow(col);
 
     if (createTable->constraints.size() > 0)
@@ -130,33 +139,31 @@ bool PdfExport::exportTable(const QString& database, const QString& table, const
 
     flushObjectPages();
 
-    prepareTableDataExport(table, columnsAndTypes, providedData);
+    prepareTableDataExport(columnsAndTypes, providedData, headerLabel);
     return true;
 }
 
 bool PdfExport::exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(columnNames);
-    UNUSED(database);
-    UNUSED(ddl);
-    UNUSED(createTable);
+    Q_UNUSED(columnNames);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
+    Q_UNUSED(createTable);
 
-    if (isTableExport() && !beginDoc(tr("Exported table: %1").arg(table)))
-        return false;
-
-    prepareTableDataExport(table, columnNames, providedData);
+    QString headerLabel = tr("Table: %1").arg(table);
+    prepareTableDataExport(columnNames, providedData, headerLabel);
     return true;
 }
 
-void PdfExport::prepareTableDataExport(const QString& table, const QStringList& columnNames, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
+void PdfExport::prepareTableDataExport(const QStringList& columnNames, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData, const QString& headerLabel)
 {
     resetDataTable();
     totalRows = providedData[ExportManager::ROW_COUNT].toInt();
 
     // Prepare for exporting data row
     clearDataHeaders();
-    if (!isTableExport()) // for database export we need to mark what is this object name
-        exportDataHeader(tr("Table: %1").arg(table));
+    if (isDatabaseExport())
+        exportDataHeader(headerLabel);
 
     exportDataColumnsHeader(columnNames);
 
@@ -192,6 +199,28 @@ bool PdfExport::exportTableRow(SqlResultsRowPtr data)
     return true;
 }
 
+bool PdfExport::beforeExportSingleTable(const QString& database, const QString& table)
+{
+    Q_UNUSED(database);
+    return beginDoc(tr("Exported table: %1").arg(table));
+}
+
+bool PdfExport::afterExportSingleTable()
+{
+    return true;
+}
+
+bool PdfExport::beforeExportSingleView(const QString& database, const QString& name)
+{
+    Q_UNUSED(database);
+    return beginDoc(tr("Exported view: %1").arg(name));
+}
+
+bool PdfExport::afterExportSingleView()
+{
+    return true;
+}
+
 bool PdfExport::afterExport()
 {
     endDoc();
@@ -210,6 +239,12 @@ bool PdfExport::afterExportQueryResults()
     return true;
 }
 
+bool PdfExport::afterExportView()
+{
+    flushDataPages(true);
+    return true;
+}
+
 bool PdfExport::beforeExportDatabase(const QString& database)
 {
     return beginDoc(tr("Exported database: %1").arg(database));
@@ -217,8 +252,8 @@ bool PdfExport::beforeExportDatabase(const QString& database)
 
 bool PdfExport::exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
 
     exportObjectHeader(tr("Index: %1").arg(name));
 
@@ -232,7 +267,7 @@ bool PdfExport::exportIndex(const QString& database, const QString& name, const 
     exportObjectColumnsHeader(indexColumns);
 
     QString sort;
-    for (SqliteOrderBy* idxCol : createIndex->indexedColumns)
+    for (SqliteOrderBy*& idxCol : createIndex->indexedColumns)
     {
         if (idxCol->order != SqliteSortOrder::null)
             sort = sqliteSortOrder(idxCol->order);
@@ -255,8 +290,8 @@ bool PdfExport::exportIndex(const QString& database, const QString& name, const 
 
 bool PdfExport::exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
 
     exportObjectHeader(tr("Trigger: %1").arg(name));
 
@@ -279,7 +314,7 @@ bool PdfExport::exportTrigger(const QString& database, const QString& name, cons
     exportObjectRow({tr("Activation condition"), cond});
 
     QStringList queryStrings;
-    for (SqliteQuery* q : createTrigger->queries)
+    for (SqliteQuery*& q : createTrigger->queries)
         queryStrings << q->detokenize();
 
     exportObjectColumnsHeader({tr("Code executed")});
@@ -289,22 +324,48 @@ bool PdfExport::exportTrigger(const QString& database, const QString& name, cons
     return true;
 }
 
-bool PdfExport::exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr view)
+bool PdfExport::exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl, SqliteCreateViewPtr createView, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(ddl);
+    Q_UNUSED(database);
+    Q_UNUSED(ddl);
+    Q_UNUSED(name);
 
-    exportObjectHeader(tr("View: %1").arg(name));
+    QString headerLabel = tr("View: %1").arg(name);
+
     exportObjectColumnsHeader({tr("Query:")});
-    exportObjectRow(view->select->detokenize());
+    exportObjectRow(createView->select->detokenize());
+    bufferedObjectRows.last().expandHeight = true;
 
     flushObjectPages();
+
+    prepareTableDataExport(columnNames, providedData, headerLabel);
+    return true;
+}
+
+bool PdfExport::exportViewRow(SqlResultsRowPtr data)
+{
+    exportDataRow(data->valueList());
     return true;
 }
 
 bool PdfExport::isBinaryData() const
 {
     return true;
+}
+
+void PdfExport::initPainter()
+{
+    painter = new QPainter(pagedWriter);
+    painter->setBrush(Qt::NoBrush);
+    painter->setPen(QPen(Qt::black, lineWidth));
+    painter->setFont(stdFont);
+
+    updateMargins();
+
+    QRectF rect = painter->boundingRect(QRectF(padding, padding, pageWidth - 2 * padding, 1), "X", *textOption);
+    minRowHeight = rect.height() + padding * 2;
+    maxRowHeight = qMax((int)(pageHeight * 0.225), minRowHeight);
+    rowsToPrebuffer = (int)qCeil((double)pageHeight / minRowHeight);
 }
 
 bool PdfExport::beginDoc(const QString& title)
@@ -318,16 +379,18 @@ bool PdfExport::beginDoc(const QString& title)
     if (!pagedWriter)
         return false;
 
-    painter = new QPainter(pagedWriter);
-    painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(Qt::black, lineWidth));
-
     setupConfig();
+    initPainter();
+
+    if (!drawCustomHeader())
+        return false;
+
     return true;
 }
 
 void PdfExport::endDoc()
 {
+    drawCustomFooter();
     drawFooter();
 }
 
@@ -340,36 +403,29 @@ void PdfExport::cleanupAfterExport()
 
 void PdfExport::setupConfig()
 {
-    pagedWriter->setPageSize(convertPageSize(cfg.PdfExport.PageSize.get()));
+    pagedWriter->setPageSize(convertPageSize(PDFEXPORT_CFG.PdfExport.PageSize.get()));
     pageWidth = pagedWriter->width();
     pageHeight = pagedWriter->height();
-    pointsPerMm = pageWidth / pagedWriter->pageSizeMM().width();
+    pointsPerMm = pageWidth / pagedWriter->pageLayout().pageSize().size(QPageSize::Millimeter).width();
 
-    stdFont = cfg.PdfExport.Font.get();
-    stdFont.setPointSize(cfg.PdfExport.FontSize.get());
+    stdFont = PDFEXPORT_CFG.PdfExport.Font.get();
+    stdFont.setPointSize(PDFEXPORT_CFG.PdfExport.FontSize.get());
     boldFont = stdFont;
     boldFont.setBold(true);
     italicFont = stdFont;
     italicFont.setItalic(true);
-    painter->setFont(stdFont);
 
-    topMargin = mmToPoints(cfg.PdfExport.TopMargin.get());
-    rightMargin = mmToPoints(cfg.PdfExport.RightMargin.get());
-    leftMargin = mmToPoints(cfg.PdfExport.LeftMargin.get());
-    bottomMargin = mmToPoints(cfg.PdfExport.BottomMargin.get());
-    updateMargins();
+    topMargin = mmToPoints(PDFEXPORT_CFG.PdfExport.TopMargin.get());
+    rightMargin = mmToPoints(PDFEXPORT_CFG.PdfExport.RightMargin.get());
+    leftMargin = mmToPoints(PDFEXPORT_CFG.PdfExport.LeftMargin.get());
+    bottomMargin = mmToPoints(PDFEXPORT_CFG.PdfExport.BottomMargin.get());
 
     maxColWidth = pageWidth / 5;
-    padding = mmToPoints(cfg.PdfExport.Padding.get());
+    padding = mmToPoints(PDFEXPORT_CFG.PdfExport.Padding.get());
 
-    QRectF rect = painter->boundingRect(QRectF(padding, padding, pageWidth - 2 * padding, 1), "X", *textOption);
-    minRowHeight = rect.height() + padding * 2;
-    maxRowHeight = qMax((int)(pageHeight * 0.225), minRowHeight);
-    rowsToPrebuffer = (int)qCeil((double)pageHeight / minRowHeight);
-
-    cellDataLimit = cfg.PdfExport.MaxCellBytes.get();
-    printRowNum = cfg.PdfExport.PrintRowNum.get();
-    printPageNumbers = cfg.PdfExport.PrintPageNumbers.get();
+    cellDataLimit = PDFEXPORT_CFG.PdfExport.MaxCellBytes.get();
+    printRowNum = PDFEXPORT_CFG.PdfExport.PrintRowNum.get();
+    printPageNumbers = PDFEXPORT_CFG.PdfExport.PrintPageNumbers.get();
 
     lastRowY = getContentsTop();
     currentPage = -1;
@@ -418,13 +474,13 @@ void PdfExport::exportDataRow(const QList<QVariant>& data)
 
     for (const QVariant& value : data)
     {
-        switch (value.type())
+        switch (value.userType())
         {
-            case QVariant::Int:
-            case QVariant::UInt:
-            case QVariant::LongLong:
-            case QVariant::ULongLong:
-            case QVariant::Double:
+            case QMetaType::Int:
+            case QMetaType::UInt:
+            case QMetaType::LongLong:
+            case QMetaType::ULongLong:
+            case QMetaType::Double:
                 cell.alignment = Qt::AlignRight;
                 break;
             default:
@@ -432,7 +488,7 @@ void PdfExport::exportDataRow(const QList<QVariant>& data)
                 break;
         }
 
-        if (value.isNull())
+        if (isNull(value))
         {
             cell.alignment = Qt::AlignCenter;
             cell.isNull = true;
@@ -504,7 +560,7 @@ void PdfExport::exportTableColumnRow(SqliteCreateTable::Column* column)
 
     if (column->constraints.size() > 0)
     {
-        for (SqliteCreateTable::Column::Constraint* constr : column->constraints)
+        for (SqliteCreateTable::Column::Constraint*& constr : column->constraints)
             cell.contents << constr->detokenize();
 
         cell.type = ObjectCell::Type::LIST;
@@ -643,7 +699,7 @@ void PdfExport::drawObjectTopLine(int y)
 void PdfExport::drawObjectCellHeaderBackground(int x1, int y1, int x2, int y2)
 {
     painter->save();
-    painter->setBrush(QBrush(cfg.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
+    painter->setBrush(QBrush(PDFEXPORT_CFG.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
     painter->setPen(Qt::NoPen);
     painter->drawRect(x1, y1, x2 - x1, y2 - y1);
     painter->restore();
@@ -651,7 +707,7 @@ void PdfExport::drawObjectCellHeaderBackground(int x1, int y1, int x2, int y2)
 
 void PdfExport::drawFooter()
 {
-    QString footer = tr("Document generated with SQLiteStudio v%1").arg(SQLITESTUDIO->getVersionString());
+    QString footer = tr("Document generated with Letos v%1").arg(LETOS->getVersionString());
 
     QTextOption opt = *textOption;
     opt.setAlignment(Qt::AlignRight);
@@ -668,6 +724,56 @@ void PdfExport::drawFooter()
     painter->save();
     painter->setFont(italicFont);
     painter->drawText(QRect(getContentsLeft(), y, pageWidth, txtHeight), footer, opt);
+    painter->restore();
+}
+
+bool PdfExport::drawCustomHeader()
+{
+    QString err;
+    QString hdrContent = getCustomHeader(err);
+    if (!err.isEmpty())
+    {
+        notifyError(err);
+        return false;
+    }
+
+    if (!hdrContent.isEmpty())
+    {
+        newPage();
+        drawCustomContent(hdrContent);
+    }
+
+    return true;
+}
+
+void PdfExport::drawCustomFooter()
+{
+    QString err;
+    QString ftrContent = getCustomFooter(err);
+    if (!err.isEmpty())
+        notifyError(err);
+
+    if (!ftrContent.isEmpty())
+        drawCustomContent(ftrContent);
+}
+
+void PdfExport::drawCustomContent(const QString& content)
+{
+    QTextOption opt = *textOption;
+    int y = lastRowY + minRowHeight;
+    int height = pageHeight - y;
+    int txtHeight = painter->boundingRect(QRect(0, 0, pageWidth, height), content, opt).height();
+    if ((y + txtHeight) > pageHeight)
+    {
+        newPage();
+        y = getContentsTop();
+    }
+
+    lastRowY = y + txtHeight - minRowHeight; // move back a bit to prevent big space between custom content and next object;
+
+    painter->save();
+    painter->setFont(stdFont);
+    painter->drawText(QRect(getContentsLeft(), y, pageWidth, txtHeight), content, opt);
     painter->restore();
 }
 
@@ -709,7 +815,7 @@ void PdfExport::flushObjectRow(const PdfExport::ObjectRow& row, int y)
 
             x = left;
             painter->drawLine(x, y, x, bottom);
-            for (int w : calculatedObjectColumnWidths)
+            for (int& w : calculatedObjectColumnWidths)
             {
                 x += w;
                 painter->drawLine(x, y, x, bottom);
@@ -755,7 +861,6 @@ void PdfExport::flushObjectCell(const PdfExport::ObjectCell& cell, int x, int y,
             x += padding;
             y += padding;
             w -= 2 * padding;
-            h -= 2 * padding;
             int txtX = x + prefixWidth;
             int txtW = w - prefixWidth;
 
@@ -815,7 +920,7 @@ void PdfExport::calculateObjectColumnWidths(int columnToExpand)
 int PdfExport::correctMaxObjectColumnWidths(int colCount, int columnToExpand)
 {
     int totalWidth = 0;
-    for (int w : calculatedObjectColumnWidths)
+    for (int& w : calculatedObjectColumnWidths)
         totalWidth += w;
 
     int maxWidth = pageWidth / colCount;
@@ -845,7 +950,6 @@ int PdfExport::correctMaxObjectColumnWidths(int colCount, int columnToExpand)
 
     if (columnToExpand > -1 && totalWidth > pageWidth)
     {
-        tmpWidth = calculatedObjectColumnWidths[columnToExpand];
         if ((totalWidth - calculatedObjectColumnWidths[columnToExpand] + maxWidth) <= pageWidth)
             calculatedObjectColumnWidths[columnToExpand] -= (pageWidth - totalWidth + calculatedObjectColumnWidths[columnToExpand] - maxWidth);
         else
@@ -884,7 +988,10 @@ void PdfExport::calculateObjectRowHeights()
             maxHeight = qMax(maxHeight, height);
         }
 
-        row.height = qMin(maxRowHeight, maxHeight);
+        if (!row.expandHeight)
+            row.height = qMin(maxRowHeight, maxHeight);
+        else
+            row.height = maxHeight;
     }
 }
 
@@ -895,6 +1002,11 @@ void PdfExport::flushDataPages(bool forceRender)
     int rowsToRender = 0;
     int totalRowHeight = 0;
     int colStartAt = 0;
+
+    // int totalHeight = lastRowY - getContentsTop();
+    // if (totalHeight <= 0)
+    // newPage();
+
     while ((bufferedDataRows.size() >= rowsToPrebuffer) || (forceRender && bufferedDataRows.size() > 0))
     {
         // Calculate how many rows we can render on single page
@@ -954,7 +1066,7 @@ void PdfExport::flushDataRowsPage(int columnStart, int columnEndBefore, int rows
     // Draw header background
     int x = getDataColumnsStartX();
     painter->save();
-    painter->setBrush(QBrush(cfg.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
+    painter->setBrush(QBrush(PDFEXPORT_CFG.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
     painter->setPen(Qt::NoPen);
     painter->drawRect(QRect(x, top, totalColumnsWidth, totalHeaderRowsHeight));
     painter->restore();
@@ -963,7 +1075,7 @@ void PdfExport::flushDataRowsPage(int columnStart, int columnEndBefore, int rows
     if (printRowNum)
     {
         painter->save();
-        painter->setBrush(QBrush(cfg.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
+        painter->setBrush(QBrush(PDFEXPORT_CFG.PdfExport.HeaderBgColor.get(), Qt::SolidPattern));
         painter->setPen(Qt::NoPen);
         painter->drawRect(QRect(left, top, rowNumColumnWidth, totalRowsHeight));
         painter->restore();
@@ -1071,7 +1183,7 @@ void PdfExport::flushDataCell(const QRect& rect, const PdfExport::DataCell& cell
     painter->save();
     if (cell.isNull)
     {
-        painter->setPen(cfg.PdfExport.NullValueColor.get());
+        painter->setPen(PDFEXPORT_CFG.PdfExport.NullValueColor.get());
         painter->setFont(italicFont);
     }
 
@@ -1145,7 +1257,7 @@ void PdfExport::renderPageNumber()
     QRect rect = painter->boundingRect(QRect(0, 0, 1, 1), page, opt).toRect();
     int x = getContentsRight() - rect.width();
     int y = getContentsBottom(); // the bottom margin was already increased to hold page numbers
-    QRect newRect(x, y, rect.width(), rect.height());
+    QRect newRect(x, y, rect.width() + 10, rect.height()); // +10 width for safety, cause sometimes the text is drawn a bit wider than the bounding rect and causes text wrap (even it should not...)
     painter->drawText(newRect, page, *textOption);
     painter->restore();
 }
@@ -1403,9 +1515,48 @@ qreal PdfExport::mmToPoints(qreal sizeMM)
     return pointsPerMm * sizeMM;
 }
 
+QString PdfExport::getCustomHeader(QString& err)
+{
+    return getCustomHeaderOrFooter(err,
+                                   &PDFEXPORT_CFG.PdfExport.CustomHeaderMode,
+                                   &PDFEXPORT_CFG.PdfExport.CustomHdrContent,
+                                   &PDFEXPORT_CFG.PdfExport.CustomHdrFile);
+}
+
+QString PdfExport::getCustomFooter(QString& err)
+{
+    return getCustomHeaderOrFooter(err,
+                                   &PDFEXPORT_CFG.PdfExport.CustomFooterMode,
+                                   &PDFEXPORT_CFG.PdfExport.CustomFtrContent,
+                                   &PDFEXPORT_CFG.PdfExport.CustomFtrFile);
+}
+
+QString PdfExport::getCustomHeaderOrFooter(QString& err, CfgEntry* modeEntry, CfgEntry* contentEntry, CfgEntry* fileEntry)
+{
+    switch (modeEntry->get().toInt())
+    {
+        case 0: // No header/footer
+            break;
+        case 1: // Inline contents
+            return contentEntry->get().toString();
+        case 2: // File with contents
+        {
+            QString err;
+            QString contents = readFileContents(fileEntry->get().toString(), &err);
+            if (!err.isEmpty())
+                notifyError(err);
+
+            return contents;
+        }
+        default:
+            qWarning() << "Unhandled header/footer mode:" << modeEntry->get();
+    }
+    return QString();
+}
+
 CfgMain* PdfExport::getConfig()
 {
-    return &cfg;
+    return &PDFEXPORT_CFG;
 }
 
 QString PdfExport::getExportConfigFormName() const

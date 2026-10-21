@@ -4,37 +4,37 @@
   <context>
     <name>Printing</name>
     <message>
-      <location filename="../printing.cpp" line="35"/>
+      <location filename="../printing.cpp" line="36"/>
       <source>Print data</source>
-      <translation type="unfinished">Print data</translation>
+      <translation>Tlačiť údaje</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="37"/>
+      <location filename="../printing.cpp" line="38"/>
       <source>Print query</source>
-      <translation type="unfinished">Print query</translation>
+      <translation>Tlačiť dopyt</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="74"/>
+      <location filename="../printing.cpp" line="75"/>
       <source>No data to print.</source>
-      <translation type="unfinished">No data to print.</translation>
+      <translation>Žiadne údaje na tlač.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="82"/>
+      <location filename="../printing.cpp" line="83"/>
       <source>Printing data.</source>
-      <translation type="unfinished">Printing data.</translation>
+      <translation>Tlačia sa údaje.</translation>
     </message>
     <message>
-      <location filename="../printing.cpp" line="108"/>
+      <location filename="../printing.cpp" line="109"/>
       <source>Printing query.</source>
-      <translation type="unfinished">Printing query.</translation>
+      <translation>Tlačí sa dopyt.</translation>
     </message>
   </context>
   <context>
     <name>PrintingExport</name>
     <message>
-      <location filename="../printingexport.cpp" line="30"/>
+      <location filename="../printingexport.cpp" line="27"/>
       <source>Printing</source>
-      <translation type="unfinished">Printing</translation>
+      <translation>Tlač</translation>
     </message>
   </context>
 </TS>

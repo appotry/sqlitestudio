@@ -20,22 +20,27 @@ class DbAndroidInstance : public AbstractDb
         ~DbAndroidInstance();
 
         QList<AliasedColumn> columnsForQuery(const QString& query);
-        SqlQueryPtr prepare(const QString& query);
-        QString getTypeLabel();
+        SqlQueryPtr prepare(const QString& query) const;
+        QString getTypeLabel() const;
+        QString getTypeClassName() const;
         bool deregisterFunction(const QString& name, int argCount);
         bool registerScalarFunction(const QString& name, int argCount, bool deterministic);
         bool registerAggregateFunction(const QString& name, int argCount, bool deterministic);
+        bool registerAggregateWindowFunction(const QString& name, int argCount, bool deterministic);
         bool initAfterCreated();
         bool loadExtension(const QString& filePath, const QString& initFunc);
         bool isComplete(const QString& sql) const;
+        AbstractDb* createCloneInstance() const;
+        bool isTransactionActive() const;
+        TransactionState getTransactionState() const;
 
     protected:
-        bool isOpenInternal();
+        bool isOpenInternal() const;
         void interruptExecution();
         QString getErrorTextInternal();
         int getErrorCodeInternal();
         bool openInternal();
-        bool closeInternal();
+        bool closeInternal(bool walCheckpoint = true);
         bool registerCollationInternal(const QString& name);
         bool deregisterCollationInternal(const QString& name);
 

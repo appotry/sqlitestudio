@@ -6,12 +6,12 @@
     <message>
       <location filename="../CsvExport.ui" line="20"/>
       <source>Column names in first row</source>
-      <translation>İlk satırdaki kolon isimleri</translation>
+      <translation>İlk satırda sütun adları</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="30"/>
       <source>Column separator:</source>
-      <translation>Kolon ayracı:</translation>
+      <translation>Sütun ayracı:</translation>
     </message>
     <message>
       <location filename="../CsvExport.ui" line="41"/>
@@ -49,7 +49,7 @@
       <translation>Boş string</translation>
     </message>
     <message>
-      <location filename="../csvexport.cpp" line="42"/>
+      <location filename="../csvexport.cpp" line="41"/>
       <source>Enter the custom separator character.</source>
       <translation>Özel ayraç karakterini girin.</translation>
     </message>

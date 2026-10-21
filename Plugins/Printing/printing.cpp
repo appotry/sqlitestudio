@@ -1,6 +1,6 @@
 #include "printing.h"
+#include "iconmanager.h"
 #include "printingexport.h"
-#include "common/unused.h"
 #include "mainwindow.h"
 #include "windows/editorwindow.h"
 #include "dataview.h"
@@ -17,7 +17,7 @@
 
 bool Printing::init()
 {
-    Q_INIT_RESOURCE(printing);
+    SQLS_INIT_RESOURCE(printing);
 
     printingExport = new PrintingExport();
     bool printingExportInit = printingExport->init();
@@ -27,21 +27,22 @@ bool Printing::init()
     loadTranslation("Printing");
 
     printingConfig = new ExportManager::StandardExportConfig();
-    printingConfig->exportData = true;
-    printingConfig->exportTableIndexes = false;
-    printingConfig->exportTableTriggers = false;
+    printingConfig->exportTableData = true;
+    printingConfig->exportIndexes = false;
+    printingConfig->exportTriggers = false;
     printingConfig->codec = defaultCodecName();
 
-    printDataAction = new ExtActionPrototype(QIcon(":/icons/printer.png"), tr("Print data"), this);
+    QIcon printerIcon = ICONMANAGER->getIcon("printer", ":/icons/printer.svg");
+    printDataAction = new ExtActionPrototype(printerIcon, tr("Print data"), this);
     separatorAction = new ExtActionPrototype(this);
-    printQueryAction = new ExtActionPrototype(QIcon(":/icons/printer.png"), tr("Print query"), this);
+    printQueryAction = new ExtActionPrototype(printerIcon, tr("Print query"), this);
 
     connect(printDataAction, SIGNAL(triggered(ExtActionContainer*,int)), this, SLOT(dataPrintRequested(ExtActionContainer*)));
     connect(printQueryAction, SIGNAL(triggered(ExtActionContainer*,int)), this, SLOT(queryPrintRequested(ExtActionContainer*)));
 
     DataView::insertActionAfter(printDataAction, DataView::LAST_PAGE);
     DataView::insertActionAfter(separatorAction, DataView::LAST_PAGE);
-    EditorWindow::insertActionAfter(printQueryAction, EditorWindow::EXPORT_RESULTS);
+    EditorWindow::insertAction(printQueryAction);
 
     return true;
 }
@@ -57,7 +58,7 @@ void Printing::deinit()
     safe_delete(printDataAction);
     safe_delete(separatorAction);
     safe_delete(printQueryAction);
-    Q_CLEANUP_RESOURCE(printing);
+    SQLS_CLEANUP_RESOURCE(printing);
 }
 
 void Printing::dataPrintRequested(ExtActionContainer* actionContainer)

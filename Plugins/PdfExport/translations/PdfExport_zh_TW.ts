@@ -4,166 +4,171 @@
   <context>
     <name>PdfExport</name>
     <message>
-      <location filename="../pdfexport.cpp" line="28"/>
-      <source>SQLiteStudio v%1</source>
-      <translation>SQLiteStudio v%1</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="61"/>
+      <location filename="../pdfexport.cpp" line="66"/>
       <source>SQL query results</source>
       <translation>SQL 查詢結果</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="90"/>
-      <location filename="../pdfexport.cpp" line="144"/>
+      <location filename="../pdfexport.cpp" line="205"/>
       <source>Exported table: %1</source>
       <translation>匯出的表：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="93"/>
-      <location filename="../pdfexport.cpp" line="159"/>
+      <location filename="../pdfexport.cpp" line="101"/>
+      <location filename="../pdfexport.cpp" line="153"/>
       <source>Table: %1</source>
       <translation>表：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="33"/>
+      <source>Letos v%1</source>
+      <translation>Letos v%1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="104"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Column</source>
       <translation>列</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Data type</source>
       <translation>資料型別</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Constraints</source>
       <translation>約束</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="126"/>
+      <location filename="../pdfexport.cpp" line="135"/>
       <source>Global table constraints</source>
       <translation>全域性表約束</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="215"/>
+      <location filename="../pdfexport.cpp" line="216"/>
+      <source>Exported view: %1</source>
+      <translation>匯出的檢視：%1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="250"/>
       <source>Exported database: %1</source>
       <translation>匯出的資料庫：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="223"/>
+      <location filename="../pdfexport.cpp" line="258"/>
       <source>Index: %1</source>
       <translation>索引：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Property</source>
       <comment>index header</comment>
       <translation>屬性</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Value</source>
       <comment>index header</comment>
       <translation>值</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="228"/>
+      <location filename="../pdfexport.cpp" line="263"/>
       <source>Indexed table</source>
       <translation>索引表</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Unique index</source>
       <translation>唯一索引</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Yes</source>
       <translation>是</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>No</source>
       <translation>否</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Collation</source>
       <translation>字元序</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Sort order</source>
       <translation>排序方式</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="247"/>
+      <location filename="../pdfexport.cpp" line="282"/>
       <source>Partial index condition</source>
       <translation>部分索引條件</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="261"/>
+      <location filename="../pdfexport.cpp" line="296"/>
       <source>Trigger: %1</source>
       <translation>觸發器：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="263"/>
+      <location filename="../pdfexport.cpp" line="298"/>
       <source>Property</source>
       <comment>trigger header</comment>
       <translation>屬性</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="263"/>
+      <location filename="../pdfexport.cpp" line="298"/>
       <source>Value</source>
       <comment>trigger header</comment>
       <translation>值</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="265"/>
+      <location filename="../pdfexport.cpp" line="300"/>
       <source>Activation time</source>
       <translation>啟用時間</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="268"/>
+      <location filename="../pdfexport.cpp" line="303"/>
       <source>For action</source>
       <translation>對動作</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="272"/>
+      <location filename="../pdfexport.cpp" line="307"/>
       <source>On view</source>
       <translation>檢視</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="274"/>
+      <location filename="../pdfexport.cpp" line="309"/>
       <source>On table</source>
       <translation>表</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="279"/>
+      <location filename="../pdfexport.cpp" line="314"/>
       <source>Activation condition</source>
       <translation>啟用條件</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="285"/>
+      <location filename="../pdfexport.cpp" line="320"/>
       <source>Code executed</source>
       <translation>執行程式碼</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="297"/>
+      <location filename="../pdfexport.cpp" line="333"/>
       <source>View: %1</source>
       <translation>檢視：%1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="298"/>
-      <source>Query:</source>
-      <translation>查詢：</translation>
+      <location filename="../pdfexport.cpp" line="710"/>
+      <source>Document generated with Letos v%1</source>
+      <translation>使用 Letos v%1 產生的文件</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="654"/>
-      <source>Document generated with SQLiteStudio v%1</source>
-      <translation>使用 SQLiteStudio v%1 生成的文件</translation>
+      <location filename="../pdfexport.cpp" line="69"/>
+      <location filename="../pdfexport.cpp" line="335"/>
+      <source>Query:</source>
+      <translation>查詢：</translation>
     </message>
   </context>
   <context>
@@ -251,6 +256,68 @@
       <location filename="../pdfexport.ui" line="277"/>
       <source>Print page numbers</source>
       <translation>列印頁碼</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="290"/>
+      <source>Custom header</source>
+      <translation>自訂頁首</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="296"/>
+      <source>No custom header</source>
+      <translation>無自訂頁首</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="309"/>
+      <source>Define custom header content</source>
+      <translation>定義自訂頁首內容</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="322"/>
+      <location filename="../pdfexport.ui" line="393"/>
+      <source>Plain text content</source>
+      <translation>純文字內容</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="332"/>
+      <source>Define custom header file</source>
+      <translation>定義自訂頁首檔案</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="348"/>
+      <source>Choose file for the header</source>
+      <translation>選擇頁首檔案</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="351"/>
+      <location filename="../pdfexport.ui" line="422"/>
+      <source>Text files (*.txt);;All files (*)</source>
+      <translation>文字檔案 (*.txt);;所有檔案 (*)</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="361"/>
+      <source>Custom footer</source>
+      <translation>自訂頁尾</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="367"/>
+      <source>No custom footer</source>
+      <translation>無自訂頁尾</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="380"/>
+      <source>Define custom footer content</source>
+      <translation>定義自訂頁尾內容</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="403"/>
+      <source>Define custom footer file</source>
+      <translation>定義自訂頁尾檔案</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="419"/>
+      <source>Choose file for the footer</source>
+      <translation>選擇頁尾檔案</translation>
     </message>
   </context>
 </TS>

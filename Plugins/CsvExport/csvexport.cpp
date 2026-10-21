@@ -1,5 +1,4 @@
 #include "csvexport.h"
-#include "common/unused.h"
 #include "services/exportmanager.h"
 #include "csvserializer.h"
 
@@ -19,7 +18,7 @@ ExportManager::StandardConfigFlags CsvExport::standardOptionsToEnable() const
 
 ExportManager::ExportModes CsvExport::getSupportedModes() const
 {
-    return ExportManager::FILE|ExportManager::TABLE|ExportManager::QUERY_RESULTS|ExportManager::CLIPBOARD;
+    return ExportManager::FILE|ExportManager::TABLE|ExportManager::VIEW|ExportManager::QUERY_RESULTS|ExportManager::CLIPBOARD;
 }
 
 QString CsvExport::getExportConfigFormName() const
@@ -53,16 +52,40 @@ QString CsvExport::defaultFileExtension() const
     return QStringLiteral("csv");
 }
 
+bool CsvExport::beforeExportSingleTable(const QString& database, const QString& table)
+{
+    Q_UNUSED(database);
+    Q_UNUSED(table);
+    return true;
+}
+
+bool CsvExport::afterExportSingleTable()
+{
+    return true;
+}
+
+bool CsvExport::beforeExportSingleView(const QString& database, const QString& name)
+{
+    Q_UNUSED(database);
+    Q_UNUSED(name);
+    return true;
+}
+
+bool CsvExport::afterExportSingleView()
+{
+    return true;
+}
+
 bool CsvExport::beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(query);
-    UNUSED(providedData);
+    Q_UNUSED(query);
+    Q_UNUSED(providedData);
     defineCsvFormat();
 
     if (cfg.CsvExport.ColumnsInFirstRow.get())
     {
         QStringList cols;
-        for (QueryExecutor::ResultColumnPtr resCol : columns)
+        for (QueryExecutor::ResultColumnPtr& resCol : columns)
             cols << resCol->displayName;
 
         writeln(CsvSerializer::serialize(cols, format));
@@ -78,29 +101,32 @@ bool CsvExport::exportQueryResultsRow(SqlResultsRowPtr row)
 
 bool CsvExport::exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(table);
-    UNUSED(ddl);
-    UNUSED(providedData);
-    UNUSED(createTable);
-    return exportTable(columnNames);
+    Q_UNUSED(database);
+    Q_UNUSED(table);
+    Q_UNUSED(ddl);
+    Q_UNUSED(providedData);
+    Q_UNUSED(createTable);
+    if (!isTableExport())
+        return false;
+
+    return exportTableOrView(columnNames);
 }
 
 bool CsvExport::exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(table);
-    UNUSED(ddl);
-    UNUSED(providedData);
-    UNUSED(createTable);
-    return exportTable(columnNames);
-}
-
-bool CsvExport::exportTable(const QStringList& columnNames)
-{
+    Q_UNUSED(database);
+    Q_UNUSED(table);
+    Q_UNUSED(ddl);
+    Q_UNUSED(providedData);
+    Q_UNUSED(createTable);
     if (!isTableExport())
         return false;
 
+    return exportTableOrView(columnNames);
+}
+
+bool CsvExport::exportTableOrView(const QStringList& columnNames)
+{
     defineCsvFormat();
     if (cfg.CsvExport.ColumnsInFirstRow.get())
         writeln(CsvSerializer::serialize(columnNames, format));
@@ -108,29 +134,34 @@ bool CsvExport::exportTable(const QStringList& columnNames)
     return true;
 }
 
-bool CsvExport::exportTableRow(SqlResultsRowPtr data)
+bool CsvExport::exportDataRow(SqlResultsRowPtr data)
 {
     QStringList valList;
     QString nl = cfg.CsvExport.NullValueString.get();
     for (const QVariant& val : data->valueList())
-        valList << (val.isNull() ? nl : val.toString());
+        valList << (isNull(val) ? nl : val.toString());
 
     writeln(CsvSerializer::serialize(valList, format));
     return true;
 }
 
+bool CsvExport::exportTableRow(SqlResultsRowPtr data)
+{
+    return exportDataRow(data);
+}
+
 bool CsvExport::beforeExportDatabase(const QString& database)
 {
-    UNUSED(database);
+    Q_UNUSED(database);
     return false;
 }
 
 bool CsvExport::exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex)
 {
-    UNUSED(database);
-    UNUSED(name);
-    UNUSED(ddl);
-    UNUSED(createIndex);
+    Q_UNUSED(database);
+    Q_UNUSED(name);
+    Q_UNUSED(ddl);
+    Q_UNUSED(createIndex);
     if (isTableExport())
         return true;
 
@@ -139,23 +170,27 @@ bool CsvExport::exportIndex(const QString& database, const QString& name, const 
 
 bool CsvExport::exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger)
 {
-    UNUSED(database);
-    UNUSED(name);
-    UNUSED(ddl);
-    UNUSED(createTrigger);
-    if (isTableExport())
+    Q_UNUSED(database);
+    Q_UNUSED(name);
+    Q_UNUSED(ddl);
+    Q_UNUSED(createTrigger);
+    if (isTableExport() || isViewExport())
         return true;
 
     return false;
 }
 
-bool CsvExport::exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr createView)
+bool CsvExport::exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl, SqliteCreateViewPtr createView, const QHash<ExportManager::ExportProviderFlag, QVariant> providedData)
 {
-    UNUSED(database);
-    UNUSED(name);
-    UNUSED(ddl);
-    UNUSED(createView);
-    return false;
+    if (!isViewExport())
+        return false;
+
+    return exportTableOrView(columnNames);
+}
+
+bool CsvExport::exportViewRow(SqlResultsRowPtr data)
+{
+    return exportDataRow(data);
 }
 
 void CsvExport::defineCsvFormat()
@@ -188,11 +223,11 @@ void CsvExport::defineCsvFormat()
 
 bool CsvExport::init()
 {
-    Q_INIT_RESOURCE(csvexport);
+    SQLS_INIT_RESOURCE(csvexport);
     return GenericExportPlugin::init();
 }
 
 void CsvExport::deinit()
 {
-    Q_CLEANUP_RESOURCE(csvexport);
+    SQLS_CLEANUP_RESOURCE(csvexport);
 }

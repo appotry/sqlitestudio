@@ -2,7 +2,7 @@
 #include "parser/ast/sqliteselect.h"
 
 FormatWith::FormatWith(SqliteWith *with) :
-    with(with)
+    FormatStatement(with), with(with)
 {
 }
 
@@ -24,7 +24,7 @@ void FormatWith::formatInternal()
 
 
 FormatWithCommonTableExpression::FormatWithCommonTableExpression(SqliteWith::CommonTableExpression *cte) :
-    cte(cte)
+    FormatStatement(cte), cte(cte)
 {
 }
 
@@ -34,5 +34,16 @@ void FormatWithCommonTableExpression::formatInternal()
     if (cte->indexedColumns.size() > 0)
         withParDefLeft().withStatementList(cte->indexedColumns, "idxCols").withParDefRight();
 
-    withKeyword("AS").withParDefLeft().withStatement(cte->select).withParDefRight();
+    withKeyword("AS");
+    switch (cte->asMode) {
+        case SqliteWith::CommonTableExpression::ANY:
+            break;
+        case SqliteWith::CommonTableExpression::MATERIALIZED:
+            withKeyword("MATERIALIZED");
+            break;
+        case SqliteWith::CommonTableExpression::NOT_MATERIALIZED:
+            withKeyword("NOT").withKeyword("MATERIALIZED");
+            break;
+    }
+    withParDefLeft().withStatement(cte->select).withParDefRight();
 }

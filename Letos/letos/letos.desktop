@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Letos
+GenericName=SQLite database manager
+Comment=A free, open source, multi-platform SQLite database manager.
+Keywords=sqlite;database;explorer;
+Exec=letos %f
+Icon=letos
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Categories=Development;Database;
+MimeType=application/x-letos;application/vnd.sqlite3;application/x-sqlite2;application/x-sqlite3;
+StartupWMClass=letos

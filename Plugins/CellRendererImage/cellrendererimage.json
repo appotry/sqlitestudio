@@ -1,0 +1,7 @@
+{
+    "type":         "CellRendererPlugin",
+    "title":        "Image",
+    "description":  "Introduces image preview for cells in Grid View.",
+    "version":      10000,
+    "author":       "letos.org"
+}

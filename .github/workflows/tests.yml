@@ -1,9 +1,7 @@
 env:
     TCL_VERSION: '8.6'
-    SQLITE_VERSION: '3350500'
-    SQLITE_RELEASE_YEAR: '2021'
-    PYTHON_VERSION: '3.9'
-    PORTABLE_DIR: ${{ github.workspace }}/output/portable/SQLiteStudio
+    SQLITE_VERSION: '3530200'
+    PORTABLE_DIR: ${{ github.workspace }}/output/portable/Letos
 
 name: Unit tests
 
@@ -11,8 +9,7 @@ on:
     push:
         branches:
             - master
-            - 3.2
-            - 3.3
+            - 3.4
         paths:
             - '**.cpp'
             - '**.hpp'
@@ -23,91 +20,193 @@ on:
             - '**.ui'
             - '**.qrc'
             - '**/tests.yml'
+    workflow_dispatch:
+        inputs:
+          debug_ssh:
+            description: "Open SSH tunnel at the end"
+            type: boolean
+            default: false
+          debug_on_failure:
+            description: "Open SSH tunnel if job fails"
+            type: boolean
+            default: false
+          target:
+            description: "Target Qt"
+            required: false
+            type: choice
+            options:
+                - "all"
+                - "6.2"
+                - "6.5"
+                - "6.8"
+                - "6.10"
+            default: "all"
 
 jobs:
+    generate:
+        runs-on: ubuntu-latest
+        outputs:
+            matrix: ${{ steps.set.outputs.matrix }}
+        steps:
+            - id: set
+              run: |
+                ALL='{
+                    "6.2": {
+                        "QT_VERSION": "6.2.4",
+                        "PYTHON_VERSION": "3.9"
+                    },
+                    "6.5": {
+                        "QT_VERSION": "6.5.3",
+                        "PYTHON_VERSION": "3.9"
+                    },
+                    "6.8": {
+                        "QT_VERSION": "6.8.3",
+                        "PYTHON_VERSION": "3.12"
+                    },
+                    "6.10": {
+                        "QT_VERSION": "6.11.1",
+                        "PYTHON_VERSION": "3.12"
+                    }
+                }'
+
+                matrix="$(echo $ALL | jq -r --arg v "${{ inputs.target }}" '.[$v]')"
+
+                if [ "$matrix" = "null" ]; then
+                    matrix="$(echo $ALL | jq '[.[]]')"
+                fi
+
+                echo "Matrix:"
+                echo "$matrix"
+
+                {
+                    echo "matrix<<EOF"
+                    echo "$matrix"
+                    echo "EOF"
+                } >> $GITHUB_OUTPUT
+
     build:
-        runs-on: ubuntu-18.04
+        needs: generate
+
+        runs-on: ubuntu-22.04
 
         strategy:
             matrix:
-                QT_VERSION: ['5.12.10', '5.15.2']
+                include: ${{ fromJson(needs.generate.outputs.matrix) }}
 
         steps:
-            - name: Cache Qt
-              id: cache-qt
-              uses: actions/cache@v1
+            - uses: actions/setup-python@v6
               with:
-                path: ${{ github.workspace }}/../Qt
-                key: ${{ runner.os }}-Qt-${{ matrix.QT_VERSION }}-Linux-Cache
+                python-version: ${{ matrix.PYTHON_VERSION }}
+                architecture: 'x64'
+
+            - name: Qt installation dir
+              id: qt-installation-dir
+              run: echo "DIR=$(readlink -f ${{ github.workspace }}/..)" >> $GITHUB_OUTPUT
 
             - name: Install Qt
-              uses: jurplel/install-qt-action@v2
+              uses: jurplel/install-qt-action@v4
               with:
-                cached: ${{ steps.cache-qt.outputs.cache-hit }}
+                cache: true
                 version: ${{ matrix.QT_VERSION }}
                 host: 'linux'
-                dir: '${{ github.workspace }}/..'
+                dir: '${{ steps.qt-installation-dir.DIR }}'
+                py7zrversion: '==0.20.*'
+                setup-python: 'false'
+                extra: '--external 7z'
+
+            - name: Clone GH scripts
+              uses: actions/checkout@v6
+              with:
+                repository: pawelsalawa/gh-action-scripts
+                ref: main
+                path: gh-scripts
+
+            - name: Setup GH scripts path
+              shell: bash
+              run: |
+                mv gh-scripts ..
+                cd ..
+                chmod +x gh-scripts/scripts/*.sh
+                echo "GH_SCRIPTS=$(pwd)/gh-scripts/scripts" >> $GITHUB_ENV
+                echo "DEBUG=${{ inputs.DEBUG }}" >> $GITHUB_ENV
 
             - name: Clone repo
-              uses: actions/checkout@v2
+              uses: actions/checkout@v6
               with:
                 ref: ${{ env.GITHUB_REF }}
 
             - name: Install SQLite3
               run: |
+                cd ..
+                SQLITE_DOT_VERSION=$($GH_SCRIPTS/convert_int_ver.sh $SQLITE_VERSION)
+                SQLITE3_ZIP=sqlite3-linux-x64-$SQLITE_VERSION.zip
+                curl -L https://github.com/pawelsalawa/sqlite3-letos/releases/download/v$SQLITE_DOT_VERSION/$SQLITE3_ZIP --output $SQLITE3_ZIP
+
                 sudo rm -f /usr/lib/libsqlite* /usr/local/lib/libsqlite* /usr/include/sqlite* /usr/local/include/sqlite* /usr/lib/x86_64-linux-gnu/libsqlite*
-                wget http://sqlite.org/$SQLITE_RELEASE_YEAR/sqlite-amalgamation-$SQLITE_VERSION.zip
-                unzip sqlite-amalgamation-$SQLITE_VERSION.zip
-                cd sqlite-amalgamation-$SQLITE_VERSION
-                gcc sqlite3.c -lpthread -ldl -lm -Os -fpic -shared -o libsqlite3.so \
-                    -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT \
-                    -DSQLITE_ENABLE_DBSTAT_VTAB \
-                    -DSQLITE_ENABLE_BYTECODE_VTAB \
-                    -DSQLITE_ENABLE_COLUMN_METADATA \
-                    -DSQLITE_ENABLE_EXPLAIN_COMMENTS \
-                    -DSQLITE_ENABLE_FTS3 \
-                    -DSQLITE_ENABLE_FTS4 \
-                    -DSQLITE_ENABLE_FTS5 \
-                    -DSQLITE_ENABLE_GEOPOLY \
-                    -DSQLITE_ENABLE_JSON1 \
-                    -DSQLITE_ENABLE_RTREE \
-                    -DSQLITE_ENABLE_MATH_FUNCTIONS
-                strip libsqlite3.so
-                sudo cp -P libsqlite3.so* /usr/local/lib/
-                sudo cp *.h /usr/local/include/
+                sudo unzip $SQLITE3_ZIP libsqlite3.so -d /usr/local/lib
+                sudo unzip $SQLITE3_ZIP sqlite3.h sqlite3ext.h -d /usr/local/include
+                sudo ln -s /usr/local/lib/libsqlite3.so /usr/local/lib/libsqlite3.so.0
+                sudo ln -s /usr/local/lib/libsqlite3.so /usr/local/lib/libsqlite3.so.0.8.6
+                ls -l /usr/local/lib/libsqlite3*
+                ls -l /usr/local/include/sqlite*
 
             - name: Install Tcl
               run: sudo apt-get install -qq libtcl$TCL_VERSION tcl$TCL_VERSION-dev
 
             - name: Install other tools/dependencies
               run: |
-                sudo apt install libreadline-dev libncurses5-dev
+                sudo apt-get install libreadline-dev libncurses5-dev
                 echo "${{ github.workspace }}/../Qt/${{ matrix.QT_VERSION }}/gcc_64/bin" >> $GITHUB_PATH
-                
-            - uses: actions/setup-python@v2
-              with:
-                python-version: ${{ env.PYTHON_VERSION }}
-                architecture: 'x64'
 
             - name: Prepare output dir
-              run: mkdir output output/build output/build/Plugins
+              run: mkdir output output/build output/build-plugins
 
-            - name: Compile SQLiteStudio3
+            - name: Compile Letos
               working-directory: output/build
               run: |
-                qmake CONFIG+=portable CONFIG+=debug DEFINES+=tests ../../SQLiteStudio3
-                make -j 2
+                cmake ../../Letos -G Ninja \
+                    -DCMAKE_BUILD_TYPE=Debug \
+                    -DCMAKE_PREFIX_PATH="${{ env.QT_ROOT_DIR }}" \
+                    -DCMAKE_INSTALL_PREFIX=../Letos \
+                    -DWITH_UPDATER=1 \
+                    -DBUILD_TESTING=1
+                cmake --build . --verbose
+                cmake --install . --verbose
 
             - name: Compile Plugins
-              working-directory: output/build/Plugins
+              working-directory: output/build-plugins
               run: |
-                qmake CONFIG+=portable CONFIG+=debug DEFINES+=tests "INCLUDEPATH+=$pythonLocation/include/python$PYTHON_VERSION" "LIBS += -L$pythonLocation/lib" ../../../Plugins
-                make -j 1
+                cmake ../../Plugins -G Ninja \
+                    -DCMAKE_BUILD_TYPE=Debug \
+                    -DCMAKE_PREFIX_PATH="${{ env.QT_ROOT_DIR }}:${{ env.Python3_ROOT_DIR }}" \
+                    -DCMAKE_INSTALL_PREFIX=../Letos \
+                    -DWITH_DYNAMIC_PYTHON=1 \
+                    -DWITH_ALL_PLUGINS=1
+                cmake --build . --verbose
+                cmake --install . --verbose
 
             - name: Run tests
-              working-directory: output/SQLiteStudio
+              working-directory: output/build
               run: |
-                sudo cp -P /usr/local/lib/libsqlite3.so* ./lib/
-                export LD_LIBRARY_PATH="./lib"
-                ldd tst_tablemodifiertest
-                for f in tst_*; do ./$f; done
+                set -x
+                export LD_LIBRARY_PATH=./lib:${{ env.QT_ROOT_DIR }}/lib:/usr/local/lib
+                export LETOS_PLUGINS="${{ github.workspace }}/output/build-plugins/SqlEnterpriseFormatter"
+                ctest --verbose
+
+            - name: Install Midnight Commander
+              if: >
+                ${{
+                    github.repository_owner == 'pawelsalawa'
+                    && (inputs.debug_ssh || (failure() && inputs.debug_on_failure))
+                }}
+              run: sudo apt-get install mc
+
+            - name: Setup debugging SSH
+              if: >
+                ${{
+                    github.repository_owner == 'pawelsalawa'
+                    && (inputs.debug_ssh || (failure() && inputs.debug_on_failure))
+                }}
+              uses: owenthereal/action-upterm@v1
+              with:
+                wait-timeout-minutes: 10

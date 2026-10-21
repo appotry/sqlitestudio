@@ -1,0 +1,281 @@
+#include "erdconnectionpanel.h"
+#include "ui_erdconnectionpanel.h"
+#include "db/db.h"
+#include "db/chainexecutor.h"
+#include "scene/erdentity.h"
+#include "changes/erdchangemodifyentity.h"
+#include "scene/erdconnection.h"
+#include "erdcolumnfkpanel.h"
+#include "erdtablefkpanel.h"
+#include "iconmanager.h"
+#include "services/notifymanager.h"
+#include <QDebug>
+
+ErdConnectionPanel::ErdConnectionPanel(Db* db, ErdConnection* connection, QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::ErdConnectionPanel),
+    db(db)
+{
+    ui->setupUi(this);
+    init(connection);
+}
+
+ErdConnectionPanel::~ErdConnectionPanel()
+{
+    safe_delete(ddlExecutor);
+    delete ui;
+}
+
+QString ErdConnectionPanel::getStartEntityTable() const
+{
+    return createTable->table;
+}
+
+bool ErdConnectionPanel::commitErdChange()
+{
+    return commit();
+}
+
+void ErdConnectionPanel::abortErdChange()
+{
+    rollback();
+}
+
+bool ErdConnectionPanel::isUncommitted() const
+{
+    return actionMap[COMMIT]->isEnabled();
+}
+
+QString ErdConnectionPanel::getQuitUncommittedConfirmMessage() const
+{
+    return tr("ERD side panel for relation between tables \"%1\" and \"%2\" has uncommitted modifications.")
+            .arg(createTable->table, originalReferencedTable);
+}
+
+void ErdConnectionPanel::createActions()
+{
+    createAction(COMMIT, ICONS.COMMIT, tr("Apply changes to diagram", "ERD editor"), this, SLOT(commit()), ui->toolBar, this);
+    createAction(ROLLBACK, ICONS.ROLLBACK, tr("Abort changes", "ERD editor"), this, SLOT(rollback()), ui->toolBar, this);
+}
+
+void ErdConnectionPanel::setupDefShortcuts()
+{
+}
+
+QToolBar *ErdConnectionPanel::getToolBar(int toolbar) const
+{
+    Q_UNUSED(toolbar);
+    return ui->toolBar;
+}
+
+void ErdConnectionPanel::init(ErdConnection* connection)
+{
+    initActions();
+
+    ddlExecutor = new ChainExecutor();
+    ddlExecutor->setTransaction(false);
+    ddlExecutor->setAsync(false);
+    ddlExecutor->setDb(db);
+    ddlExecutor->setDisableForeignKeys(true);
+    ddlExecutor->setDisableObjectDropsDetection(true);
+
+    originalReferencedTable = connection->getEndEntity()->getTableName();
+
+    ErdEntity* childEntity = connection->getStartEntity();
+    originalCreateTable = childEntity->getTableModel();
+    createTable.reset(originalCreateTable->typeClone<SqliteCreateTable>());
+    originalContent = originalCreateTable->produceTokens().detokenize();
+
+    if (connection->isTableLevelFk())
+        initTableLevelFk(connection);
+    else
+        initColumnLevelFk(connection);
+
+    actionMap[COMMIT]->setEnabled(false);
+    actionMap[ROLLBACK]->setEnabled(false);
+}
+
+void ErdConnectionPanel::initColumnLevelFk(ErdConnection* connection)
+{
+    ui->tableLevelFkLabel->setVisible(false);
+
+    ErdEntity* childEntity = connection->getStartEntity();
+    ErdEntity* parentEntity = connection->getEndEntity();
+    ui->childTableName->setText(childEntity->getTableName());
+
+    SqliteCreateTable* childCreateTable = createTable.data();
+    childColumnStmt = childCreateTable->columns[connection->getStartEntityRow() - 1]; // -1 to respect entity header
+    ui->childColumnName->setText(childColumnStmt->name);
+
+    SqliteCreateTable* parentCreateTable = parentEntity->getTableModel().data();
+    SqliteCreateTable::Column* parentColumnStmt = parentCreateTable->columns[connection->getEndEntityRow() - 1]; // -1 to respect entity header
+
+    QString parentTableName = parentCreateTable->table.toLower();
+    QString parentColumnName = parentColumnStmt->name;
+    QList<SqliteCreateTable::Column::Constraint*> fkList = childColumnStmt->getConstraints(SqliteCreateTable::Column::Constraint::FOREIGN_KEY);
+    matchedFk = nullptr;
+    for (SqliteCreateTable::Column::Constraint*& fk : fkList)
+    {
+        QStringList fkColumns = fk->foreignKey->getColumnNames();
+        if (fk->foreignKey->foreignTable.toLower() == parentTableName &&
+                (
+                    fkColumns.contains(parentColumnName, Qt::CaseInsensitive) ||
+                    (fkColumns.isEmpty() && childColumnStmt->name.compare(parentColumnName, Qt::CaseInsensitive) == 0)
+                )
+            )
+        {
+            matchedFk = fk;
+            break;
+        }
+    }
+    createColumnLevelPanel();
+}
+
+void ErdConnectionPanel::initTableLevelFk(ErdConnection* connection)
+{
+    ui->childColumnName->hide();
+    ui->childColumnTitleLabel->hide();
+    ui->bottomSpacer->changeSize(0, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
+    ui->topLevelLayout->invalidate();
+
+    ErdEntity* childEntity = connection->getStartEntity();
+    ErdEntity* parentEntity = connection->getEndEntity();
+    ui->childTableName->setText(childEntity->getTableName());
+
+    SqliteCreateTable* childCreateTable = createTable.data();
+    QList<SqliteCreateTable::Column*> childColumnStmts;
+    childColumnStmts << childCreateTable->columns[connection->getStartEntityRow() - 1]; // -1 to respect entity header
+    for (ErdConnection* assocConn : connection->getAssociatedConnections())
+        childColumnStmts << childCreateTable->columns[assocConn->getStartEntityRow() - 1];
+
+    SqliteCreateTable* parentCreateTable = parentEntity->getTableModel().data();
+    QList<SqliteCreateTable::Column*> parentColumnStmts;
+    parentColumnStmts << parentCreateTable->columns[connection->getEndEntityRow() - 1]; // -1 to respect entity header
+    for (ErdConnection* assocConn : connection->getAssociatedConnections())
+        parentColumnStmts << parentCreateTable->columns[assocConn->getEndEntityRow() - 1];
+
+    QString parentTableName = parentCreateTable->table.toLower();
+    QSet<QString> parentColumnNames = toSet(parentColumnStmts | MAP(stmt, {return stmt->name;}));
+    QSet<QString> childColumnNames = toSet(childColumnStmts | MAP(stmt, {return stmt->name;}));
+
+    QList<SqliteCreateTable::Constraint*> fkList = childCreateTable->getConstraints(SqliteCreateTable::Constraint::FOREIGN_KEY);
+    matchedFk = nullptr;
+    SqliteStatement* matchedFkCandidate = nullptr;
+    for (SqliteCreateTable::Constraint*& fk : fkList)
+    {
+        if (fk->foreignKey->foreignTable.toLower() != parentTableName)
+            continue;
+
+        QStringList fkChildColumnNames = fk->getColumnNames();
+        if (childColumnNames != toSet(fkChildColumnNames))
+            continue;
+
+        QStringList fkParentColumnNames = fk->foreignKey->getColumnNames();
+        if (fkParentColumnNames.isEmpty())
+        {
+            fkParentColumnNames = fkChildColumnNames;
+            matchedFkCandidate = fk;
+        }
+
+        if (parentColumnNames != toSet(fkParentColumnNames))
+            continue;
+
+        matchedFk = fk;
+        break;
+    }
+    if (!matchedFk && matchedFkCandidate)
+        matchedFk = matchedFkCandidate;
+
+    createTableLevelPanel();
+}
+
+void ErdConnectionPanel::createColumnLevelPanel()
+{
+    ErdColumnFkPanel* fkPanel = new ErdColumnFkPanel();
+    ui->fkPanelContainer->layout()->addWidget(fkPanel);
+    if (!matchedFk)
+    {
+        qCritical() << "ErdConnectionPanel failed to match FK constraint!";
+        return;
+    }
+    fkPanel->setDb(db);
+    fkPanel->setCreateTableStmt(createTable.data());
+    fkPanel->setColumnStmt(childColumnStmt);
+    fkPanel->setConstraint(matchedFk);
+    constraintPanel = fkPanel;
+    connect(fkPanel, SIGNAL(modified()), this, SLOT(modified()));
+}
+
+void ErdConnectionPanel::createTableLevelPanel()
+{
+    ErdTableFkPanel* fkPanel = new ErdTableFkPanel();
+    ui->fkPanelContainer->layout()->addWidget(fkPanel);
+    fkPanel->setDb(db);
+    fkPanel->setCreateTableStmt(createTable.data());
+    fkPanel->setConstraint(matchedFk);
+    constraintPanel = fkPanel;
+    connect(fkPanel, SIGNAL(updateValidation()), this, SLOT(modified()));
+}
+
+bool ErdConnectionPanel::commit()
+{
+    if (!actionMap[COMMIT]->isEnabled())
+    {
+        if (!actionMap[ROLLBACK]->isEnabled())
+        {
+            // Not modified at all.
+            return true;
+        }
+        // TODO commitable, but invalid state - ask
+        return false;
+    }
+
+    constraintPanel->storeDefinition();
+
+    QString newContent = createTable->produceTokens().detokenize();
+    if (originalContent == newContent)
+        return true;
+
+    QString changeDesc = (originalReferencedTable == createTable->table) ?
+              tr("Modify relationship between \"%1\" and \"%2\".")
+                .arg(originalCreateTable->table, originalReferencedTable) :
+              tr("Modify relationship between \"%1\" and \"%2\" - change target to \"%3\".")
+                .arg(originalCreateTable->table, originalReferencedTable, createTable->table);
+
+    ErdChange* change = new ErdChangeModifyEntity(db, originalCreateTable, createTable, changeDesc);
+    ddlExecutor->setQueries(change->toDdl());
+    ddlExecutor->setRollbackOnErrorTo(change->getTransactionId());
+    ddlExecutor->exec();
+    if (!ddlExecutor->getSuccessfulExecution())
+    {
+        delete change;
+        notifyError(tr("Failed to execute DDL required for relation modification. Details: %1")
+                    .arg(ddlExecutor->getErrorsMessages().join("; ")));
+        return false;
+    }
+
+    actionMap[COMMIT]->setEnabled(false);
+    actionMap[ROLLBACK]->setEnabled(false);
+    emit changeCreated(change);
+    return true;
+}
+
+void ErdConnectionPanel::rollback()
+{
+    ui->fkPanelContainer->layout()->removeWidget(constraintPanel);
+    safe_delete(constraintPanel);
+
+    if (ui->tableLevelFkLabel->isVisible())
+        createTableLevelPanel();
+    else
+        createColumnLevelPanel();
+
+    actionMap[COMMIT]->setEnabled(false);
+    actionMap[ROLLBACK]->setEnabled(false);
+}
+
+void ErdConnectionPanel::modified()
+{
+    actionMap[COMMIT]->setEnabled(constraintPanel->validate());
+    actionMap[ROLLBACK]->setEnabled(true);
+}

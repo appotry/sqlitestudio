@@ -1,0 +1,330 @@
+#include "sqlqueryitemdelegate.h"
+#include "sqlquerymodel.h"
+#include "sqlqueryitem.h"
+#include "services/notifymanager.h"
+#include "sqlqueryview.h"
+#include "uiconfig.h"
+#include "fkcombobox.h"
+#include "sqlqueryitemlineedit.h"
+#include "datagrid/cellrendererplugin.h"
+#include "iconmanager.h"
+#include <QHeaderView>
+#include <QPainter>
+#include <QEvent>
+#include <QLineEdit>
+#include <QDebug>
+#include <QComboBox>
+#include <QApplication>
+#include <QVBoxLayout>
+#include <QResizeEvent>
+#include <QScrollBar>
+#include <limits>
+#include <QToolTip>
+#include <QTextLayout>
+#include <QtMath>
+#include <QScreen>
+#include <QAction>
+
+bool SqlQueryItemDelegate::warnedAboutHugeContents = false;
+
+SqlQueryItemDelegate::SqlQueryItemDelegate(QObject *parent) :
+    QStyledItemDelegate(parent)
+{
+}
+
+void SqlQueryItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QStyledItemDelegate::paint(painter, option, index);
+    handleUncommitedPainting(painter, option, index);
+}
+
+void SqlQueryItemDelegate::handleUncommitedPainting(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex &index)
+{
+    SqlQueryItem* item = getItem(index);
+    if (item->isUncommitted())
+    {
+        painter->setPen(item->isCommittingError() ? QColor(Qt::red) : QColor(Qt::blue));
+        painter->setBrush(Qt::NoBrush);
+        painter->drawRect(option.rect.x(), option.rect.y(), option.rect.width()-1, option.rect.height()-1);
+    }
+}
+
+QWidget* SqlQueryItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    Q_UNUSED(option);
+    if (!index.isValid())
+        return nullptr;
+
+    const SqlQueryModel* model = dynamic_cast<const SqlQueryModel*>(index.model());
+    SqlQueryItem* item = model->itemFromIndex(index);
+
+    if (item->isDeletedRow())
+    {
+        notifyWarn(tr("Cannot edit this cell. Details: %1").arg(tr("The row is marked for deletion.")));
+        return nullptr;
+    }
+
+    if (!item->getColumn()->canEdit())
+    {
+        notifyWarn(tr("Cannot edit this cell. Details: %1").arg(item->getColumn()->getEditionForbiddenReason()));
+        return nullptr;
+    }
+
+    if (model->isStructureOutOfDate())
+    {
+        notifyWarn(tr("Cannot edit this cell. Details: %1").arg(tr("Structure of this table has changed since last data was loaded. Reload the data to proceed.")));
+        return nullptr;
+    }
+
+    if (!item->getColumn()->hasInsteadOfTrigger && item->getRowId().isEmpty() && !item->isNewRow())
+    {
+        notifyWarn(tr("Cannot edit this cell. Details: %1").arg(tr("ROWID is not available for this cell.")));
+        return nullptr;
+    }
+
+    bool skipInitSelection = item->shoulSkipInitialFocusSelection();
+    lastCommitReason = CommitReason::Other;
+    QWidget* editor = (!item->getColumn()->getFkConstraints().isEmpty()) ?
+        getFkEditor(item, skipInitSelection, parent, model) :
+        getEditor(item, item->getValue().userType(), skipInitSelection, parent);
+
+    editor->setFont(CFG_UI.Fonts.DataView.get());
+    editor->installEventFilter(const_cast<SqlQueryItemDelegate*>(this));
+    return editor;
+}
+
+void SqlQueryItemDelegate::destroyEditor(QWidget* editor, const QModelIndex& index) const
+{
+    QStyledItemDelegate::destroyEditor(editor, index);
+    if (!index.isValid())
+        return;
+
+    const SqlQueryModel* model = dynamic_cast<const SqlQueryModel*>(index.model());
+    SqlQueryItem* item = model->itemFromIndex(index);
+    item->resetInitialFocusSelection();
+}
+
+QString SqlQueryItemDelegate::displayText(const QVariant& value, const QLocale& locale) const
+{
+    Q_UNUSED(locale);
+    if (value.userType() == QMetaType::Double)
+        return doubleToString(value, CFG_UI.General.UseSciFormatForDoubles.get());
+
+    if (value.userType() == QMetaType::QString)
+    {
+        QString newStr = value.toString();
+        newStr.replace(QChar::ParagraphSeparator, '\n');
+        newStr.replace(QChar::LineSeparator, '\n');
+        return QStyledItemDelegate::displayText(newStr, locale);
+    }
+    return QStyledItemDelegate::displayText(value, locale);
+}
+
+void SqlQueryItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
+{
+    // No need to check or load full data, it is already preloaded if necessary in createEditor().
+    QComboBox* cb = dynamic_cast<QComboBox*>(editor);
+    QLineEdit* le = dynamic_cast<QLineEdit*>(editor);
+    if (cb) {
+        setEditorDataForFk(cb, index);
+    } else if (le) {
+        setEditorDataForLineEdit(le, index);
+    } else {
+        QStyledItemDelegate::setEditorData(editor, index);
+    }
+}
+
+void SqlQueryItemDelegate::setEditorDataForFk(QComboBox* cb, const QModelIndex& index) const
+{
+    Q_UNUSED(cb);
+    Q_UNUSED(index);
+    // There used to be code here, but it's empty now.
+    // All necessary data population happens in the fkDataReady().
+    // Keeping this method just for this comment and for consistency across different kind of cell editors
+    // (i.e. each editor has method to copy value from model to editor and another to copy from editor to model).
+}
+
+void SqlQueryItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+{
+    FkComboBox* cb = dynamic_cast<FkComboBox*>(editor);
+    QLineEdit* le = dynamic_cast<QLineEdit*>(editor);
+    if (cb) {
+        setModelDataForFk(cb, model, index);
+    } else if (le) {
+        setModelDataForLineEdit(le, model, index);
+    } else {
+        QStyledItemDelegate::setModelData(editor, model, index);
+    }
+
+    SqlQueryModel* queryModel = const_cast<SqlQueryModel*>(dynamic_cast<const SqlQueryModel*>(index.model()));
+    queryModel->notifyItemEditionEnded(index);
+}
+
+bool SqlQueryItemDelegate::eventFilter(QObject* editor, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        auto* keyEvent = static_cast<QKeyEvent*>(event);
+        switch (keyEvent->key())
+        {
+            case Qt::Key_Return:
+            case Qt::Key_Enter:
+            {
+                lastCommitReason = CommitReason::EnterKey;
+                emit commitData(qobject_cast<QWidget*>(editor));
+                emit closeEditor(qobject_cast<QWidget*>(editor), QAbstractItemDelegate::NoHint);
+                return true;
+            }
+        }
+    }
+    return QStyledItemDelegate::eventFilter(editor, event);
+}
+
+void SqlQueryItemDelegate::setModelDataForFk(FkComboBox* cb, QAbstractItemModel* model, const QModelIndex& index) const
+{
+    bool manualValue = false;
+    bool ok = false;
+    QVariant value = cb->getValue(&manualValue, &ok);
+
+    SqlQueryModel* dataModel = dynamic_cast<SqlQueryModel*>(model);
+    SqlQueryItem* theItem = dataModel->itemFromIndex(index);
+
+    // If the item of the main data model cannot be found, we use plain QStandardItem method to set item's value.
+    // It's a safety circuit breaker. Shouldn't happend and if does so, it prints Critical debug log.
+    if (!theItem)
+    {
+        qCritical() << "Confirmed FK edition, but there is no SqlQueryItem for which this was triggered!" << index;
+        model->setData(index, value, Qt::EditRole);
+        return;
+    }
+
+    // Out of index? So it's custom value. Set it and it's done.
+    // If we deal with custom value inserted as item, we also just set it and that's it.
+    if (manualValue)
+    {
+        theItem->setValue(value);
+        return;
+    }
+
+    theItem->setValue(value);
+}
+
+void SqlQueryItemDelegate::setModelDataForLineEdit(QLineEdit* editor, QAbstractItemModel* model, const QModelIndex& index) const
+{
+    QString value = editor->text();
+
+    if (CFG_UI.General.KeepNullWhenEmptyValue.get() && isNull(model->data(index, Qt::EditRole)) && value.isEmpty())
+        return;
+
+    const SqlQueryModel* queryModel = dynamic_cast<const SqlQueryModel*>(model);
+    SqlQueryItem* item = queryModel->itemFromIndex(index);
+
+    if (item->getColumn()->dataType.isNumeric())
+    {
+        bool ok;
+        QVariant variant = value.toLongLong(&ok);
+        if (ok)
+        {
+            model->setData(index, variant, Qt::EditRole);
+            return;
+        }
+
+        variant = value.toDouble(&ok);
+        if (ok)
+        {
+            model->setData(index, variant, Qt::EditRole);
+            return;
+        }
+    }
+    model->setData(index, value, Qt::EditRole);
+}
+
+SqlQueryItemDelegate::CommitReason SqlQueryItemDelegate::getLastCommitReason() const
+{
+    return lastCommitReason;
+}
+
+void SqlQueryItemDelegate::setEditorDataForLineEdit(QLineEdit* le, const QModelIndex& index) const
+{
+    QVariant value = index.data(Qt::EditRole);
+    if (value.userType() == QMetaType::Double)
+    {
+        le->setText(doubleToString(value, !CFG_UI.General.UseSciFormatForDoubles.get()));
+        return;
+    }
+
+    QString str = value.toString();
+    if (str.size() > HUGE_CONTENTS_WARNING_LIMIT && !warnedAboutHugeContents)
+    {
+        NOTIFY_MANAGER->warn(tr("Editing a huge contents in an inline cell editor is not a good idea. It can become slow and inconvenient. It's better to edit such big contents in a Form View, or in popup editor (available under right-click menu)."));
+        warnedAboutHugeContents = true;
+    }
+
+    le->setText(str);
+}
+
+SqlQueryItem* SqlQueryItemDelegate::getItem(const QModelIndex &index)
+{
+    const SqlQueryModel* queryModel = dynamic_cast<const SqlQueryModel*>(index.model());
+    return queryModel->itemFromIndex(index);
+}
+
+QWidget* SqlQueryItemDelegate::getEditor(SqlQueryItem* item, int type, bool shouldSkipInitialSelection, QWidget* parent) const
+{
+    Q_UNUSED(type);
+    SqlQueryItemLineEdit *editor = new SqlQueryItemLineEdit(shouldSkipInitialSelection, parent);
+    editor->setMaxLength(std::numeric_limits<int>::max());
+    editor->setFrame(editor->style()->styleHint(QStyle::SH_ItemView_DrawDelegateFrame, 0, editor));
+
+    SqlQueryModelColumn* col = item->getColumn();
+    if (col->hasDefaultValueForInsert() && item->isNewRow() && !item->isUntouched())
+    {
+        QAction* resetAct = editor->addAction(ICONS.ACT_UNDO, QLineEdit::TrailingPosition);
+        if (col->isDefault())
+            resetAct->setToolTip(tr("Reset to DEFAULT value"));
+        else if (col->isAutoIncr())
+            resetAct->setToolTip(tr("Reset to PRIMARY KEY AUTOINCREMENT value"));
+        else
+            resetAct->setToolTip(tr("Reset value"));
+
+        connect(resetAct, &QAction::triggered, this, [this, editor, item]()
+        {
+            item->setValue(QVariant(QString()), false);
+            item->setUntouched(true);
+            emit const_cast<SqlQueryItemDelegate*>(this)->closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
+        });
+    }
+
+    return editor;
+}
+
+QWidget* SqlQueryItemDelegate::getFkEditor(SqlQueryItem* item, bool shouldSkipInitialSelection, QWidget* parent, const SqlQueryModel* model) const
+{
+    Db* db = model->getDb();
+    bool countingError = false;
+    QString sql = FkComboBox::getSqlForFkEditor(db, item->getColumn(), item->getValue());
+    qlonglong rowCount = FkComboBox::getRowCountForFkEditor(db, sql, &countingError);
+    if (rowCount > FkComboBox::MAX_ROWS_FOR_FK)
+    {
+        notifyWarn(tr("Foreign key for column %2 has more than %1 possible values. It's too much to display in drop down list. You need to edit value manually.")
+                       .arg(FkComboBox::MAX_ROWS_FOR_FK).arg(item->getColumn()->column));
+
+        return getEditor(item, item->getValue().userType(), shouldSkipInitialSelection, parent);
+    }
+
+    if (rowCount == 0 && countingError && model->isStructureOutOfDate())
+    {
+        notifyWarn(tr("Cannot edit this cell. Details: %1").arg(tr("Structure of this table has changed since last data was loaded. Reload the data to proceed.")));
+        return nullptr;
+    }
+
+    int dropDownViewMinWidth = model->getView()->horizontalHeader()->sectionSize(item->index().column());
+    FkComboBox* cb = new FkComboBox(parent, dropDownViewMinWidth);
+    cb->init(db, item->getColumn());
+    cb->setValue(item->getValue());
+    if (!shouldSkipInitialSelection)
+        cb->lineEdit()->selectAll();
+
+    cb->lineEdit()->setFont(CFG_UI.Fonts.DataView.get());
+    return cb;
+}

@@ -4,166 +4,171 @@
   <context>
     <name>PdfExport</name>
     <message>
-      <location filename="../pdfexport.cpp" line="28"/>
-      <source>SQLiteStudio v%1</source>
-      <translation type="unfinished">SQLiteStudio v%1</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="61"/>
+      <location filename="../pdfexport.cpp" line="66"/>
       <source>SQL query results</source>
-      <translation type="unfinished">SQL query results</translation>
+      <translation>نتایج پرس‌وجوی SQL</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="90"/>
-      <location filename="../pdfexport.cpp" line="144"/>
+      <location filename="../pdfexport.cpp" line="205"/>
       <source>Exported table: %1</source>
-      <translation type="unfinished">Exported table: %1</translation>
+      <translation>جدول صادرشده: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="93"/>
-      <location filename="../pdfexport.cpp" line="159"/>
+      <location filename="../pdfexport.cpp" line="101"/>
+      <location filename="../pdfexport.cpp" line="153"/>
       <source>Table: %1</source>
-      <translation type="unfinished">Table: %1</translation>
+      <translation>جدول: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="33"/>
+      <source>Letos v%1</source>
+      <translation>Letos نسخه %1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="104"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Column</source>
-      <translation type="unfinished">Column</translation>
+      <translation>ستون</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Data type</source>
-      <translation type="unfinished">Data type</translation>
+      <translation>نوع داده</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="95"/>
+      <location filename="../pdfexport.cpp" line="104"/>
       <source>Constraints</source>
-      <translation type="unfinished">Constraints</translation>
+      <translation>محدودیت‌ها</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="126"/>
+      <location filename="../pdfexport.cpp" line="135"/>
       <source>Global table constraints</source>
-      <translation type="unfinished">Global table constraints</translation>
+      <translation>محدودیت‌های سراسری جدول</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="215"/>
+      <location filename="../pdfexport.cpp" line="216"/>
+      <source>Exported view: %1</source>
+      <translation>نمای صادرشده: %1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="250"/>
       <source>Exported database: %1</source>
-      <translation type="unfinished">Exported database: %1</translation>
+      <translation>پایگاه داده صادرشده: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="223"/>
+      <location filename="../pdfexport.cpp" line="258"/>
       <source>Index: %1</source>
-      <translation type="unfinished">Index: %1</translation>
+      <translation>شاخص: %1</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Property</source>
       <comment>index header</comment>
-      <translation type="unfinished">Property</translation>
+      <translation>ویژگی</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="225"/>
+      <location filename="../pdfexport.cpp" line="260"/>
       <source>Value</source>
       <comment>index header</comment>
-      <translation type="unfinished">Value</translation>
+      <translation>مقدار</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="228"/>
+      <location filename="../pdfexport.cpp" line="263"/>
       <source>Indexed table</source>
-      <translation type="unfinished">Indexed table</translation>
+      <translation>جدول شاخص‌گذاری‌شده</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Unique index</source>
-      <translation type="unfinished">Unique index</translation>
+      <translation>شاخص یکتا</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>Yes</source>
-      <translation type="unfinished">Yes</translation>
+      <translation>بله</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="229"/>
+      <location filename="../pdfexport.cpp" line="264"/>
       <source>No</source>
-      <translation type="unfinished">No</translation>
+      <translation>خیر</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Collation</source>
-      <translation type="unfinished">Collation</translation>
+      <translation>ترتیب تطبیق</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="231"/>
+      <location filename="../pdfexport.cpp" line="266"/>
       <source>Sort order</source>
-      <translation type="unfinished">Sort order</translation>
+      <translation>ترتیب مرتب‌سازی</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="247"/>
+      <location filename="../pdfexport.cpp" line="282"/>
       <source>Partial index condition</source>
-      <translation type="unfinished">Partial index condition</translation>
+      <translation>شرط شاخص جزئی</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="261"/>
+      <location filename="../pdfexport.cpp" line="296"/>
       <source>Trigger: %1</source>
-      <translation type="unfinished">Trigger: %1</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="263"/>
-      <source>Property</source>
-      <comment>trigger header</comment>
-      <translation type="unfinished">Property</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="263"/>
-      <source>Value</source>
-      <comment>trigger header</comment>
-      <translation type="unfinished">Value</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="265"/>
-      <source>Activation time</source>
-      <translation type="unfinished">Activation time</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="268"/>
-      <source>For action</source>
-      <translation type="unfinished">For action</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="272"/>
-      <source>On view</source>
-      <translation type="unfinished">On view</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="274"/>
-      <source>On table</source>
-      <translation type="unfinished">On table</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="279"/>
-      <source>Activation condition</source>
-      <translation type="unfinished">Activation condition</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="285"/>
-      <source>Code executed</source>
-      <translation type="unfinished">Code executed</translation>
-    </message>
-    <message>
-      <location filename="../pdfexport.cpp" line="297"/>
-      <source>View: %1</source>
-      <translation type="unfinished">View: %1</translation>
+      <translation>راه‌انداز: %1</translation>
     </message>
     <message>
       <location filename="../pdfexport.cpp" line="298"/>
-      <source>Query:</source>
-      <translation type="unfinished">Query:</translation>
+      <source>Property</source>
+      <comment>trigger header</comment>
+      <translation>ویژگی</translation>
     </message>
     <message>
-      <location filename="../pdfexport.cpp" line="654"/>
-      <source>Document generated with SQLiteStudio v%1</source>
-      <translation type="unfinished">Document generated with SQLiteStudio v%1</translation>
+      <location filename="../pdfexport.cpp" line="298"/>
+      <source>Value</source>
+      <comment>trigger header</comment>
+      <translation>مقدار</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="300"/>
+      <source>Activation time</source>
+      <translation>زمان فعال‌سازی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="303"/>
+      <source>For action</source>
+      <translation>برای عمل</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="307"/>
+      <source>On view</source>
+      <translation>روی نما</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="309"/>
+      <source>On table</source>
+      <translation>روی جدول</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="314"/>
+      <source>Activation condition</source>
+      <translation>شرط فعال‌سازی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="320"/>
+      <source>Code executed</source>
+      <translation>کد اجراشده</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="333"/>
+      <source>View: %1</source>
+      <translation>نما: %1</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="710"/>
+      <source>Document generated with Letos v%1</source>
+      <translation>سند با Letos نسخه %1 تولید شد</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.cpp" line="69"/>
+      <location filename="../pdfexport.cpp" line="335"/>
+      <source>Query:</source>
+      <translation>پرس‌وجو:</translation>
     </message>
   </context>
   <context>
@@ -171,32 +176,32 @@
     <message>
       <location filename="../pdfexport.ui" line="20"/>
       <source>Size and layout</source>
-      <translation type="unfinished">Size and layout</translation>
+      <translation>اندازه و چیدمان</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="36"/>
       <source>Page size:</source>
-      <translation type="unfinished">Page size:</translation>
+      <translation>اندازه صفحه:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="63"/>
       <source>Right margin:</source>
-      <translation type="unfinished">Right margin:</translation>
+      <translation>حاشیه راست:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="70"/>
       <source>Left margin:</source>
-      <translation type="unfinished">Left margin:</translation>
+      <translation>حاشیه چپ:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="77"/>
       <source>Cell padding:</source>
-      <translation type="unfinished">Cell padding:</translation>
+      <translation>فاصله داخلی سلول:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="84"/>
       <source>Limit characters in single cell:</source>
-      <translation type="unfinished">Limit characters in single cell:</translation>
+      <translation>محدود کردن تعداد نویسه‌ها در یک سلول:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="91"/>
@@ -205,52 +210,114 @@
       <location filename="../pdfexport.ui" line="132"/>
       <location filename="../pdfexport.ui" line="156"/>
       <source>mm</source>
-      <translation type="unfinished">mm</translation>
+      <translation>میلی‌متر</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="139"/>
       <source>Bottom margin:</source>
-      <translation type="unfinished">Bottom margin:</translation>
+      <translation>حاشیه پایین:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="163"/>
       <source>Top margin:</source>
-      <translation type="unfinished">Top margin:</translation>
+      <translation>حاشیه بالا:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="183"/>
       <source>Font</source>
-      <translation type="unfinished">Font</translation>
+      <translation>قلم</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="206"/>
       <source>Colors</source>
-      <translation type="unfinished">Colors</translation>
+      <translation>رنگ‌ها</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="212"/>
       <source>Headers background:</source>
-      <translation type="unfinished">Headers background:</translation>
+      <translation>پس‌زمینه سرستون‌ها:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="235"/>
       <source>NULL value color:</source>
-      <translation type="unfinished">NULL value color:</translation>
+      <translation>رنگ مقدار NULL:</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="261"/>
       <source>Other settings</source>
-      <translation type="unfinished">Other settings</translation>
+      <translation>تنظیمات دیگر</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="267"/>
       <source>Print row numbers for data</source>
-      <translation type="unfinished">Print row numbers for data</translation>
+      <translation>چاپ شماره ردیف‌ها برای داده‌ها</translation>
     </message>
     <message>
       <location filename="../pdfexport.ui" line="277"/>
       <source>Print page numbers</source>
-      <translation type="unfinished">Print page numbers</translation>
+      <translation>چاپ شماره صفحه‌ها</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="290"/>
+      <source>Custom header</source>
+      <translation>سرصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="296"/>
+      <source>No custom header</source>
+      <translation>بدون سرصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="309"/>
+      <source>Define custom header content</source>
+      <translation>تعریف محتوای سرصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="322"/>
+      <location filename="../pdfexport.ui" line="393"/>
+      <source>Plain text content</source>
+      <translation>محتوای متن ساده</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="332"/>
+      <source>Define custom header file</source>
+      <translation>تعریف فایل سرصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="348"/>
+      <source>Choose file for the header</source>
+      <translation>انتخاب فایل برای سرصفحه</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="351"/>
+      <location filename="../pdfexport.ui" line="422"/>
+      <source>Text files (*.txt);;All files (*)</source>
+      <translation>فایل‌های متنی (*.txt);;همه فایل‌ها (*)</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="361"/>
+      <source>Custom footer</source>
+      <translation>پاصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="367"/>
+      <source>No custom footer</source>
+      <translation>بدون پاصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="380"/>
+      <source>Define custom footer content</source>
+      <translation>تعریف محتوای پاصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="403"/>
+      <source>Define custom footer file</source>
+      <translation>تعریف فایل پاصفحه سفارشی</translation>
+    </message>
+    <message>
+      <location filename="../pdfexport.ui" line="419"/>
+      <source>Choose file for the footer</source>
+      <translation>انتخاب فایل برای پاصفحه</translation>
     </message>
   </context>
 </TS>

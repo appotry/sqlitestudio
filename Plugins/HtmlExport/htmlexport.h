@@ -5,45 +5,58 @@
 #include "plugins/genericexportplugin.h"
 #include "config_builder.h"
 
-CFG_CATEGORIES(HtmlExportConfig,
-    CFG_CATEGORY(HtmlExport,
-        CFG_ENTRY(QString, Format,          "compress")
-        CFG_ENTRY(bool,    PrintRowNum,     true)
-        CFG_ENTRY(bool,    PrintHeader,     true)
-        CFG_ENTRY(bool,    PrintDataTypes,  true)
-        CFG_ENTRY(bool,    DontEscapeHtml,  false)
-        CFG_ENTRY(int,     ByteLengthLimit, 10000)
+CFG_CATEGORIES_EX(HtmlExportConfig, HTMLEXPORTSHARED_EXPORT,
+    CFG_CATEGORY_EX(HtmlExport, HTMLEXPORTSHARED_EXPORT,
+        CFG_ENTRY(QString, Format,           "compress")
+        CFG_ENTRY(bool,    PrintRowNum,      true)
+        CFG_ENTRY(bool,    PrintHeader,      true)
+        CFG_ENTRY(bool,    PrintDataTypes,   true)
+        CFG_ENTRY(bool,    DontEscapeHtml,   false)
+        CFG_ENTRY(int,     ByteLengthLimit,  10000)
+        CFG_ENTRY(int,     CustomHeaderMode, 0)
+        CFG_ENTRY(QString, CustomHdrContent, QString(), CFG_DEP(CustomHeaderMode, 1, true))
+        CFG_ENTRY(QString, CustomHdrFile,    QString(), CFG_DEP(CustomHeaderMode, 2, true))
+        CFG_ENTRY(int,     CustomFooterMode, 0)
+        CFG_ENTRY(QString, CustomFtrContent, QString(), CFG_DEP(CustomFooterMode, 1, true))
+        CFG_ENTRY(QString, CustomFtrFile,    QString(), CFG_DEP(CustomFooterMode, 2, true))
     )
 )
 class HTMLEXPORTSHARED_EXPORT HtmlExport : public GenericExportPlugin
 {
         Q_OBJECT
-        SQLITESTUDIO_PLUGIN("htmlexport.json")
+        LETOS_PLUGIN("htmlexport.json")
 
     public:
-        QString getFormatName() const;
-        ExportManager::StandardConfigFlags standardOptionsToEnable() const;
-        QString getExportConfigFormName() const;
-        CfgMain* getConfig();
-        void validateOptions();
-        QString defaultFileExtension() const;
+        QString getFormatName() const override;
+        ExportManager::StandardConfigFlags standardOptionsToEnable() const override;
+        QString getExportConfigFormName() const override;
+        CfgMain* getConfig() override;
+        void validateOptions() override;
+        QString defaultFileExtension() const override;
         bool beforeExportQueryResults(const QString& query, QList<QueryExecutor::ResultColumnPtr>& columns,
-                                      const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
-        bool exportQueryResultsRow(SqlResultsRowPtr row);
+                                      const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool exportQueryResultsRow(SqlResultsRowPtr row) override;
+        bool afterExportQueryResults() override;
+        bool beforeExportSingleTable(const QString& database, const QString& table) override;
+        bool afterExportSingleTable() override;
+        bool beforeExportSingleView(const QString& database, const QString& name) override;
+        bool afterExportSingleView() override;
         bool exportTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateTablePtr createTable,
-                         const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
+                         const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
         bool exportVirtualTable(const QString& database, const QString& table, const QStringList& columnNames, const QString& ddl, SqliteCreateVirtualTablePtr createTable,
-                                const QHash<ExportManager::ExportProviderFlag,QVariant> providedData);
-        bool exportTableRow(SqlResultsRowPtr data);
-        bool beforeExportDatabase(const QString& database);
-        bool exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex);
-        bool exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger);
-        bool exportView(const QString& database, const QString& name, const QString& ddl, SqliteCreateViewPtr view);
-        bool afterExportQueryResults();
-        bool afterExportTable();
-        bool afterExport();
-        bool init();
-        void deinit();
+                                const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool exportTableRow(SqlResultsRowPtr data) override;
+        bool afterExportTable() override;
+        bool beforeExportDatabase(const QString& database) override;
+        bool exportIndex(const QString& database, const QString& name, const QString& ddl, SqliteCreateIndexPtr createIndex) override;
+        bool exportTrigger(const QString& database, const QString& name, const QString& ddl, SqliteCreateTriggerPtr createTrigger) override;
+        bool exportView(const QString& database, const QString& name, const QStringList& columnNames, const QString& ddl,
+                        SqliteCreateViewPtr createView, const QHash<ExportManager::ExportProviderFlag,QVariant> providedData) override;
+        bool exportViewRow(SqlResultsRowPtr data) override;
+        bool afterExportView() override;
+        bool afterExport() override;
+        bool init() override;
+        void deinit() override;
 
     private:
         bool beginDoc(const QString& title);
@@ -54,8 +67,13 @@ class HTMLEXPORTSHARED_EXPORT HtmlExport : public GenericExportPlugin
         void updateIndent();
         void writeln(const QString& str);
         QString escape(const QString& str);
+        QString getCustomHeader(QString& err);
+        QString getCustomFooter(QString& err);
+        QString getCustomHeaderOrFooter(QString& err, CfgEntry* modeEntry, CfgEntry* contentEntry, CfgEntry* fileEntry);
+        bool writeCustomHeader();
+        void writeCustomFooter();
 
-        static QString compressCss(QString css);
+        static QString compressCssOrJs(QString css);
 
         CFG_LOCAL_PERSISTABLE(HtmlExportConfig, cfg)
         bool indent = false;

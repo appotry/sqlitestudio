@@ -1,28 +1,59 @@
 #include "scriptingpython.h"
 #include "common/global.h"
-#include "common/unused.h"
 #include "db/db.h"
-#include "db/sqlite3.h"
 #include "parser/lexer.h"
 #include "parser/token.h"
 #include "common/utils_sql.h"
+#include <sqlite3.h>
 #include <QDebug>
 #include <QMutexLocker>
-#include <frameobject.h>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#include <QtSystemDetection>
+#else
+#include <qsystemdetection.h>
+#endif
 
-static PyMethodDef pyDbMethods[] = {
+#ifdef PYTHON_DYNAMIC_BINDING
+#include <QDir>
+#include <QRegularExpression>
+#endif
+
+static const PyMethodDef pyDbMethodsTemplate[] = {
     {"eval", reinterpret_cast<PyCFunction>(ScriptingPython::dbEval), METH_FASTCALL, ""},
     {nullptr, nullptr, 0, nullptr}
 };
 
-static PyModuleDef pyDbModule = {
+// For Python library before 3.7, we have to provide a slower API
+static const PyMethodDef pyDbMethodsCompatTemplate[] = {
+    {"eval", reinterpret_cast<PyCFunction>(ScriptingPython::dbEvalCompat), 0, ""},
+    {nullptr, nullptr, 0, nullptr}
+};
+
+static const int pyDbMethodsCount = sizeof(pyDbMethodsTemplate) / sizeof(PyMethodDef);
+static PyMethodDef pyDbMethods[pyDbMethodsCount];
+
+static const PyModuleDef pyDbModuleTemplate = {
     PyModuleDef_HEAD_INIT, "db", nullptr, -1, pyDbMethods,
     nullptr, nullptr, nullptr, nullptr
 };
+static PyModuleDef pyDbModule;
+
+static inline PyObject* pyDbModuleInitInternal(const PyMethodDef* methodsTemplate)
+{
+    // Build a clean copy of the module struct on every library reload
+    std::copy(methodsTemplate, methodsTemplate + pyDbMethodsCount, pyDbMethods);
+    pyDbModule = pyDbModuleTemplate;
+    return PyModule_Create(&pyDbModule);
+}
 
 static PyObject* pyDbModuleInit(void)
 {
-    return PyModule_Create(&pyDbModule);
+    return pyDbModuleInitInternal(pyDbMethodsTemplate);
+}
+
+static PyObject* pyDbModuleCompatInit(void)
+{
+    return pyDbModuleInitInternal(pyDbMethodsCompatTemplate);
 }
 
 QHash<PyThreadState*, ScriptingPython::ContextPython*> ScriptingPython::contexts;
@@ -39,24 +70,74 @@ ScriptingPython::~ScriptingPython()
 
 bool ScriptingPython::init()
 {
-    Q_INIT_RESOURCE(scriptingpython);
-    QMutexLocker locker(mainInterpMutex);
+    SQLS_INIT_RESOURCE(scriptingpython);
 
+#ifdef PYTHON_DYNAMIC_BINDING
+    setLibraryPath(cfg.ScriptingPython.LibraryPath.get());
+#else
+    initPython();
+#endif
+    return true;
+}
+
+void ScriptingPython::initPython()
+{
+    QMutexLocker locker(mainInterpMutex);
+#ifdef PYTHON_DYNAMIC_BINDING
+    if (library.isLoaded())
+        deinitPython();
+    if (!bindLibrary())
+        return;
+    if (libraryVersion < QVersionNumber(3, 7))
+        PyImport_AppendInittab("db", pyDbModuleCompatInit);
+    else
+        PyImport_AppendInittab("db", pyDbModuleInit);
+#else
+#if PY_VERSION_HEX < 0x03070000
+    PyImport_AppendInittab("db", &pyDbModuleCompatInit);
+#else
     PyImport_AppendInittab("db", &pyDbModuleInit);
+#endif
+#endif
+
     Py_Initialize();
+#ifdef PYTHON_DYNAMIC_BINDING
+    if (libraryVersion < QVersionNumber(3, 0))
+        PyUnicode_SetDefaultEncoding("utf-8");
+#endif
+
+    PyEval_InitThreads();  // No-op in Python 3.7+
+    // GIL is held, thread state is set.
+
     PyRun_SimpleString("import db");
 
     mainContext = new ContextPython();
     contexts[mainContext->interp] = mainContext;
-    return true;
 }
 
 void ScriptingPython::deinit()
 {
     QMutexLocker locker(mainInterpMutex);
+#ifdef PYTHON_DYNAMIC_BINDING
+    if (library.isLoaded())
+#endif
+        deinitPython();
+    SQLS_CLEANUP_RESOURCE(scriptingpython);
+}
+
+void ScriptingPython::deinitPython()
+{
     contexts.clear();
+
+    // Acquire GIL and set thread state
+    PyEval_RestoreThread(mainContext->interp);
     Py_Finalize();
-    Q_CLEANUP_RESOURCE(scriptingpython);
+    // GIL and thread state no longer exist
+
+    mainContext = nullptr;
+#ifdef PYTHON_DYNAMIC_BINDING
+    library.unload();
+#endif
 }
 
 QString ScriptingPython::getLanguage() const
@@ -64,9 +145,134 @@ QString ScriptingPython::getLanguage() const
     return "Python";
 }
 
+#ifdef PYTHON_DYNAMIC_BINDING
+bool ScriptingPython::bindLibrary()
+{
+    library.setFileName(libraryPath);
+    if (!library.load())
+    {
+        qWarning() << "Could not load Python library" << libraryPath;
+        return false;
+    }
+
+    if (!bindSymbols(library))
+    {
+        qWarning() << "Could not bind all symbols in Python library: " << libraryPath;
+        library.unload();
+        return false;
+    }
+    libraryVersion = QVersionNumber::fromString(Py_GetVersion());
+    qInfo() << "Python library " << libraryPath << " has been loaded succesfully.";
+    return true;
+}
+
+void ScriptingPython::setLibraryPath(QString path)
+{
+    if (path != libraryPath)
+    {
+        libraryPath = path;
+        initPython();
+    }
+}
+
+static void globParts(QStringList& files, QList<QStringList> parts,
+                      QString prefix = QString(), int offset = 0)
+{
+    // Find all existing files among all concatenations of path parts.
+    // A part may include wildcards or path separators but not both.
+    if (parts.size() <= offset)
+        return;
+    bool isFile = offset == parts.size() - 1;
+    QDir::Filters filters = isFile ? QDir::Files
+                                   : QDir::Dirs | QDir::NoDotAndDotDot | QDir::NoSymLinks;
+    for (const QString &piece : parts.at(offset))
+    {
+        if (piece.contains('*') || piece.contains('?'))
+        {
+            for (const QString &fileName : QDir(prefix).entryList({piece}, filters))
+            {
+                if (isFile)
+                    files << QDir::toNativeSeparators(prefix) + fileName;
+                else globParts(files, parts, prefix + fileName, offset + 1);
+            }
+        }
+        else if (!piece.isEmpty() && isFile && QFile(prefix + piece).exists())
+            files << QDir::toNativeSeparators(prefix + piece);
+        else globParts(files, parts, prefix + piece, offset + 1);
+    }
+}
+
+#if !defined(Q_OS_MACX) && defined(Q_OS_UNIX)
+static inline QStringList dirNames(QStringList paths)
+{
+   // Returns a path list where every last path component is removed
+   return paths.replaceInStrings(QRegularExpression("/?[^/]+/?$"), "");
+}
+#endif
+
+QStringList ScriptingPython::discoverLibraries() const
+{
+    QStringList paths;
+    QStringList pathEnv = qEnvironmentVariable("PATH").split(PATH_LIST_SEPARATOR);
+    QList<QStringList> parts = {
+#if defined(Q_OS_MACX)
+        {"", "/System", "/opt/homebrew", "/opt/local", "/opt/pkg", "/usr/local"},
+        {"/Library/Frameworks/Python.framework/Versions/"}, {"*"}, {"/Python"}
+#elif defined(Q_OS_UNIX)
+        QStringList({"", "/usr", "/usr/local", "/usr/pkg"}) + dirNames(pathEnv),
+        {"/lib/", "/lib64/", "/lib/x86_64-linux-gnu/", "/lib64/x86_64-linux-gnu/", "/lib/x86-linux-gnu/"}, {"libpython*.so*"}
+#elif defined(Q_OS_WINDOWS)
+        QStringList({QDir::homePath() + "/AppData/Local/Programs/Python"}) + pathEnv,
+        {"", "/bin", "/lib"}, {"*python*.dll"}
+#endif
+    };
+    globParts(paths, parts);
+    paths.removeDuplicates();
+    paths.sort();
+    return paths;
+}
+
+QString ScriptingPython::getConfigUiForm() const
+{
+    return "ScriptingPython";
+}
+
+CfgMain* ScriptingPython::getMainUiConfig()
+{
+    return &cfg;
+}
+
+void ScriptingPython::configDialogOpen()
+{
+    cfg.ScriptingPython.DiscoveredLibraries.set(discoverLibraries());
+    connect(&cfg.ScriptingPython.LibraryPath, &CfgEntry::changed, this, &ScriptingPython::configModified);
+}
+
+void ScriptingPython::configDialogClosed()
+{
+    disconnect(&cfg.ScriptingPython.LibraryPath, &CfgEntry::changed, this, &ScriptingPython::configModified);
+}
+
+void ScriptingPython::configModified(const QVariant& newValue)
+{
+    QString value = newValue.toString();
+    qDebug() << "Python library config modified signal: " << value;
+    setLibraryPath(value);
+}
+#endif
+
 ScriptingPlugin::Context* ScriptingPython::createContext()
 {
+#ifdef PYTHON_DYNAMIC_BINDING
+    if (!library.isLoaded())
+        return nullptr;
+#endif
+
+    // ContextPython() expects that GIL is held and thread state is set
+    PyEval_RestoreThread(mainContext->interp);
     ContextPython* ctx = new ContextPython();
+    // No GIL is held
+
     contexts[ctx->interp] = ctx;
     return ctx;
 }
@@ -79,7 +285,8 @@ void ScriptingPython::releaseContext(ScriptingPlugin::Context* context)
 
     contexts.remove(ctx->interp);
     delete ctx;
-    PyThreadState_Swap(mainContext->interp);
+    // Thread state has been destroyed. Don't switch to main thread state,
+    // as we'll do it as needed anyway, and it needs GIL.
 }
 
 void ScriptingPython::resetContext(ScriptingPlugin::Context* context)
@@ -109,8 +316,15 @@ QVariant ScriptingPython::getVariable(ScriptingPlugin::Context* context, const Q
     if (!ctx)
         return QVariant();
 
-    PyThreadState_Swap(ctx->interp);
-    return getVariable(name);
+    // Acquire GIL and set thread state
+    PyEval_RestoreThread(ctx->interp);
+
+    QVariant value = getVariable(name);
+
+    // Release GIL
+    PyEval_ReleaseThread(ctx->interp);
+
+    return value;
 }
 
 bool ScriptingPython::hasError(ScriptingPlugin::Context* context) const
@@ -133,7 +347,7 @@ QString ScriptingPython::getErrorMessage(ScriptingPlugin::Context* context) cons
 
 QString ScriptingPython::getIconPath() const
 {
-    return ":/scriptingpython/scriptingpython.png";
+    return ":/scriptingpython/scriptingpython.svg";
 }
 
 QVariant ScriptingPython::evaluate(ScriptingPlugin::Context* context, const QString& code, const FunctionInfo& funcInfo, const QList<QVariant>& args, Db* db, bool locking)
@@ -148,6 +362,16 @@ QVariant ScriptingPython::evaluate(ScriptingPlugin::Context* context, const QStr
 QVariant ScriptingPython::evaluate(const QString& code, const FunctionInfo& funcInfo, const QList<QVariant>& args, Db* db, bool locking, QString* errorMessage)
 {
     QMutexLocker locker(mainInterpMutex);
+
+#ifdef PYTHON_DYNAMIC_BINDING
+    if (!mainContext)
+    {
+        if (errorMessage)
+            *errorMessage = tr("The plugin is not configured properly.");
+        return QVariant();
+    }
+#endif
+
     QVariant results = compileAndEval(mainContext, code, funcInfo, args, db, locking);
 
     if (errorMessage && !mainContext->error.isEmpty())
@@ -168,13 +392,17 @@ ScriptingPython::ContextPython* ScriptingPython::getContext(ScriptingPlugin::Con
 QVariant ScriptingPython::compileAndEval(ScriptingPython::ContextPython* ctx, const QString& code, const FunctionInfo& funcInfo,
                                          const QList<QVariant>& args, Db* db, bool locking)
 {
-    PyThreadState_Swap(ctx->interp);
+    // Acquire GIL and set thread state
+    PyEval_RestoreThread(ctx->interp);
+
     clearError(ctx);
 
     ScriptObject* scriptObj = getScriptObject(code, funcInfo, ctx);
     if (PyErr_Occurred() || !scriptObj->getCompiled())
     {
         ctx->error = extractError();
+        // Release GIL
+        PyEval_ReleaseThread(ctx->interp);
         return QVariant();
     }
 
@@ -192,11 +420,15 @@ QVariant ScriptingPython::compileAndEval(ScriptingPython::ContextPython* ctx, co
     {
         Py_XDECREF(result);
         ctx->error = extractError();
+        // Release GIL
+        PyEval_ReleaseThread(ctx->interp);
         return QVariant();
     }
 
     QVariant resultVariant = pythonObjToVariant(result);
     Py_XDECREF(result);
+    // Release GIL
+    PyEval_ReleaseThread(ctx->interp);
     return resultVariant;
 }
 
@@ -208,7 +440,9 @@ QString ScriptingPython::extractError()
         return QString();
 
     PyObject* strErr = PyObject_Repr(value);
-    QString err = QString::fromUtf8(PyUnicode_AsUTF8(strErr));
+    Py_ssize_t size;
+    const char *buf = PyUnicode_AsUTF8AndSize(strErr, &size);
+    QString err = QString::fromUtf8(buf, size);
     PyErr_Clear();
 
     Py_XDECREF(type);
@@ -272,7 +506,11 @@ QVariant ScriptingPython::pythonObjToVariant(PyObject* obj)
         return QVariant();
 
     if (PyUnicode_Check(obj))
-        return QString::fromUtf8(PyUnicode_AsUTF8(obj));
+    {
+        Py_ssize_t size;
+        const char *buf = PyUnicode_AsUTF8AndSize(obj, &size);
+        return QString::fromUtf8(buf, size);
+    }
 
     if (PyLong_Check(obj))
         return PyLong_AsLongLong(obj);
@@ -357,7 +595,9 @@ QVariant ScriptingPython::pythonObjToVariant(PyObject* obj)
     }
 
     PyObject* strObj = PyObject_Repr(obj);
-    QString result = QString::fromUtf8(PyUnicode_AsUTF8(strObj));
+    Py_ssize_t size;
+    const char *buf = PyUnicode_AsUTF8AndSize(strObj, &size);
+    QString result = QString::fromUtf8(buf, size);
     Py_DECREF(strObj);
     return result;
 }
@@ -368,7 +608,9 @@ QString ScriptingPython::pythonObjToString(PyObject* obj)
     if (!strObj)
         return QString();
 
-    QString result = QString::fromUtf8(PyUnicode_AsUTF8(strObj));
+    Py_ssize_t size;
+    const char *buf = PyUnicode_AsUTF8AndSize(strObj, &size);
+    QString result = QString::fromUtf8(buf, size);
     Py_DECREF(strObj);
     return result;
 }
@@ -376,30 +618,30 @@ QString ScriptingPython::pythonObjToString(PyObject* obj)
 PyObject* ScriptingPython::variantToPythonObj(const QVariant& value)
 {
     PyObject* obj = nullptr;
-    switch (value.type())
+    switch (value.userType())
     {
-        case QVariant::Bool:
+        case QMetaType::Bool:
             obj = PyBool_FromLong(value.toBool() ? 1L : 0L);
             break;
-        case QVariant::Int:
-        case QVariant::LongLong:
+        case QMetaType::Int:
+        case QMetaType::LongLong:
             obj = PyLong_FromLongLong(value.toLongLong());
             break;
-        case QVariant::UInt:
-        case QVariant::ULongLong:
+        case QMetaType::UInt:
+        case QMetaType::ULongLong:
             obj = PyLong_FromUnsignedLongLong(value.toULongLong());
             break;
-        case QVariant::Double:
+        case QMetaType::Double:
             obj = PyFloat_FromDouble(value.toDouble());
             break;
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
         {
             QByteArray bytes = value.toByteArray();
             char* data = bytes.data();
             obj = PyBytes_FromStringAndSize(data, bytes.size());
             break;
         }
-        case QVariant::List:
+        case QMetaType::QVariantList:
         {
             QList<QVariant> list = value.toList();
             int listSize = list.size();
@@ -409,27 +651,25 @@ PyObject* ScriptingPython::variantToPythonObj(const QVariant& value)
             {
                 PyObject* subObj = variantToPythonObj(item);
                 PyList_SetItem(obj, pos++, subObj);
-                Py_DECREF(subObj);
             }
 
             break;
         }
-        case QVariant::StringList:
+        case QMetaType::QStringList:
         {
             QStringList list = value.toStringList();
             int listSize = list.size();
             obj = PyList_New(listSize);
             int pos = 0;
-            for (const QVariant& item : list)
+            for (const QString& item : list)
             {
-                PyObject* subObj = variantToPythonObj(item);
+                PyObject* subObj = stringToPythonObj(item);
                 PyList_SetItem(obj, pos++, subObj);
-                Py_DECREF(subObj);
             }
 
             break;
         }
-        case QVariant::Hash:
+        case QMetaType::QVariantHash:
         {
             QHash<QString, QVariant> hash = value.toHash();
             obj = PyDict_New();
@@ -443,7 +683,7 @@ PyObject* ScriptingPython::variantToPythonObj(const QVariant& value)
             }
             break;
         }
-        case QVariant::Map:
+        case QMetaType::QVariantMap:
         {
             QMap<QString, QVariant> map = value.toMap();
             obj = PyDict_New();
@@ -457,7 +697,7 @@ PyObject* ScriptingPython::variantToPythonObj(const QVariant& value)
             }
             break;
         }
-        case QVariant::String:
+        case QMetaType::QString:
         default:
             obj = stringToPythonObj(value.toString());
             break;
@@ -475,10 +715,16 @@ PyObject* ScriptingPython::stringToPythonObj(const QString& value)
     return PyUnicode_FromStringAndSize(bytes.constData(), bytes.size());
 }
 
-PyObject* ScriptingPython::dbEval(PyObject* self, PyObject *const *args, Py_ssize_t nargs)
+PyObject* ScriptingPython::dbEvalCompat(PyObject *self, PyObject *args)
 {
-    UNUSED(self);
+    return dbEval(self, &PyList_GET_ITEM(args, 0));
+}
 
+PyObject* ScriptingPython::dbEval(PyObject* self, PyObject *const *args)
+{
+    Q_UNUSED(self);
+
+    Py_ssize_t nargs = PyList_GET_SIZE(args);
     if (nargs != 1)
     {
         PyErr_SetString(PyExc_RuntimeError, QObject::tr("Invalid use of %1 function. Expected %2 arguments, but got %3.")
@@ -536,11 +782,17 @@ SqlQueryPtr ScriptingPython::dbCommonEval(PyObject* sqlArg, const char* fnName)
                         SQLITE_ERROR);
         }
 
-        sql = QString::fromUtf8(PyUnicode_AsUTF8(strObj));
+        Py_ssize_t size;
+        const char *buf = PyUnicode_AsUTF8AndSize(strObj, &size);
+        sql = QString::fromUtf8(buf, size);
         Py_DECREF(strObj);
     }
     else
-        sql = QString::fromUtf8(PyUnicode_AsUTF8(sqlArg));
+    {
+        Py_ssize_t size;
+        const char *buf = PyUnicode_AsUTF8AndSize(sqlArg, &size);
+        sql = QString::fromUtf8(buf, size);
+    }
 
     PyThreadState* state = PyThreadState_Get();
     ContextPython* ctx = contexts[state];
@@ -582,15 +834,16 @@ SqlQueryPtr ScriptingPython::dbCommonEval(PyObject* sqlArg, const char* fnName)
 QVariant ScriptingPython::getVariable(const QString& name)
 {
     PyThreadState* state = PyThreadState_Get();
-    if (!state->frame)
+    PyFrameObject* frame = PyThreadState_GetFrame(state);
+    if (!frame)
         return QVariant();
 
     const char* varName = name.toUtf8().constData();
     PyObject* obj = nullptr;
 
-    PyFrame_FastToLocals(state->frame);
-    PyObject* locals = state->frame->f_locals;
-    PyObject* globals = state->frame->f_globals;
+    PyFrame_FastToLocals(frame);
+    PyObject* locals = PyFrame_GetLocals(frame);
+    PyObject* globals = PyFrame_GetGlobals(frame);
     if (PyMapping_Check(locals))
         obj = PyMapping_GetItemString(locals, varName);
     else if (PyDict_Check(globals))
@@ -648,19 +901,30 @@ void ScriptingPython::ContextPython::reset()
 
 void ScriptingPython::ContextPython::init()
 {
+    // Py_NewInterpreter() expects that GIL is held and thread state is set
     interp = Py_NewInterpreter();
-    PyThreadState_Swap(interp);
+    // GIL is still held, thread state has changed
+
     mainModule = PyImport_AddModule("__main__");
     envDict = PyModule_GetDict(mainModule);
     PyRun_SimpleString("import db");
+
+    // Release GIL
+    PyEval_ReleaseThread(interp);
 }
 
 void ScriptingPython::ContextPython::clear()
 {
-    PyThreadState_Swap(interp);
+    // Acquire GIL and set thread state
+    PyEval_RestoreThread(interp);
+
     PyDict_Clear(envDict);
     scriptCache.clear();
     PyErr_Clear();
+
+    // Py_EndInterpreter expects thread state to be already set
     Py_EndInterpreter(interp);
+    // Thread state is destroyed, no GIL is held
+
     error = QString();
 }

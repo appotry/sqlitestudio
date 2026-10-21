@@ -3,7 +3,7 @@
 #include "parser/lexer.h"
 
 FormatCreateVirtualTable::FormatCreateVirtualTable(SqliteCreateVirtualTable* cvt) :
-    cvt(cvt)
+    FormatStatement(cvt), cvt(cvt)
 {
 }
 
@@ -98,9 +98,11 @@ void FormatCreateVirtualTable::handleToken(const TokenPtr& token)
         case Token::CTX_FK_MATCH:
         case Token::CTX_PRAGMA:
         case Token::CTX_ROWID_KW:
+        case Token::CTX_STRICT_KW:
         case Token::CTX_NEW_KW:
         case Token::CTX_OLD_KW:
         case Token::CTX_ERROR_MESSAGE:
+        case Token::CTX_JOIN_EXPR:
             break;
     }
 }

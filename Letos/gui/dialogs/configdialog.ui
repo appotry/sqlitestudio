@@ -1,0 +1,3511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfigDialog</class>
+ <widget class="QDialog" name="ConfigDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>885</width>
+    <height>589</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Configuration</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <item row="0" column="0">
+    <widget class="QWidget" name="mainWidget" native="true">
+     <property name="contextMenuPolicy">
+      <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QSplitter" name="mainSplitter">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <widget class="QWidget" name="categoriesWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="categoriesFilter">
+            <property name="placeholderText">
+             <string>Search</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTreeWidget" name="categoriesTree">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>18</width>
+              <height>18</height>
+             </size>
+            </property>
+            <property name="verticalScrollMode">
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+            </property>
+            <attribute name="headerVisible">
+             <bool>false</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+            <item>
+             <property name="text">
+              <string>General</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">generalPage</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Keyboard shortcuts</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">shortcutsPage</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Look &amp; feel</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">lookAndFeelPage</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Style</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">stylePage</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Fonts</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">fontsPage</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Code colors</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">codeColorsPage</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text">
+              <string>SQL Editor</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">sqlEditorPage</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Database list</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">databaseListPage</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Data browsing</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">dataBrowsingPage</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Data editors</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">dataEditorsPage</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Data renderers</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">dataRenderersPage</string>
+              </property>
+             </item>
+            </item>
+            <item>
+             <property name="text">
+              <string>Plugins</string>
+             </property>
+             <property name="statusTip">
+              <string notr="true">pluginsPage</string>
+             </property>
+             <item>
+              <property name="text">
+               <string>Code formatters</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">formatterPluginsPage</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Scripting languages</string>
+              </property>
+              <property name="statusTip">
+               <string notr="true">scriptingPluginsPage</string>
+              </property>
+             </item>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QStackedWidget" name="stackedWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>5</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>8</number>
+         </property>
+         <widget class="QWidget" name="databaseListPage">
+          <layout class="QVBoxLayout" name="verticalLayout_36">
+           <item>
+            <widget class="QGroupBox" name="dbListGroup">
+             <property name="title">
+              <string>Database list</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="openDbSettingsOnDoubleClickCheck">
+                <property name="toolTip">
+                 <string>When enabled, double-clicking a connected database opens its settings. When disabled, it expands or collapses the database tree instead. Double-clicking a disconnected database still connects to it.</string>
+                </property>
+                <property name="text">
+                 <string>Open database settings on double-click</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.OpenDbSettingsOnDoubleClick</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="expandTablesCheck">
+                <property name="text">
+                 <string>Expand tables when connected to a database</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.ExpandTables</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QCheckBox" name="prefMasterOverSchemaCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By default, the database schema is accessed using the &lt;span style=&quot; font-family:'Courier New';&quot;&gt;sqlite_schema&lt;/span&gt; table name.&lt;br/&gt;Older SQLite versions used the &lt;span style=&quot; font-family:'Courier New';&quot;&gt;sqlite_master&lt;/span&gt; name, which is still supported as an alias.&lt;br/&gt;You can switch here to use the legacy name instead.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Prefer sqlite_master over sqlite_schema table name</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.PreferMasterOverSchema</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QCheckBox" name="sortColumns">
+                <property name="toolTip">
+                 <string>If switched off, then columns will be sorted in the order they are typed in CREATE TABLE statement.</string>
+                </property>
+                <property name="text">
+                 <string>Sort table columns alphabetically</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.SortColumns</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="expandColsIdxTrigCheck">
+                <property name="toolTip">
+                 <string>Expanding a table or view also expands the Columns, Indexes and Triggers nodes to show their contents.</string>
+                </property>
+                <property name="text">
+                 <string>Expand columns, indexes and triggers together with the table</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.ExpandSubNodes</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QCheckBox" name="sortObjects">
+                <property name="toolTip">
+                 <string>If this option is switched off, then objects will be sorted in order they appear in sqlite_master table (which is in order they were created)</string>
+                </property>
+                <property name="text">
+                 <string>Sort objects (tables, indexes, triggers and views) alphabetically</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.SortObjects</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QGroupBox" name="addLabelsGroup">
+                <property name="toolTip">
+                 <string>&lt;p&gt;Additional labels are those displayed next to the names on the databases list (they are blue, unless configured otherwise). Enabling this option will result in labels for databases, invalid databases and aggregated nodes (column group, index group, trigger group). For more labels see options below.&lt;p&gt;</string>
+                </property>
+                <property name="title">
+                 <string>Display additional labels on the list</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.ShowDbTreeLabels</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <item>
+                  <widget class="QCheckBox" name="columnTypeLabelsCheck">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Shows data type next to the column when Columns node is expanded.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Display column data types</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">DbList.ShowColumnTypeLabels</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="regularTableLabelsCheck">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Shows number of columns, indexes and triggers next to each table name.&lt;/p&gt;&lt;p&gt;Requires loading full schema for all tables. For databases with hundreds or thousands of tables, this can significantly impact performance.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Display labels for regular tables</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">DbList.ShowRegularTableLabels</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="virtTableLabelsCheck">
+                   <property name="toolTip">
+                    <string>Virtual tables will be marked with a 'virtual' label.</string>
+                   </property>
+                   <property name="text">
+                    <string>Display labels for virtual tables</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">DbList.ShowVirtualTableLabels</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QCheckBox" name="dispSystemTablesCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By default, system tables and indexes are hidden from the list.&lt;br/&gt;Enable this option to display internal SQLite objects, such as &lt;span style=&quot; font-family:'Courier New';&quot;&gt;sqlite_schema&lt;/span&gt; and auto-generated indexes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Display system tables and indexes on the list</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.ShowSystemObjects</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QCheckBox" name="expandViewsCheck">
+                <property name="text">
+                 <string>Expand views when connected to a database</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.ExpandViews</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="dbDialogGroup">
+             <property name="title">
+              <string>Database dialog window</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_37">
+              <item>
+               <widget class="QCheckBox" name="dontMarkDbAsDefaultCheck">
+                <property name="toolTip">
+                 <string>&lt;p&gt;When adding new database it is marked to be &quot;permanent&quot; (stored in configuration) by default. Checking this option makes every new database to NOT be &quot;permanent&quot; by default.&lt;/p&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Do not mark database to be &quot;permanent&quot; by default</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.NewDbNotPermanentByDefault</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="bypassDbDialogCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, database files will be added without showing the standard database dialog. If opening the database with default options fails (e.g. encrypted database or different driver required), the dialog will be shown so the options can be adjusted. When disabled, the dialog will always be shown.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Skip the dialog when possible</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">DbList.BypassDbDialogWhenPossible</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="dataBrowsingPage">
+          <layout class="QVBoxLayout" name="verticalLayout_21">
+           <item>
+            <widget class="QScrollArea" name="dataBrowsingScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="dataBrowsingScrollAreaContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>679</width>
+                <height>871</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_34">
+               <item>
+                <widget class="QGroupBox" name="dataBrowsingGroup">
+                 <property name="title">
+                  <string>Data browsing and editing</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_2">
+                  <item row="2" column="2">
+                   <widget class="QSpinBox" name="memPopulConfigsCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;Maximum number of configurations of Populate Table dialog stored in configuration. Value of 100 should be sufficient.&lt;/p&gt;</string>
+                    </property>
+                    <property name="maximum">
+                     <number>999999</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.PopulateHistorySize</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="2">
+                   <widget class="QLabel" name="memPopulConfigsLabel">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;Maximum number of configurations of Populate Table dialog stored in configuration. Value of 100 should be sufficient.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Number of memorized table populating configurations</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" colspan="3">
+                   <widget class="QCheckBox" name="keepNullWhenEmptyCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When editing a cell which used to have NULL value and entering empty string as new value, then this option determinates whether the new value should remain NULL (have this option enabled), or should it be overwritten with empty string value (have this option disabled).&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Keep NULL value when entering empty value</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.KeepNullWhenEmptyValue</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QCheckBox" name="editCellAfterAdvancingCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Automatically starts editing the cell in the next row after moving to it with Enter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Start editing after moving to the next row</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DataEditAutoAdvanceEdit</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QSpinBox" name="rowsPerPageSpin">
+                    <property name="maximumSize">
+                     <size>
+                      <width>150</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.NumberOfRowsPerPage</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QCheckBox" name="advanceRowOnEnterCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When editing a cell, pressing Enter accepts the value and moves to the same column in the next row.&lt;br/&gt;If disabled, the selection stays on the current cell.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>After editing, Enter moves to the next row</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DataEditAutoAdvanceOnEnter</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0" colspan="2">
+                   <widget class="QLabel" name="rowsPerPageLabel">
+                    <property name="text">
+                     <string>Number of data rows per page:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" colspan="3">
+                   <widget class="QCheckBox" name="useSciFormatForDoublesCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, Letos automatically switches to scientific notation for very small real numbers (e.g. &lt;span style=&quot; font-style:italic;&quot;&gt;5.3e-21&lt;/span&gt;).&lt;br/&gt;Decimal notation is used for values whose magnitude allows a readable decimal representation.&lt;/p&gt;&lt;p&gt;When disabled, real numbers are always displayed using decimal notation, even if this results in very long fractional parts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Use scientific notation for very small real numbers in the grid view</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.UseSciFormatForDoubles</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0" colspan="3">
+                   <widget class="QCheckBox" name="limitColumnsVsRowsCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If query results contain dozens (or hundreds) of columns, it is more likely that it will exhaust free memory of your computer by loading several gigabytes of data at once. Letos may try to limit number of results displayed on one page in such cases to protect your computer. If you know that you don't work with big values in database, you can disable this limit and you will always see as many rows as defined per page.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Limit number of rows for in case of dozens of columns</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.LimitRowsForManyColumns</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" colspan="3">
+                   <widget class="QCheckBox" name="tolltipInDataViewCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When this is enabled and user holds mouse pointer over a cell in any data view (query results, a table data, a view data) a tooltip will appear with details about the cell - it includes details like column data type, constraints, ROWID and others.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Show column and row details tooltip in data view</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.ShowDataViewTooltips</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dataColumnWdGroup">
+                 <property name="title">
+                  <string>Data column width</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_9">
+                  <item row="1" column="0" colspan="2">
+                   <widget class="QCheckBox" name="enlargeColumnCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When user enters new value into column and the value is bigger than the current column width, the application will enlarge the column to fit the new value, but not wider than the limit defined in the option above.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Enlarge column when entering value longer than current width</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.EnlargeColumnForValue</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="initColWidthLimitSpin">
+                    <property name="maximumSize">
+                     <size>
+                      <width>150</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When the data is read into grid view columns width is automatically adjusted. This value limits the initial width for the adjustment, but user can still resize the column manually over this limit.&lt;/p&gt;</string>
+                    </property>
+                    <property name="minimum">
+                     <number>10</number>
+                    </property>
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                    <property name="value">
+                     <number>600</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.MaxInitialColumnWith</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="initColWidthLimitLabel">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When the data is read into grid view columns width is automatically adjusted. This value limits the initial width for the adjustment, but user can still resize the column manually over this limit. This value is also used when enlarging column upon new, longer value entered by the user (see option below).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Limit automatic data column width to (in pixels):</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="2">
+                   <widget class="QCheckBox" name="keepColNameCheck">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Initial width of data columns will be set to at least show complete name of the column in the header. This can still be overwritten by the initial limit of column width specified in pixels (the setting above).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Keep at least the width to show complete column name</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.ColumnWidthForName</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="columnHdrActionGroup">
+                 <property name="title">
+                  <string>Column header actions</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_25">
+                  <item>
+                   <widget class="ConfigRadioButton" name="colHdrClickSelectsRadio">
+                    <property name="text">
+                     <string>Single-click selects column data; double-click sorts by column</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.SingleColumnClickSort</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ConfigRadioButton" name="colHdrClickSortsRadio">
+                    <property name="text">
+                     <string>Single-click sorts by column; Alt+click selects column data</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.SingleColumnClickSort</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="insertRowPlacementGroup">
+                 <property name="title">
+                  <string>Inserting new row in data grid</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_33">
+                  <item>
+                   <widget class="ConfigRadioButton" name="insertRowBeforeRadio">
+                    <property name="text">
+                     <string>Before currently selected row</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <number>0</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.InsertRowPlacement</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ConfigRadioButton" name="insertRowAfterRadio">
+                    <property name="text">
+                     <string>After currently selected row</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <number>1</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.InsertRowPlacement</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ConfigRadioButton" name="insertRowAtEndRadio">
+                    <property name="text">
+                     <string>At the end of data view</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <number>2</number>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.InsertRowPlacement</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="tableWinGroup">
+                 <property name="title">
+                  <string>Table windows</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_18">
+                  <item>
+                   <widget class="QCheckBox" name="openTablesOnDataCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When enabled, Table Windows will show up with the data tab, instead of the structure tab.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Open Table Windows with the data tab for start</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.OpenTablesOnData</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="dataTabInTableAsFirstCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When enabled the &quot;Data&quot; tab will be placed as first tab in every Table Window, instead of being at second place.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Place data tab as first tab in a Table Window</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DataTabAsFirstInTables</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="viewWinGroup">
+                 <property name="title">
+                  <string>View windows</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_19">
+                  <item>
+                   <widget class="QCheckBox" name="openViewsOnDataCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When enabled, View Windows will show up with the data tab, instead of the structure tab.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Open View Windows with the data tab for start</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.OpenViewsOnData</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="dataTabInViewAsFirstCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;When enabled the &quot;Data&quot; tab will be placed as first tab in every View Window, instead of being at second place.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Place data tab as first tab in a View Window</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DataTabAsFirstInViews</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_6">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="dataEditorsPage">
+          <layout class="QVBoxLayout" name="verticalLayout_24">
+           <item>
+            <widget class="QSplitter" name="splitter_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <widget class="QGroupBox" name="dataEditorsTypesGroup">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>1</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="title">
+               <string>Data types</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
+               <item>
+                <widget class="QToolBar" name="dataEditorsTypesToolbar"/>
+               </item>
+               <item>
+                <widget class="QListWidget" name="dataEditorsTypesList">
+                 <property name="cfg" stdset="0">
+                  <string notr="true">General.DataEditorsOrder</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="dataEditorsRightWidget" native="true">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>3</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_23">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QWidget" name="widget" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QGroupBox" name="dataEditorsAvailableGroup">
+                    <property name="title">
+                     <string>Available editors:</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_26">
+                     <item>
+                      <widget class="QListWidget" name="dataEditorsAvailableList">
+                       <property name="sortingEnabled">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Define which data editors are available for specific column types in &lt;span style=&quot; font-weight:700;&quot;&gt;Form View&lt;/span&gt; and the &lt;span style=&quot; font-weight:700;&quot;&gt;popup editor dialog&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="wordWrap">
+                     <bool>true</bool>
+                    </property>
+                    <property name="cmdPalIgnore" stdset="0">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dataEditorsSelectedGroup">
+                 <property name="title">
+                  <string>Preview of editors for this data type (drag to reorder):</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_27">
+                  <item>
+                   <widget class="QTabWidget" name="dataEditorsSelectedTabs">
+                    <property name="movable">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="dataRenderersPage">
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <widget class="QLabel" name="dataRenderersHelp">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You can define which cell renderers are used for specific data types declared on table columns (case-insensitive). If no renderer is defined for a given type, the default renderer is used.&lt;/p&gt;&lt;p&gt;Optional plugins may provide additional renderers and set their own default mappings for data types, which you can still override here.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+             <property name="cmdPalIgnore" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolBar" name="dataRenderersToolbar"/>
+           </item>
+           <item>
+            <widget class="CellRendererTable" name="dataRenderersTable">
+             <property name="cornerButtonEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="cfg" stdset="0">
+              <string notr="true">General.DataRenderers</string>
+             </property>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Data type</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Renderer</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="generalPage">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="schemaEditingGroup">
+             <property name="title">
+              <string>Schema editing</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_12">
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="ddlHistorySizeSpin">
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Number of DDL changes kept in history.</string>
+                </property>
+                <property name="maximum">
+                 <number>9999999</number>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.DdlHistorySize</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="ddlHistorySizeLabel">
+                <property name="text">
+                 <string>DDL history size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="QCheckBox" name="dontShowDdlPreview">
+                <property name="text">
+                 <string>Don't show DDL preview dialog when committing schema changes</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.DontShowDdlPreview</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="updatesGroup">
+             <property name="title">
+              <string>Updates</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_29">
+              <item>
+               <widget class="QCheckBox" name="checkForUpdatesCheck">
+                <property name="text">
+                 <string>Automatically check for updates at startup</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.CheckUpdatesOnStartup</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="sessionGroup">
+             <property name="title">
+              <string>Session</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_11">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="sessionCheck">
+                <property name="text">
+                 <string>Restore last session (active MDI windows) after startup</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.RestoreSession</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="multipleSessionsCheck">
+                <property name="text">
+                 <string>Allow multiple instances of the application at the same time</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.AllowMultipleSessions</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="statusFieldGroup">
+             <property name="title">
+              <string>Status Field</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_35">
+              <item>
+               <widget class="QCheckBox" name="openStatusFieldOnNewCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When user manually closes the Status panel, this option makes sure that if any new message is printed in the Status panel it will be reopened. If it's disabled, then Status panel can only be open manually by the user from the &amp;quot;View&amp;quot; menu.&lt;/p&gt;&lt;p&gt;You can always hide the Status panel with the Esc key.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Always open Status panel when new message is printed</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.AutoOpenStatusField</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="statusFieldFadeGroup">
+                <property name="title">
+                 <string>Older status messages</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_38">
+                 <item>
+                  <widget class="ConfigRadioButton" name="statusFieldFadeKeepRadio">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Older status messages are kept unchanged.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Keep messages</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">General.StatusFieldMsgFadingMode</string>
+                   </property>
+                   <property name="assignedValue" stdset="0">
+                    <number>0</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="ConfigRadioButton" name="statusFieldFadeDimmRadio">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Older status messages remain visible, but are visually dimmed to make recent messages stand out.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Dim older messages</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">General.StatusFieldMsgFadingMode</string>
+                   </property>
+                   <property name="assignedValue" stdset="0">
+                    <number>1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="ConfigRadioButton" name="statusFieldFadeRemoveRadio">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Older status messages are automatically removed from the status field.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>Remove older messages</string>
+                   </property>
+                   <property name="cfg" stdset="0">
+                    <string notr="true">General.StatusFieldMsgFadingMode</string>
+                   </property>
+                   <property name="assignedValue" stdset="0">
+                    <number>2</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="supportRemindersCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Occasionally show a status message with information about supporting the Letos project. These reminders appear infrequently and can be disabled at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Show occasional project support reminders</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">SupportReminder.ShowOccasional</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="sqlEditorPage">
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QGroupBox" name="sqlQueriesGroup">
+             <property name="title">
+              <string>SQL Editor</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="5" column="0">
+               <widget class="QLabel" name="execTimePrecCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Specifies the maximum number of decimal places shown for query execution time. Up to 9 digits (nanoseconds) can be configured. Trailing zeros are automatically trimmed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Execution time precision (decimal places)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QSpinBox" name="execTimePrecSpin">
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Specifies the maximum number of decimal places shown for query execution time. Up to 9 digits (nanoseconds) can be configured. Trailing zeros are automatically trimmed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="maximum">
+                 <number>9</number>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.SqlEditorExecTimePrecision</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" colspan="2">
+               <widget class="QCheckBox" name="wrapLinesInSqlEditorCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, lines longer than the editor width will be wrapped, so horizontal scrolling will not be needed.&lt;/p&gt;&lt;p&gt;This option defines the global default, while individual SQL editor windows can override it locally.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Wrap lines in SQL editor</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.SqlEditorWrapWords</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2">
+               <widget class="QCheckBox" name="disableBlinkingCusrorCheck">
+                <property name="text">
+                 <string>Disable blinking text cursor</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.DisableBlinkingCursor</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QCheckBox" name="highlightCurrentQueryCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Highlights the query under the cursor - the same query that will be executed when using &lt;span style=&quot; font-style:italic;&quot;&gt;Execute query&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Highlight current query</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.SqlEditorCurrQueryHighlight</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QCheckBox" name="execQueryUnderCursorCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When multiple queries are present, executes only the query under the cursor.&lt;br/&gt;When disabled, all queries are executed.&lt;br/&gt;You can also execute selected queries or use shortcuts (%1 for single, %2 for all).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Execute only the query under the cursor</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.ExecuteCurrentQueryOnly</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="codeAssistantGroup">
+             <property name="title">
+              <string>Code assistant</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_14">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="autoTriggerAssistantCheck">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this option is enabled, the code assistant will be triggered in cases, when user types for example &lt;span style=&quot; font-weight:700;&quot;&gt;tableName.&lt;/span&gt; to propose columns of the table. If the option is disabled, user will have to hit the assistant hotkey explicitly.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Trigger assistant after typing a dot</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">CodeAssistant.AutoTrigger</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="checkBox_2">
+                <property name="toolTip">
+                 <string>When enabled, invoking code completion in an empty editor shows code snippets first instead of syntax suggestions. Invoking code completion again switches to syntax suggestions (and vice versa).</string>
+                </property>
+                <property name="text">
+                 <string>Prefer snippets in empty editor</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.SqlEditorSnippetsIfEmpty</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>History</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_10">
+              <item row="0" column="0">
+               <widget class="QLabel" name="queryHistorySizeLabel">
+                <property name="toolTip">
+                 <string>Number of queries kept in the history.</string>
+                </property>
+                <property name="text">
+                 <string>Query history size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSpinBox" name="queryHistorySizeSpin">
+                <property name="maximumSize">
+                 <size>
+                  <width>150</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Number of queries kept in the history.</string>
+                </property>
+                <property name="maximum">
+                 <number>999999</number>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.SqlHistorySize</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="bindParamLimitLabel">
+                <property name="toolTip">
+                 <string>&lt;p&gt;Maximum number of query parameters (:param, @param, $param, ?) stored in history. When you re-use parameter with the same name/position, Letos will pre-initialize it with most recent memorized value (you will still be able to change it). Value of 1000 should be sufficient.&lt;/p&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Number of memorized query parameters</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="bindParamLimitSpin">
+                <property name="toolTip">
+                 <string>&lt;p&gt;Maximum number of query parameters (:param, @param, $param, ?) stored in history. When you re-use parameter with the same name/position, Letos will pre-initialize it with most recent memorized value (you will still be able to change it). Value of 1000 should be sufficient.&lt;/p&gt;</string>
+                </property>
+                <property name="maximum">
+                 <number>999999</number>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.BindParamsCacheSize</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="sqlEditorSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="codeColorsPage">
+          <layout class="QGridLayout" name="gridLayout_6">
+           <property name="horizontalSpacing">
+            <number>15</number>
+           </property>
+           <item row="0" column="2">
+            <widget class="QTabWidget" name="codeColorsPreviewTabWidget"/>
+           </item>
+           <item row="2" column="0" colspan="3">
+            <spacer name="codeColorsSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QGroupBox" name="commonCodeColorsGroup">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>Code syntax colors</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_3" rowminimumheight="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" columnminimumwidth="0,0,30,30">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="regularFgCheck">
+                <property name="text">
+                 <string>Regular foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxForegroundCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="ColorButton" name="regularFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxForeground</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="BoolToolButton" name="regularBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxForegroundBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="BoolToolButton" name="regularItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxForegroundItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="stringFgCheck">
+                <property name="text">
+                 <string>String foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxStringFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="ColorButton" name="stringFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxStringFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="BoolToolButton" name="stringFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxStringFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="BoolToolButton" name="stringFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxStringFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QCheckBox" name="keywordFgCheck">
+                <property name="text">
+                 <string>Keyword foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxKeywordFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="ColorButton" name="keywordFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxKeywordFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="BoolToolButton" name="keywordFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxKeywordFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="BoolToolButton" name="keywordFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxKeywordFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QCheckBox" name="numberFgCheck">
+                <property name="text">
+                 <string>Number foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxNumberFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="ColorButton" name="numberFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxNumberFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="BoolToolButton" name="numberFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxNumberFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="BoolToolButton" name="numberFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxNumberFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QCheckBox" name="commentFgCheck">
+                <property name="text">
+                 <string>Comment foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCommentFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="ColorButton" name="commentFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCommentFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="2">
+               <widget class="BoolToolButton" name="commentFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCommentFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="3">
+               <widget class="BoolToolButton" name="commentFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCommentFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QCheckBox" name="validObjectsFkCheck">
+                <property name="text">
+                 <string>Valid objects foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxValidObjectCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="ColorButton" name="validObjectsFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxValidObject</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="2">
+               <widget class="BoolToolButton" name="validObjectsFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxValidObjectBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="3">
+               <widget class="BoolToolButton" name="validObjectsFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxValidObjectItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QCheckBox" name="blobFgCheck">
+                <property name="text">
+                 <string>BLOB value foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBlobFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="ColorButton" name="blobFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBlobFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="2">
+               <widget class="BoolToolButton" name="blobFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBlobFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="3">
+               <widget class="BoolToolButton" name="blobFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBlobFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QCheckBox" name="bindParamFgCheck">
+                <property name="text">
+                 <string>Bind parameter foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBindParamFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="1">
+               <widget class="ColorButton" name="bindParamFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBindParamFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="2">
+               <widget class="BoolToolButton" name="bindParamFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBindParamFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="3">
+               <widget class="BoolToolButton" name="bindParamFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxBindParamFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="0">
+               <widget class="QCheckBox" name="currLineBgCheck">
+                <property name="text">
+                 <string>Current line background</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCurrentLineBgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="15" column="1">
+               <widget class="ColorButton" name="currLineBgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCurrentLineBg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="0">
+               <widget class="QCheckBox" name="currQueryBgCheck">
+                <property name="text">
+                 <string>Current query background</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCurrentQueryBgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="1">
+               <widget class="ColorButton" name="currQueryBgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You can disable current query highlighting entirely on the General settings page.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxCurrentQueryBg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="0">
+               <widget class="QCheckBox" name="matchedParBgCheck">
+                <property name="text">
+                 <string>Matched parenthesis background</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisBgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="19" column="1">
+               <widget class="ColorButton" name="matchedParBgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisBg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="21" column="0">
+               <widget class="QCheckBox" name="matchedParFgCheck">
+                <property name="text">
+                 <string>Matched parenthesis foreground</string>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisFgCustom</string>
+                </property>
+               </widget>
+              </item>
+              <item row="21" column="1">
+               <widget class="ColorButton" name="matchedParFgBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisFg</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="21" column="2">
+               <widget class="BoolToolButton" name="matchedParFgBoldBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">B</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisFgBold</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="21" column="3">
+               <widget class="BoolToolButton" name="matchedParFgItalicBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <italic>true</italic>
+                 </font>
+                </property>
+                <property name="text">
+                 <string notr="true">I</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="cfg" stdset="0">
+                 <string notr="true">Colors.SyntaxParenthesisFgItalic</string>
+                </property>
+                <property name="cmdPalIgnore" stdset="0">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="3">
+            <widget class="QFrame" name="frame">
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Raised</enum>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <item alignment="Qt::AlignmentFlag::AlignRight">
+               <widget class="QPushButton" name="codeColorsResetBtn">
+                <property name="text">
+                 <string>Reset to defaults</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="shortcutsPage">
+          <layout class="QVBoxLayout" name="verticalLayout_28">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="shortcutsFilterEdit">
+             <property name="placeholderText">
+              <string>Filter shortcuts by name or key combination</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTreeWidget" name="shortcutsTable">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+             </property>
+             <property name="showDropIndicator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+             </property>
+             <property name="indentation">
+              <number>0</number>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>false</bool>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+             <property name="expandsOnDoubleClick">
+              <bool>false</bool>
+             </property>
+             <attribute name="headerMinimumSectionSize">
+              <number>16</number>
+             </attribute>
+             <attribute name="headerDefaultSectionSize">
+              <number>150</number>
+             </attribute>
+             <attribute name="headerStretchLastSection">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Action</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Key combination</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true"/>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="shortuctsBottom" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <item alignment="Qt::AlignmentFlag::AlignRight">
+               <widget class="QPushButton" name="shortcutsResetBtn">
+                <property name="text">
+                 <string>Reset to defaults</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="lookAndFeelPage">
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QScrollArea" name="lookAndFeelScroll">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="lookAndFeelScrollWidget">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>-178</y>
+                <width>697</width>
+                <height>716</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_31">
+               <item>
+                <widget class="QGroupBox" name="langGroup">
+                 <property name="title">
+                  <string>Language</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_30">
+                  <item>
+                   <widget class="QLabel" name="langLabel">
+                    <property name="text">
+                     <string>Changing language requires application restart to take effect.</string>
+                    </property>
+                    <property name="cmdPalIgnore" stdset="0">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="langCombo">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.Language</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="compactLayoutGroup">
+                 <property name="title">
+                  <string>User interface</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_16">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="uiScaleLabel">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adjusts the scale of the application interface. Changes take effect after restarting the application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Interface scale</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QComboBox" name="uiScaleCombo">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adjusts the scale of the application interface. Changes take effect after restarting the application.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="tbIconSizeLabel">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Expressed in percentage of default size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Toolbar icon size</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QComboBox" name="tbIconSizeCombo">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Expressed in percentage of default size.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.ToolBarIconSize</string>
+                    </property>
+                    <property name="dataDrivenCombo" stdset="0">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" colspan="2">
+                   <widget class="QCheckBox" name="compactLayoutCheck">
+                    <property name="toolTip">
+                     <string>&lt;p&gt;Compact layout reduces all margins and spacing on the UI to minimum, making space for displaying more data. It makes the interface a little bit less aesthetic, but allows to display more data at once.&lt;/p&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Use compact layout</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.CompactLayout</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="iconSetGroup">
+                 <property name="title">
+                  <string>Icon set</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_15">
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="iconSetLicenseLabel">
+                    <property name="text">
+                     <string>License</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="iconSetChoiceLabel">
+                    <property name="text">
+                     <string>Choose icon set (requires restart)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QWidget" name="iconSetPreviewPanel" native="true">
+                    <layout class="QGridLayout" name="gridLayout_17">
+                     <item row="0" column="5">
+                      <widget class="QLabel" name="iconSetIcon6">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QLabel" name="iconSetIcon2">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="4">
+                      <widget class="QLabel" name="iconSetIcon5">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="3">
+                      <widget class="QLabel" name="iconSetIcon4">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QLabel" name="iconSetIcon3">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="7">
+                      <widget class="QLabel" name="iconSetIcon8">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="iconSetIcon1">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="6">
+                      <widget class="QLabel" name="iconSetIcon7">
+                       <property name="text">
+                        <string notr="true"/>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QComboBox" name="iconSetCombo"/>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="iconSetDescriptionLabel">
+                    <property name="text">
+                     <string>Description</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QPlainTextEdit" name="iconSetDescriptionEdit"/>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="iconSetAuthorLabel">
+                    <property name="text">
+                     <string>Author</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="iconSetPreviewLabel">
+                    <property name="text">
+                     <string>Preview</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="iconSetUrlLabel">
+                    <property name="text">
+                     <string>URL</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLabel" name="iconSetUrlEdit">
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                    <property name="openExternalLinks">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLabel" name="iconSetLicenseEdit">
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="iconSetAuthorEdit">
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dockLayoutGroup">
+                 <property name="title">
+                  <string>Main window dock areas</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_13">
+                  <item row="0" column="0">
+                   <widget class="ConfigRadioButton" name="dockLayoutVertical">
+                    <property name="text">
+                     <string>Left and right areas occupy corners</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DockLayout</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <string notr="true">vertical</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="ConfigRadioButton" name="dockLayoutHorizontal">
+                    <property name="text">
+                     <string>Top and bottom areas occupy corners</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.DockLayout</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <string notr="true">horizontal</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="windowMenuLayoutGrp">
+                 <property name="title">
+                  <string>Window menu layout</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_32">
+                  <item>
+                   <widget class="ConfigRadioButton" name="separateWindowMenuRadio">
+                    <property name="text">
+                     <string>Separate &quot;Windows&quot; menu</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.WindowsInMenuBar</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="ConfigRadioButton" name="windowListUnderViewRadio">
+                    <property name="text">
+                     <string>&quot;Window List&quot; under &quot;View&quot;</string>
+                    </property>
+                    <property name="cfg" stdset="0">
+                     <string notr="true">General.WindowsInMenuBar</string>
+                    </property>
+                    <property name="assignedValue" stdset="0">
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pluginsPage">
+          <layout class="QGridLayout" name="gridLayout_18">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="1" column="0" colspan="2">
+            <widget class="QTreeWidget" name="pluginsList">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::NoFocus</enum>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+             </property>
+             <property name="showDropIndicator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+             </property>
+             <property name="verticalScrollMode">
+              <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+             </property>
+             <property name="indentation">
+              <number>0</number>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>false</bool>
+             </property>
+             <property name="expandsOnDoubleClick">
+              <bool>false</bool>
+             </property>
+             <property name="columnCount">
+              <number>2</number>
+             </property>
+             <attribute name="headerVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="headerStretchLastSection">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string notr="true">1</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">2</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QWidget" name="hideBuiltInPluginsWidget" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="hideBuiltInPluginsCheck">
+                <property name="text">
+                 <string>Hide built-in plugins</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="stylePage">
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QWidget" name="activeStyleWidget" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QLabel" name="activeStyleLabel">
+                <property name="text">
+                 <string>Current style:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="activeStyleCombo">
+                <property name="cfg" stdset="0">
+                 <string notr="true">General.Style</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="activeStylePreviewGroup">
+             <property name="title">
+              <string>Preview</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <item>
+               <widget class="QTabWidget" name="previewTabs">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <widget class="QWidget" name="previewTab1">
+                 <attribute name="title">
+                  <string>Enabled</string>
+                 </attribute>
+                 <layout class="QVBoxLayout" name="verticalLayout_2">
+                  <item>
+                   <widget class="QWidget" name="previewWidget" native="true">
+                    <layout class="QGridLayout" name="gridLayout_8">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item row="2" column="0">
+                      <widget class="QProgressBar" name="previewProgressBar">
+                       <property name="value">
+                        <number>24</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="6">
+                      <widget class="QCheckBox" name="previewCheckBox">
+                       <property name="text">
+                        <string notr="true">CheckBox</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1" rowspan="4">
+                      <widget class="QSlider" name="previewVerticalSlider">
+                       <property name="value">
+                        <number>50</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Orientation::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2" rowspan="4">
+                      <widget class="QScrollBar" name="previewVerticalScrollBar">
+                       <property name="orientation">
+                        <enum>Qt::Orientation::Vertical</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="3" colspan="2">
+                      <widget class="QPushButton" name="previewPushButton">
+                       <property name="text">
+                        <string notr="true">PushButton</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="3" colspan="3">
+                      <widget class="QSpinBox" name="previewSpinBox"/>
+                     </item>
+                     <item row="2" column="3" colspan="5">
+                      <widget class="QProgressBar" name="progressBar">
+                       <property name="maximum">
+                        <number>0</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignmentFlag::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QTreeWidget" name="previewTreeWidget">
+                       <column>
+                        <property name="text">
+                         <string notr="true">Column</string>
+                        </property>
+                       </column>
+                       <item>
+                        <property name="text">
+                         <string notr="true">123</string>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string notr="true">11111</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string notr="true">22222</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string notr="true">33333</string>
+                         </property>
+                        </item>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string notr="true">456</string>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string notr="true">44444</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string notr="true">55555</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string notr="true">66666</string>
+                         </property>
+                        </item>
+                       </item>
+                      </widget>
+                     </item>
+                     <item row="0" column="5">
+                      <widget class="QToolButton" name="previewToolButton">
+                       <property name="text">
+                        <string notr="true">...</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLineEdit" name="previewLineEdit"/>
+                     </item>
+                     <item row="0" column="6">
+                      <widget class="QRadioButton" name="previewRadioButton">
+                       <property name="text">
+                        <string notr="true">RadioButton</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QComboBox" name="previewComboBox">
+                       <property name="currentText">
+                        <string notr="true">ABC</string>
+                       </property>
+                       <item>
+                        <property name="text">
+                         <string notr="true">ABC</string>
+                        </property>
+                       </item>
+                       <item>
+                        <property name="text">
+                         <string notr="true">XYZ</string>
+                        </property>
+                       </item>
+                      </widget>
+                     </item>
+                     <item row="3" column="3" colspan="5">
+                      <widget class="QTextEdit" name="previewTextEdit">
+                       <property name="html">
+                        <string notr="true">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:8pt;&quot;&gt;Abcdefgh&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="previewTab2">
+                 <attribute name="title">
+                  <string>Disabled</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="gridLayout_7"/>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="formatterPluginsPage">
+          <layout class="QVBoxLayout" name="verticalLayout_17">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QTreeWidget" name="formatterPluginsTree">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="verticalScrollMode">
+              <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+             </property>
+             <property name="rootIsDecorated">
+              <bool>false</bool>
+             </property>
+             <property name="itemsExpandable">
+              <bool>false</bool>
+             </property>
+             <attribute name="headerStretchLastSection">
+              <bool>false</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Language</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Active formatter plugin</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Configuration</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="fontsPage">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QScrollArea" name="fontsScrollArea">
+             <property name="frameShape">
+              <enum>QFrame::Shape::NoFrame</enum>
+             </property>
+             <property name="lineWidth">
+              <number>0</number>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="fontsWidget">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>695</width>
+                <height>522</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_9">
+               <item>
+                <widget class="QLabel" name="fontConfigTipLabel">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Tip:&lt;/span&gt; In addition to the settings available here, font sizes can also be adjusted dynamically in most interface elements by holding &lt;span style=&quot; font-weight:700;&quot;&gt;Ctrl&lt;/span&gt; and scrolling the &lt;span style=&quot; font-weight:700;&quot;&gt;mouse wheel&lt;/span&gt; over the element whose font size you want to change.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                 <property name="margin">
+                  <number>5</number>
+                 </property>
+                 <property name="cmdPalIgnore" stdset="0">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="sqlEditorFontGroup">
+                 <property name="title">
+                  <string>SQL editor font</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_10">
+                  <item>
+                   <widget class="FontEdit" name="sqlEditorFont" native="true">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">Fonts.SqlEditor</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dbTreeFontGroup">
+                 <property name="title">
+                  <string>Database list font</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="FontEdit" name="dbTreeFont" native="true">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">Fonts.DbTree</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dbTreeLabelGroup">
+                 <property name="title">
+                  <string>Database list additional label font</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_14">
+                  <item>
+                   <widget class="FontEdit" name="dbTreeLabelFont" native="true">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">Fonts.DbTreeLabel</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="dataViewFontGroup">
+                 <property name="title">
+                  <string>Data view font</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_15">
+                  <item>
+                   <widget class="FontEdit" name="dataViewFont" native="true">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">Fonts.DataView</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="statusFieldFontGroup">
+                 <property name="title">
+                  <string>Status field font</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_16">
+                  <item>
+                   <widget class="FontEdit" name="statusFieldfont" native="true">
+                    <property name="cfg" stdset="0">
+                     <string notr="true">Fonts.StatusField</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ConfigRadioButton</class>
+   <extends>QRadioButton</extends>
+   <header>common/configradiobutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QPushButton</extends>
+   <header>common/colorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FontEdit</class>
+   <extends>QWidget</extends>
+   <header>common/fontedit.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BoolToolButton</class>
+   <extends>QToolButton</extends>
+   <header>common/booltoolbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CellRendererTable</class>
+   <extends>QTableWidget</extends>
+   <header>configwidgets/cellrenderertable.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>categoriesFilter</tabstop>
+  <tabstop>categoriesTree</tabstop>
+  <tabstop>pluginsList</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>expandViewsCheck</tabstop>
+  <tabstop>sortObjects</tabstop>
+  <tabstop>sortColumns</tabstop>
+  <tabstop>ddlHistorySizeSpin</tabstop>
+  <tabstop>dontShowDdlPreview</tabstop>
+  <tabstop>expandTablesCheck</tabstop>
+  <tabstop>activeStyleCombo</tabstop>
+  <tabstop>previewTabs</tabstop>
+  <tabstop>previewCheckBox</tabstop>
+  <tabstop>previewVerticalSlider</tabstop>
+  <tabstop>previewPushButton</tabstop>
+  <tabstop>previewSpinBox</tabstop>
+  <tabstop>previewTreeWidget</tabstop>
+  <tabstop>previewToolButton</tabstop>
+  <tabstop>previewLineEdit</tabstop>
+  <tabstop>previewRadioButton</tabstop>
+  <tabstop>previewComboBox</tabstop>
+  <tabstop>previewTextEdit</tabstop>
+  <tabstop>fontsScrollArea</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ConfigDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ConfigDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

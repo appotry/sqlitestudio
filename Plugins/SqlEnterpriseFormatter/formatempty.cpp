@@ -1,9 +1,9 @@
 #include "formatempty.h"
-#include "common/unused.h"
+#include "parser/ast/sqliteemptyquery.h"
 
-FormatEmpty::FormatEmpty(SqliteEmptyQuery* eq)
+FormatEmpty::FormatEmpty(SqliteEmptyQuery* eq) :
+    FormatStatement(eq)
 {
-    UNUSED(eq);
 }
 
 void FormatEmpty::formatInternal()

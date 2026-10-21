@@ -3,12 +3,11 @@
 #include "sqlresultrowandroid.h"
 #include "parser/lexer.h"
 #include "db/sqlerrorcodes.h"
-#include "common/utils_sql.h"
 #include "log.h"
 #include "dbandroidinstance.h"
 #include <QDebug>
 
-SqlQueryAndroid::SqlQueryAndroid(DbAndroidInstance* db, DbAndroidConnection* connection, const QString& query) :
+SqlQueryAndroid::SqlQueryAndroid(const DbAndroidInstance* db, DbAndroidConnection* connection, const QString& query) :
     db(db), connection(connection), queryString(query)
 {
     tokenizedQuery = Lexer::tokenize(query);
@@ -110,26 +109,27 @@ bool SqlQueryAndroid::execInternal(const QHash<QString, QVariant>& args)
 
 QString SqlQueryAndroid::convertArg(const QVariant& value)
 {
-    if (value.isNull() || !value.isValid())
+    if (isNull(value))
         return "NULL";
 
-    switch (value.type())
+    switch (value.userType())
     {
-        case QVariant::Int:
-        case QVariant::UInt:
-        case QVariant::LongLong:
-        case QVariant::ULongLong:
-        case QVariant::Double:
+        case QMetaType::Int:
+        case QMetaType::UInt:
+        case QMetaType::LongLong:
+        case QMetaType::ULongLong:
+        case QMetaType::Double:
             return value.toString();
-        case QVariant::String:
+        case QMetaType::QString:
             return "'" + value.toString().replace("'", "''")  + "'";
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
             return "x'" + value.toByteArray().toHex() + "'";
         default:
             break;
     }
 
-    qCritical() << "Unhandled argument type in SqlQueryAndroid::convertArg():" << value.type();
+    qCritical() << "Unhandled argument type in SqlQueryAndroid::convertArg():"
+                << static_cast<QMetaType::Type>(value.userType());
     return "";
 }
 

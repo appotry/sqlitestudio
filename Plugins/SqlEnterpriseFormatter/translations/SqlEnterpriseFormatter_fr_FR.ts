@@ -4,11 +4,11 @@
   <context>
     <name>QObject</name>
     <message>
-      <location filename="../sqlenterpriseformatter.cpp" line="91"/>
-      <location filename="../sqlenterpriseformatter.cpp" line="98"/>
+      <location filename="../sqlenterpriseformatter.cpp" line="89"/>
+      <location filename="../sqlenterpriseformatter.cpp" line="96"/>
       <source>name</source>
       <comment>example name wrapper</comment>
-      <translation>Nom</translation>
+      <translation>nom</translation>
     </message>
   </context>
   <context>
@@ -21,7 +21,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="58"/>
       <source>Line up keywords in multi-line queries</source>
-      <translation>Ligne de mots-clefs en majuscule dans une requête multiligne</translation>
+      <translation>Aligner les mots-clés dans les requêtes de plusieurs lignes</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="68"/>
@@ -31,7 +31,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="91"/>
       <source>Tab size:</source>
-      <translation>taille d’indentation :</translation>
+      <translation>Taille d’indentation :</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="106"/>
@@ -81,12 +81,12 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="240"/>
       <source>After JOIN keywords in FROM clause</source>
-      <translation>Après le mot-clef JOIN dans la clause FROM</translation>
+      <translation>Après avoir JOINDRE les mots-clés dans la clause DEPUIS</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="250"/>
       <source>Put each column constraint in CREATE TABLE into new line</source>
-      <translation>Mettez chaque contrainte de colonne dans CREATE TABLE à une nouvelleligne</translation>
+      <translation>Mettez chaque contrainte de colonne de CREATE TABLE dans une nouvelle ligne</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="260"/>
@@ -96,7 +96,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="270"/>
       <source>After comma in expressions</source>
-      <translation>Après la virgule dans l’exoression</translation>
+      <translation>Après la virgule dans l’expression</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="280"/>
@@ -147,7 +147,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="452"/>
       <source>No space between SQL function name and opening parenthesis</source>
-      <translation>aucun espance entre le nom de la fonction SQL et l’ouverture des paranthèses</translation>
+      <translation>Nucun espace entre le nom de la fonction SQL et l’ouverture des paranthèses</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="462"/>
@@ -157,27 +157,27 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="472"/>
       <source>After dot operator (in path to database object)</source>
-      <translation>Après </translation>
+      <translation>Après l&apos;opérateur point (dans le chemin vers l&apos;objet database)</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="482"/>
       <source>Before mathematical operator</source>
-      <translation>Avant opérateurmathématique</translation>
+      <translation>Avant opérateur mathématique</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="492"/>
       <source>After mathematical operator</source>
-      <translation>Après opérateurmathématique</translation>
+      <translation>Après opérateur mathématique</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="502"/>
       <source>Never before comma</source>
-      <translation>Jamais avant virgule</translation>
+      <translation>Jamais avant une virgule</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="558"/>
       <source>Names</source>
-      <translation>noms</translation>
+      <translation>Noms</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="583"/>
@@ -197,7 +197,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="620"/>
       <source>Uppercase keywords</source>
-      <translation>Mots-clefs en majuscule</translation>
+      <translation>Mots-clés en majuscule</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="631"/>
@@ -207,7 +207,7 @@
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="637"/>
       <source>Preferred comment marker (where possible):</source>
-      <translation type="unfinished">Preferred comment marker (where possible):</translation>
+      <translation>Marqueur de commentaire préféré (si possible):</translation>
     </message>
     <message>
       <location filename="../sqlenterpriseformatter.ui" line="654"/>

@@ -2,7 +2,6 @@
 #include "dbandroidinstance.h"
 #include "sqlqueryandroid.h"
 #include "db/sqlerrorcodes.h"
-#include "common/unused.h"
 #include "dbandroid.h"
 #include "dbandroidjsonconnection.h"
 #include "dbandroidconnectionfactory.h"
@@ -50,7 +49,7 @@ QList<AliasedColumn> DbAndroidInstance::columnsForQuery(const QString& query)
 
     QList<AliasedColumn> columns;
     AliasedColumn column;
-    for (const QString& colName : results->getColumnNames())
+    for (QString& colName : results->getColumnNames())
     {
         column.setAlias(colName);
         columns << column;
@@ -58,39 +57,53 @@ QList<AliasedColumn> DbAndroidInstance::columnsForQuery(const QString& query)
     return columns;
 }
 
-SqlQueryPtr DbAndroidInstance::prepare(const QString& query)
+SqlQueryPtr DbAndroidInstance::prepare(const QString& query) const
 {
     return SqlQueryPtr(new SqlQueryAndroid(this, connection, query));
 }
 
-QString DbAndroidInstance::getTypeLabel()
+QString DbAndroidInstance::getTypeLabel() const
 {
     return plugin->getLabel();
+}
+
+QString DbAndroidInstance::getTypeClassName() const
+{
+    return "DbAndroidInstance";
 }
 
 bool DbAndroidInstance::deregisterFunction(const QString& name, int argCount)
 {
     // Unsupported by native Android driver
-    UNUSED(name);
-    UNUSED(argCount);
+    Q_UNUSED(name);
+    Q_UNUSED(argCount);
     return true;
 }
 
 bool DbAndroidInstance::registerScalarFunction(const QString& name, int argCount, bool deterministic)
 {
     // Unsupported by native Android driver
-    UNUSED(name);
-    UNUSED(argCount);
-    UNUSED(deterministic);
+    Q_UNUSED(name);
+    Q_UNUSED(argCount);
+    Q_UNUSED(deterministic);
     return true;
 }
 
 bool DbAndroidInstance::registerAggregateFunction(const QString& name, int argCount, bool deterministic)
 {
     // Unsupported by native Android driver
-    UNUSED(name);
-    UNUSED(argCount);
-    UNUSED(deterministic);
+    Q_UNUSED(name);
+    Q_UNUSED(argCount);
+    Q_UNUSED(deterministic);
+    return true;
+}
+
+bool DbAndroidInstance::registerAggregateWindowFunction(const QString& name, int argCount, bool deterministic)
+{
+    // Unsupported by native Android driver
+    Q_UNUSED(name);
+    Q_UNUSED(argCount);
+    Q_UNUSED(deterministic);
     return true;
 }
 
@@ -102,8 +115,8 @@ bool DbAndroidInstance::initAfterCreated()
 
 bool DbAndroidInstance::loadExtension(const QString& filePath, const QString& initFunc)
 {
-    UNUSED(filePath);
-    UNUSED(initFunc);
+    Q_UNUSED(filePath);
+    Q_UNUSED(initFunc);
     errorCode = 1;
     errorText = tr("Android SQLite driver does not support loadable extensions.");
     return false;
@@ -114,7 +127,30 @@ bool DbAndroidInstance::isComplete(const QString& sql) const
     return DbSqlite3::complete(sql);
 }
 
-bool DbAndroidInstance::isOpenInternal()
+AbstractDb* DbAndroidInstance::createCloneInstance() const
+{
+    return new DbAndroidInstance(plugin, name, path, connOptions);
+}
+
+bool DbAndroidInstance::isTransactionActive() const
+{
+    SqlQueryPtr res = exec("BEGIN");
+    if (res->isError())
+        return true; // cannot begin top-level tx? Then we're in a tx already
+
+    exec("ROLLBACK"); // there was no transaction, we need to roll back the one we started
+    return false;
+}
+
+Db::TransactionState DbAndroidInstance::getTransactionState() const
+{
+    // Since there is no way to detect transaction state by PRAGMA or SQL function,
+    // this plugin just assumes any active transation to be at WRITE level.
+    // It's not ideal, but it's the best we can do.
+    return isTransactionActive() ? TransactionState::WRITE : TransactionState::NONE;
+}
+
+bool DbAndroidInstance::isOpenInternal() const
 {
     return (connection && connection->isConnected());
 }
@@ -150,12 +186,15 @@ bool DbAndroidInstance::openInternal()
     return res;
 }
 
-bool DbAndroidInstance::closeInternal()
+bool DbAndroidInstance::closeInternal(bool walCheckpoint)
 {
     if (!connection)
         return false;
 
     disconnect(connection, SIGNAL(disconnected()), this, SLOT(handleDisconnected()));
+    if (walCheckpoint)
+        exec("PRAGMA wal_checkpoint(FULL)", Flag::NO_LOCK);
+
     connection->disconnectFromAndroid();
     safe_delete(connection);
     return true;
@@ -164,14 +203,14 @@ bool DbAndroidInstance::closeInternal()
 bool DbAndroidInstance::registerCollationInternal(const QString& name)
 {
     // Unsupported by native Android driver
-    UNUSED(name);
+    Q_UNUSED(name);
     return true;
 }
 
 bool DbAndroidInstance::deregisterCollationInternal(const QString& name)
 {
     // Unsupported by native Android driver
-    UNUSED(name);
+    Q_UNUSED(name);
     return true;
 }
 

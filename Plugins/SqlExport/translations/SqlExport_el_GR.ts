@@ -4,95 +4,105 @@
   <context>
     <name>SqlExport</name>
     <message>
-      <location filename="../sqlexport.cpp" line="57"/>
+      <location filename="../sqlexport.cpp" line="87"/>
       <source>-- Results of query:</source>
-      <translation type="unfinished">-- Results of query:</translation>
+      <translation>-- Αποτελέσματα ερωτήματος:</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="122"/>
+      <location filename="../sqlexport.cpp" line="159"/>
       <source>-- Table: %1</source>
-      <translation type="unfinished">-- Table: %1</translation>
+      <translation>-- Πίνακας: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="168"/>
+      <location filename="../sqlexport.cpp" line="206"/>
       <source>-- Index: %1</source>
-      <translation type="unfinished">-- Index: %1</translation>
+      <translation>-- Ευρετήριο: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="185"/>
+      <location filename="../sqlexport.cpp" line="231"/>
       <source>-- Trigger: %1</source>
-      <translation type="unfinished">-- Trigger: %1</translation>
+      <translation>-- Trigger: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="202"/>
+      <location filename="../sqlexport.cpp" line="259"/>
       <source>-- View: %1</source>
-      <translation type="unfinished">-- View: %1</translation>
+      <translation>-- Προβολή: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="216"/>
-      <source>-- File generated with SQLiteStudio v%1 on %2</source>
-      <translation type="unfinished">-- File generated with SQLiteStudio v%1 on %2</translation>
+      <location filename="../sqlexport.cpp" line="284"/>
+      <source>-- File generated with Letos v%1 on %2</source>
+      <translation>-- Το αρχείο δημιουργήθηκε με το Letos v%1 στις %2</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="220"/>
+      <location filename="../sqlexport.cpp" line="288"/>
       <source>-- Text encoding used: %1</source>
-      <translation type="unfinished">-- Text encoding used: %1</translation>
+      <translation>-- Κωδικοποίηση κειμένου που χρησιμοποιήθηκε: %1</translation>
     </message>
     <message>
-      <location filename="../sqlexport.cpp" line="276"/>
+      <location filename="../sqlexport.cpp" line="370"/>
       <source>Table name for INSERT statements is mandatory.</source>
-      <translation type="unfinished">Table name for INSERT statements is mandatory.</translation>
+      <translation>Το όνομα πίνακα για τις εντολές INSERT είναι υποχρεωτικό.</translation>
     </message>
   </context>
   <context>
     <name>sqlExportCommonConfig</name>
     <message>
-      <location filename="../SqlExportCommon.ui" line="20"/>
-      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
-    </message>
-    <message>
       <location filename="../SqlExportCommon.ui" line="30"/>
-      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+      <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
+      <translation>Δημιουργία εντολής &quot;DROP IF EXISTS&quot; πριν από την εντολή &quot;CREATE&quot;</translation>
     </message>
     <message>
       <location filename="../SqlExportCommon.ui" line="40"/>
+      <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
+      <translation>Μορφοποίηση μόνο εντολών DDL (εξαιρούνται οι εντολές &quot;INSERT&quot;)</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportCommon.ui" line="50"/>
+      <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+      <translation>Προσθήκη ρήτρας &quot;IF NOT EXISTS&quot; στην εντολή &quot;CREATE&quot;</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportCommon.ui" line="20"/>
       <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+      <translation>Χρήση του μορφοποιητή SQL για τη μορφοποίηση των εξαγόμενων εντολών SQL</translation>
     </message>
   </context>
   <context>
     <name>sqlExportQueryConfig</name>
     <message>
-      <location filename="../SqlExportQuery.ui" line="20"/>
+      <location filename="../SqlExportQuery.ui" line="47"/>
       <source>Use SQL formatter to format exported SQL statements</source>
-      <translation type="unfinished">Use SQL formatter to format exported SQL statements</translation>
+      <translation>Χρήση του μορφοποιητή SQL για τη μορφοποίηση των εξαγόμενων εντολών SQL</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="40"/>
+      <source>Table name to use for INSERT statements:</source>
+      <translation>Όνομα πίνακα προς χρήση για τις εντολές INSERT:</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="64"/>
+      <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
+      <translation>Δημιουργία εντολής &quot;CREATE TABLE&quot; στην αρχή</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="20"/>
+      <source>Include the query in comments</source>
+      <translation>Συμπερίληψη του ερωτήματος στα σχόλια</translation>
     </message>
     <message>
       <location filename="../SqlExportQuery.ui" line="30"/>
-      <source>Table name to use for INSERT statements:</source>
-      <translation type="unfinished">Table name to use for INSERT statements:</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="37"/>
-      <source>Generate &quot;CREATE TABLE&quot; statement at the begining</source>
-      <translation type="unfinished">Generate &quot;CREATE TABLE&quot; statement at the begining</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="47"/>
-      <source>Include the query in comments</source>
-      <translation type="unfinished">Include the query in comments</translation>
-    </message>
-    <message>
-      <location filename="../SqlExportQuery.ui" line="57"/>
       <source>Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</source>
-      <translation type="unfinished">Generate &quot;DROP IF EXISTS&quot; statement before &quot;CREATE&quot; statement</translation>
+      <translation>Δημιουργία εντολής &quot;DROP IF EXISTS&quot; πριν από την εντολή &quot;CREATE&quot;</translation>
     </message>
     <message>
       <location filename="../SqlExportQuery.ui" line="74"/>
       <source>Format DDL statements only (excludes &quot;INSERT&quot; statements)</source>
-      <translation type="unfinished">Format DDL statements only (excludes &quot;INSERT&quot; statements)</translation>
+      <translation>Μορφοποίηση μόνο εντολών DDL (εξαιρούνται οι εντολές &quot;INSERT&quot;)</translation>
+    </message>
+    <message>
+      <location filename="../SqlExportQuery.ui" line="84"/>
+      <source>Add &quot;IF NOT EXISTS&quot; clause to &quot;CREATE&quot; statement</source>
+      <translation>Προσθήκη ρήτρας &quot;IF NOT EXISTS&quot; στην εντολή &quot;CREATE&quot;</translation>
     </message>
   </context>
 </TS>

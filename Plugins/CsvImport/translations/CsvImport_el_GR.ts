@@ -4,82 +4,87 @@
   <context>
     <name>CsvImport</name>
     <message>
-      <location filename="../csvimport.cpp" line="30"/>
+      <location filename="../csvimport.cpp" line="32"/>
       <source>Cannot read file %1</source>
-      <translation type="unfinished">Cannot read file %1</translation>
+      <translation>Δεν είναι δυνατή η ανάγνωση του αρχείου %1</translation>
     </message>
     <message>
-      <location filename="../csvimport.cpp" line="62"/>
+      <location filename="../csvimport.cpp" line="64"/>
       <source>Could not find any data in the file %1.</source>
-      <translation type="unfinished">Could not find any data in the file %1.</translation>
+      <translation>Δεν ήταν δυνατή η εύρεση δεδομένων στο αρχείο %1.</translation>
     </message>
     <message>
-      <location filename="../csvimport.cpp" line="167"/>
+      <location filename="../csvimport.cpp" line="170"/>
       <source>Enter the custom separator character.</source>
-      <translation type="unfinished">Enter the custom separator character.</translation>
-    </message>
-    <message>
-      <location filename="../csvimport.cpp" line="190"/>
-      <source>CSV files (*.csv);;Text files (*.txt);;All files (*)</source>
-      <translation type="unfinished">CSV files (*.csv);;Text files (*.txt);;All files (*)</translation>
+      <translation>Εισαγάγετε τον προσαρμοσμένο χαρακτήρα διαχωρισμού.</translation>
     </message>
   </context>
   <context>
     <name>csvImportOptions</name>
     <message>
-      <location filename="../CsvImportOptions.ui" line="24"/>
+      <location filename="../CsvImportOptions.ui" line="37"/>
       <source>, (comma)</source>
-      <translation type="unfinished">, (comma)</translation>
+      <translation>, (κόμμα)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="29"/>
+      <location filename="../CsvImportOptions.ui" line="42"/>
       <source>; (semicolon)</source>
-      <translation type="unfinished">; (semicolon)</translation>
+      <translation>; (ερωτηματικό)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="34"/>
+      <location filename="../CsvImportOptions.ui" line="47"/>
       <source>\t (tab)</source>
-      <translation type="unfinished">\t (tab)</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="39"/>
-      <source>  (whitespace)</source>
-      <translation type="unfinished">  (whitespace)</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="44"/>
-      <source>Custom:</source>
-      <translation type="unfinished">Custom:</translation>
+      <translation>\t (στηλοθέτης)</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="52"/>
-      <source>&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</source>
-      <translation type="unfinished">&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</translation>
+      <source>  (whitespace)</source>
+      <translation>  (κενό διάστημα)</translation>
     </message>
     <message>
-      <location filename="../CsvImportOptions.ui" line="55"/>
-      <source>First line represents CSV column names</source>
-      <translation type="unfinished">First line represents CSV column names</translation>
+      <location filename="../CsvImportOptions.ui" line="57"/>
+      <source>Custom:</source>
+      <translation>Προσαρμοσμένο:</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="65"/>
-      <source>Field separator:</source>
-      <translation type="unfinished">Field separator:</translation>
+      <source>Column separator:</source>
+      <translation>Διαχωριστικό στηλών:</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="108"/>
+      <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the &amp;quot; character will be interpreted as standard CSV value quotation mark, causing the string to be treated as single value until the next (ending) &amp;quot; character. If disabled, the &amp;quot; will be treated as any other character. Usually you want this to be enabled.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+      <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Αν ενεργοποιηθεί, ο χαρακτήρας &amp;quot; θα ερμηνευθεί ως τυπικό εισαγωγικό τιμής CSV, με αποτέλεσμα η συμβολοσειρά να αντιμετωπίζεται ως μία μόνο τιμή μέχρι τον επόμενο (τερματικό) χαρακτήρα &amp;quot;. Αν απενεργοποιηθεί, το &amp;quot; θα αντιμετωπίζεται όπως οποιοσδήποτε άλλος χαρακτήρας. Συνήθως θέλετε αυτό να είναι ενεργοποιημένο.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="111"/>
+      <source>Interpret &quot; as a value quotation mark</source>
+      <translation>Ερμηνεία του &quot; ως εισαγωγικού τιμής</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="20"/>
+      <source>&lt;p&gt;Enable this if the first data line in your CSV file represents column names. You don&apos;t want column names to be imported into the table as a regular data.&lt;/p&gt;</source>
+      <translation>&lt;p&gt;Ενεργοποιήστε το αν η πρώτη γραμμή δεδομένων στο αρχείο CSV σας αντιπροσωπεύει ονόματα στηλών. Σ&apos; αυτήν την περίπτωση, δεν θέλετε τα ονόματα στηλών να εισαχθούν στον πίνακα ως κανονικά δεδομένα.&lt;/p&gt;</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="23"/>
+      <source>First line represents CSV column names</source>
+      <translation>Η πρώτη γραμμή αντιπροσωπεύει ονόματα στηλών CSV</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="72"/>
+      <source>If enabled, then text value provided on the right will be interpreted as NULL</source>
+      <translation>Αν ενεργοποιηθεί, η τιμή κειμένου που παρέχεται στα δεξιά θα ερμηνευθεί ως NULL</translation>
+    </message>
+    <message>
+      <location filename="../CsvImportOptions.ui" line="75"/>
+      <source>NULL values:</source>
+      <translation>Τιμές NULL:</translation>
     </message>
     <message>
       <location filename="../CsvImportOptions.ui" line="85"/>
-      <source>If enabled, then text value provided on the right will be interpreted as NULL</source>
-      <translation type="unfinished">If enabled, then text value provided on the right will be interpreted as NULL</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="88"/>
-      <source>NULL values:</source>
-      <translation type="unfinished">NULL values:</translation>
-    </message>
-    <message>
-      <location filename="../CsvImportOptions.ui" line="98"/>
       <source>If your CSV data contains null values, define how are they represented in the CSV.</source>
-      <translation type="unfinished">If your CSV data contains null values, define how are they represented in the CSV.</translation>
+      <translation>Αν τα δεδομένα CSV σας περιέχουν τιμές null, ορίστε πώς αναπαρίστανται στο CSV.</translation>
     </message>
   </context>
 </TS>
